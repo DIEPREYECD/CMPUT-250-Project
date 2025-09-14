@@ -18,4 +18,10 @@ public class PlayerStatsSO : ScriptableObject
         Fame = Mathf.Max(Fame, 0);
         Stress = Mathf.Clamp(Stress, 0, 100);
     }
+
+    public void ResetStats()
+    {
+        Fame = 20;
+        Stress = 10;
+    }
 }

@@ -51,6 +51,7 @@ public class GameController : MonoBehaviour
         // chatOverlay?.Push("fan42", "Let’s goooo!");
         Debug.Log("Welcome to Streamer U!");
         Debug.Log("Let’s goooo!");
+        playerStats.ResetStats();
         Debug.Log($"Starting Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
 
         // Put avatar in the starting pose/anchors
