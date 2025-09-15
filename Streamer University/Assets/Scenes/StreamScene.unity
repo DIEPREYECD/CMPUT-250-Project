@@ -1026,7 +1026,7 @@ MonoBehaviour:
   playerAvatar: {fileID: 966450012}
   stressBar: {fileID: 1056929547}
   fameBar: {fileID: 1350946712}
-  secondsBetweenEvents: 10
+  secondsBetweenEvents: 3
   avatarCenter:
     anchorMin: {x: 0.5, y: 0.5}
     anchorMax: {x: 0.5, y: 0.5}

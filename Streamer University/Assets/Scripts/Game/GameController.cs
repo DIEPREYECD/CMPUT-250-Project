@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
     // ====== Timing ======
     [Header("Timing")]
     [Tooltip("Seconds between event prompts while streaming.")]
-    [SerializeField] private float secondsBetweenEvents = 10f;
+    [SerializeField] private float secondsBetweenEvents = 5f;
 
     // ====== Avatar Layout Targets ======
     [Header("Avatar Layout (Anchors & Size)")]
