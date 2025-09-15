@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private RectTransform eventCardsRoot; // container with HorizontalLayoutGroup
     [SerializeField] private GameObject eventCardPrefab;   // the prefab with EventCardUI.cs
     [SerializeField] private RectTransform playerAvatar;   // UI avatar RectTransform (Image)
+    [SerializeField] private BarUI stressBar;
+    [SerializeField] private BarUI fameBar;
     // [SerializeField] private UI.ChatOverlay chatOverlay;   // optional, can be null
 
     // ====== Timing ======
@@ -59,6 +61,12 @@ public class GameController : MonoBehaviour
 
         // Kick the loop
         loopCoro = StartCoroutine(StreamLoop());
+    }
+
+    private void Update()
+    {
+        stressBar.SetFill(playerStats.Stress / 100f);
+        fameBar.SetFill(playerStats.Fame / 100f);
     }
 
     private IEnumerator StreamLoop()
