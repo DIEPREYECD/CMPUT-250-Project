@@ -430,7 +430,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 13d43a456ef9c2f45b6f0b6b0e2b4961, type: 3}
+  m_Sprite: {fileID: -7289275074739315156, guid: 9a63f816a6b311b4bb4839bb0adc8d31,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -461,10 +462,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stressSprites:
-  - {fileID: 21300000, guid: 13d43a456ef9c2f45b6f0b6b0e2b4961, type: 3}
-  - {fileID: 21300000, guid: 309b28867a3d66e45a7c380f6c52cc71, type: 3}
-  - {fileID: 21300000, guid: e8aac7bdb1b35d54f8a983293ac12951, type: 3}
-  - {fileID: 21300000, guid: 3a0d1fef77f73de4f8b1406ef7449e96, type: 3}
+  - {fileID: -7289275074739315156, guid: 9a63f816a6b311b4bb4839bb0adc8d31, type: 3}
+  - {fileID: -6542623587770272185, guid: 9a63f816a6b311b4bb4839bb0adc8d31, type: 3}
+  - {fileID: -7550531813598808014, guid: 9a63f816a6b311b4bb4839bb0adc8d31, type: 3}
   playerStats: {fileID: 11400000, guid: e69036b639c332441a4d3dd712ab066c, type: 2}
 --- !u!1 &1056929543
 GameObject:
