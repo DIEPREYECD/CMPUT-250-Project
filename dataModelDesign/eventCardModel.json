@@ -1,16 +1,42 @@
 {
-  "eventCode": "string (defined by whoever created the event content, must be unique)",
-  "eventPicture": "UnityEngine.Sprite (if null or not found, use default picture)",
-  "eventSituation": "string",
-  "eventChoices": [
+  "id": "string (unique, e.g., EVT_Intro_001)",
+  "title": "string (optional, for author sanity)",
+  "spritePath": "Resources path to sprite (optional)",
+  "situation": "string (what the card shows)",
+  "weight": 1,
+  "oncePerRun": false,
+  "cooldownTurns": 0,
+
+  "conditions": {
+    "minFame": null,
+    "maxFame": null,
+    "minStress": null,
+    "maxStress": null,
+    "requiresAllFlags": ["FLAG_A", "FLAG_B"],
+    "forbidsAnyFlags": ["FLAG_C"]
+  },
+
+  "choices": [
     {
-      "choicePicture": "UnityEngine.Sprite (if null or not found, use default picture)",
-      "choiceText": "string",
-      "choiceOutCome": {
-        "deltaFame": "int",
-        "deltaStress": "int"
-      }
+      "key": "A",
+      "text": "string",
+      "spritePath": "Resources path (optional)",
+      "deltaFame": 0,
+      "deltaStress": 0,
+      "setFlags": ["FLAG_X"],
+      "clearFlags": ["FLAG_Y"],
+      "nextEventId": "EVT_XXX (optional; if present, chain fires next turn)",
+      "notes": "author-only optional"
+    },
+    {
+      "key": "B",
+      "text": "string",
+      "spritePath": null,
+      "deltaFame": 0,
+      "deltaStress": 0,
+      "setFlags": [],
+      "clearFlags": [],
+      "nextEventId": null
     }
-  ],
-  "nextChainEventCode": "string (defined by whoever created the event content, must be unique, if null or empty, no chain event will be triggered)"
+  ]
 }
