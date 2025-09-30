@@ -1,0 +1,16 @@
+{
+  "eventCode": "string (defined by whoever created the event content, must be unique)",
+  "eventPicture": "UnityEngine.Sprite (if null or not found, use default picture)",
+  "eventSituation": "string",
+  "eventChoices": [
+    {
+      "choicePicture": "UnityEngine.Sprite (if null or not found, use default picture)",
+      "choiceText": "string",
+      "choiceOutCome": {
+        "deltaFame": "int",
+        "deltaStress": "int"
+      }
+    }
+  ],
+  "nextChainEventCode": "string (defined by whoever created the event content, must be unique, if null or empty, no chain event will be triggered)"
+}
