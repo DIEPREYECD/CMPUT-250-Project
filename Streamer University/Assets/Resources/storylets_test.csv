@@ -1,0 +1,5 @@
+id,title,spritePath,situation,weight,oncePerRun,cooldownTurns,minFame,maxFame,minStress,maxStress,requiresAllFlags,forbidsAnyFlags,choiceA_text,choiceA_spritePath,choiceA_deltaFame,choiceA_deltaStress,choiceA_setFlags,choiceA_clearFlags,choiceA_nextEventId,choiceB_text,choiceB_spritePath,choiceB_deltaFame,choiceB_deltaStress,choiceB_setFlags,choiceB_clearFlags,choiceB_nextEventId
+EVT_START,First Day,ui/cards/start,It’s your first day at Streamer U. What do you do?,3,FALSE,0,,,,,,,Go live immediately!,,5,-5,STREAMING_STARTED,,EVT_FIRST_STREAM,Take time to prepare.,,0,-2,PREP_DONE,,
+EVT_FIRST_STREAM,First Stream,ui/cards/chat,Your first stream kicks off. Chat is buzzing!,2,TRUE,0,,,,,STREAMING_STARTED,,Lean into the hype!,,7,8,HYPE_ON,,,Play it safe and steady.,,2,1,,HYPE_ON,
+EVT_BREAK,Study Break,ui/cards/break,You find some free time between classes.,5,FALSE,2,,,,,,,Hang out with friends.,,2,-2,SOCIALIZED,,,Grind more content.,,3,3,STREAMING_STARTED,,
+EVT_SCANDAL,Scandal Hits,ui/cards/scandal,Rumors spread online about your channel.,1,TRUE,5,50,,,,STREAMING_STARTED,,Fight back publicly.,,-5,8,SCANDAL_DEFENDED,,,Stay silent and wait.,,0,2,,,
