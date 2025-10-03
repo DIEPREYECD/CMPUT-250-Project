@@ -30,6 +30,11 @@ public class EventManager : MonoBehaviour
     private GameObject sideLeft, sideRight;
     private EventDef currentEvent;
 
+    // Position of the main card and side cards is determined by the prefab anchors
+    public float MainCardX => 0.5f;   // center
+    public float SideCardLeftX => 0.25f;
+    public float SideCardRightX => 0.75f;   
+
     void Start()
     {
         // Check that all the required fields are present
