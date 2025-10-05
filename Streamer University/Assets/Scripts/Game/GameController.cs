@@ -135,6 +135,9 @@ public class GameController : MonoBehaviour
         }
         Debug.Log($"New Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
 
+        // Play sound
+        AudioController.Instance.PlayChooseEvent();
+
         // Clear cards
         ClearChildren(eventCardsRoot);
         eventCardsRoot.gameObject.SetActive(false);
