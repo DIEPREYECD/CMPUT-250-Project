@@ -23,13 +23,19 @@ public static class CsvStoryletLoader
         var lines = csv.text.Replace("\r", "").Split('\n');
         if (lines.Length <= 1) return db;
 
+        // Check whether to skip first column if the header is 'Timestamp'
+        var headerCols = lines[0].Split(',').Select(c => c.Trim()).ToList();
+        int expectedCols = 27; // number of expected columns without timestamp
+        bool skipFirstCol = headerCols[0] == "Timestamp";
+
         // header assumed exactly as defined above
         for (int i = 1; i < lines.Length; i++)
         {
             var line = lines[i];
             if (string.IsNullOrWhiteSpace(line)) continue;
             var cols = line.Split(',').ToList();
-            if (cols.Count < 27) continue; // not enough columns
+            if (skipFirstCol) cols = cols.Skip(1).ToList();
+            if (cols.Count < expectedCols) continue; // not enough columns
 
             int k = 0;
             var e = new EventDef();

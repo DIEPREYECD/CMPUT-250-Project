@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,6 +17,12 @@ public class EventManager : MonoBehaviour
     public GameObject sideChoicePrefab;               // small card showing choice text + image + "Choose this" button
     public Transform uiRoot;                          // parent for cards
 
+    // Add to EventManager.cs (fields)
+    private RectTransform clusterRoot;         // NEW: centered container for main + side cards
+    [SerializeField] private readonly float cardGap = 20f;
+    private float nudgeX;
+    [SerializeField] private readonly float animTime = 0.20f;
+
     private Dictionary<string, EventDef> db;               // all loaded events
     private readonly Queue<EventDef> queued = new Queue<EventDef>();                   // for chains
     private readonly HashSet<string> flags = new HashSet<string>();                    // simple global flags
@@ -30,11 +37,6 @@ public class EventManager : MonoBehaviour
     private GameObject sideLeft, sideRight;
     private EventDef currentEvent;
 
-    // Position of the main card and side cards is determined by the prefab anchors
-    public float MainCardX => 0.5f;   // center
-    public float SideCardLeftX => 0.25f;
-    public float SideCardRightX => 0.75f;   
-
     void Start()
     {
         // Check that all the required fields are present
@@ -45,6 +47,11 @@ public class EventManager : MonoBehaviour
         }
 
         db = CsvStoryletLoader.Load(storyletsCsv);
+        nudgeX = (mainCardPrefab.GetComponent<RectTransform>().sizeDelta.x / 2f)
+                 + cardGap
+                 + (sideChoicePrefab.GetComponent<RectTransform>().sizeDelta.x / 2f);
+        Debug.Log($"Total events loaded: {db.Count}");
+        Debug.Log($"NudgeX calculated as: {nudgeX}");
     }
 
     public void NextTurn()
@@ -60,6 +67,8 @@ public class EventManager : MonoBehaviour
             Debug.Log("No eligible events.");
             return;
         }
+
+        Debug.Log($"Next event: {currentEvent.id} - {currentEvent.situation}");
 
         ShowMainCard(currentEvent);
     }
@@ -102,7 +111,27 @@ public class EventManager : MonoBehaviour
     {
         ClearUI();
 
-        currentMain = Instantiate(mainCardPrefab, uiRoot);
+        var clusterGO = new GameObject("EventCluster", typeof(RectTransform));
+        clusterRoot = clusterGO.GetComponent<RectTransform>();
+        clusterRoot.SetParent(uiRoot, worldPositionStays: false);
+        clusterRoot.anchorMin = clusterRoot.anchorMax = clusterRoot.pivot = new Vector2(0.5f, 0.5f);
+        clusterRoot.anchoredPosition = Vector2.zero;
+        clusterRoot.sizeDelta = Vector2.zero;
+        clusterRoot.gameObject.layer = uiRoot.gameObject.layer;
+
+        // add layout components at runtime if not on a prefab
+        // var hlg = clusterGO.AddComponent<UnityEngine.UI.HorizontalLayoutGroup>();
+        // hlg.childAlignment = TextAnchor.MiddleCenter;
+        // hlg.spacing = 32f;
+        // hlg.childForceExpandWidth = false;
+        // hlg.childForceExpandHeight = false;
+
+        var csf = clusterGO.AddComponent<UnityEngine.UI.ContentSizeFitter>();
+        csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+
+        currentMain = Instantiate(mainCardPrefab, clusterRoot);
 
         // Bind sprite + situation text + two “View” buttons
         var img = currentMain.transform.Find("Image").GetComponent<Image>();
@@ -125,15 +154,20 @@ public class EventManager : MonoBehaviour
     void ShowSideChoice(EventChoice c, bool left)
     {
         // If already showing, destroy and return
-        if (left && sideLeft) { Destroy(sideLeft); return; }
-        if (!left && sideRight) { Destroy(sideRight); return; }
+        if (left && sideLeft) { Destroy(sideLeft); sideLeft = null; StartCoroutine(NudgeMain(0f)); return; }
+        if (!left && sideRight) { Destroy(sideRight); sideRight = null; StartCoroutine(NudgeMain(0f)); return; }
 
+        // Destroy opposite side if present and nudge the main back to center
+        if (left && sideRight) { Destroy(sideRight); sideRight = null; }
+        if (!left && sideLeft) { Destroy(sideLeft); sideLeft = null; }
+        StartCoroutine(NudgeMain(0f));
 
         // Log choice info
         Debug.Log($"Showing side choice: {c.text}");
         Debug.Log($"Delta Fame: {c.deltaFame}, Delta Stress: {c.deltaStress}");
 
-        var side = Instantiate(sideChoicePrefab, uiRoot);
+        var side = Instantiate(sideChoicePrefab, clusterRoot);
+
         var img = side.transform.Find("Image").GetComponent<Image>();
         img.sprite = LoadSpriteOrDefault(c.spritePath);
 
@@ -143,13 +177,28 @@ public class EventManager : MonoBehaviour
         var chooseBtn = side.transform.Find("BtnChoose").GetComponent<Button>();
         chooseBtn.onClick.AddListener(() => Choose(c));
 
-        // position left or right — keep it simple: anchor presets on your prefab
+        // store references
         if (left) { if (sideLeft) Destroy(sideLeft); sideLeft = side; }
         else { if (sideRight) Destroy(sideRight); sideRight = side; }
+
+        // Add CanvasGroup for fade
+        var cg = side.AddComponent<CanvasGroup>();
+        cg.alpha = 0f;
+        side.transform.localScale = Vector3.one * 0.98f;
+
+        // Animate: nudge main, then fade/slide in side
+        StartCoroutine(NudgeMain(left ? +nudgeX : -nudgeX));
+        StartCoroutine(FadeInAndSlide(side.GetComponent<RectTransform>(), cg,
+                                      targetLocalX: left ? -nudgeX : +nudgeX, animTime));
     }
 
     void Choose(EventChoice c)
     {
+        Debug.Log($"Chose: {c.text}");
+        Debug.Log($"Delta Fame: {c.deltaFame}, Delta Stress: {c.deltaStress}");
+        if (!string.IsNullOrWhiteSpace(c.nextEventId))
+            Debug.Log($"Next event in chain: {c.nextEventId}");
+
         // apply outcome
         playerStats.ApplyDelta(c.deltaFame, c.deltaStress);
 
@@ -188,6 +237,44 @@ public class EventManager : MonoBehaviour
         if (currentMain) Destroy(currentMain);
         if (sideLeft) Destroy(sideLeft);
         if (sideRight) Destroy(sideRight);
+        if (clusterRoot) { Destroy(clusterRoot.gameObject); clusterRoot = null; }
+    }
+
+    private IEnumerator NudgeMain(float x)
+    {
+        if (!currentMain) yield break;
+        var rt = currentMain.GetComponent<RectTransform>();
+        var start = rt.anchoredPosition;
+        var end = new Vector2(x, start.y);
+        float t = 0f;
+        while (t < animTime)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / animTime);
+            rt.anchoredPosition = Vector2.Lerp(start, end, k);
+            yield return null;
+        }
+        rt.anchoredPosition = end;
+    }
+
+    private IEnumerator FadeInAndSlide(RectTransform rt, CanvasGroup cg, float targetLocalX, float time)
+    {
+        // start slightly offset so it "slides in" towards center
+        Vector2 start = new Vector2(targetLocalX * 0.5f, 0f);
+        Vector2 end = Vector2.zero;
+        rt.anchoredPosition = start;
+
+        float t = 0f;
+        while (t < time)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / time);
+            rt.anchoredPosition = Vector2.Lerp(start, end, k);
+            cg.alpha = Mathf.Lerp(0f, 1f, k);
+            yield return null;
+        }
+        rt.anchoredPosition = end;
+        cg.alpha = 1f;
     }
 
     public bool IsShowingEvent { get; private set; }   // true while a storylet is on screen
