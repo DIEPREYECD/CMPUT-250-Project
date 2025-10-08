@@ -18,7 +18,21 @@ public class AudioController : MonoBehaviour
 
     public void toggleBGM()
     {
-        audioSource.PlayOneShot(bgm);
+    // Check if the BGM is already playing to avoid restarting it every time
+    if (audioSource.isPlaying)
+    {
+        Debug.Log("Stop BGM");
+        return; // Do nothing if it's already playing
+    }
+
+    // Assign the BGM clip to the AudioSource
+    audioSource.clip = bgm;
+    
+    // Set the AudioSource to loop
+    audioSource.loop = true;
+    
+    // Play the music
+    audioSource.Play();
     }
 
     public void PlayChooseEvent()
