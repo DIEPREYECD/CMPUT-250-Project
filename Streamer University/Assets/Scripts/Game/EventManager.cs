@@ -47,9 +47,14 @@ public class EventManager : MonoBehaviour
         }
 
         db = CsvStoryletLoader.Load(storyletsCsv);
-        nudgeX = (mainCardPrefab.GetComponent<RectTransform>().sizeDelta.x / 2f)
-                 + cardGap
-                 + (sideChoicePrefab.GetComponent<RectTransform>().sizeDelta.x / 2f);
+
+        // Calculate nudgeX based on prefab sizes also applying the local scale and gap
+        var mainRect = mainCardPrefab.GetComponent<RectTransform>().rect;
+        var sideRect = sideChoicePrefab.GetComponent<RectTransform>().rect;
+        nudgeX = mainRect.width * mainCardPrefab.transform.localScale.x / 2f
+               + sideRect.width * sideChoicePrefab.transform.localScale.x / 2f
+               + cardGap;
+
         Debug.Log($"Total events loaded: {db.Count}");
         Debug.Log($"NudgeX calculated as: {nudgeX}");
     }
@@ -184,7 +189,7 @@ public class EventManager : MonoBehaviour
         // Add CanvasGroup for fade
         var cg = side.AddComponent<CanvasGroup>();
         cg.alpha = 0f;
-        side.transform.localScale = Vector3.one * 0.98f;
+        side.transform.localScale *= 0.98f;
 
         // Animate: nudge main, then fade/slide in side
         StartCoroutine(NudgeMain(left ? +nudgeX : -nudgeX));
