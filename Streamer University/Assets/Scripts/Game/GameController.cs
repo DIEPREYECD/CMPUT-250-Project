@@ -8,10 +8,6 @@ public class GameController : MonoBehaviour
     [Header("Data")]
     [SerializeField] private PlayerStatsSO playerStats;   // ScriptableObject instance
 
-    // ====== Systems ======
-    [Header("Systems")]
-    [SerializeField] private EventManager eventManager;   // <- NEW: the storylet controller
-
     // ====== UI Refs ======
     [Header("UI")]
     [SerializeField] private RectTransform playerAvatar;  // UI avatar RectTransform (Image)
@@ -42,25 +38,25 @@ public class GameController : MonoBehaviour
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
-        Assert.IsNotNull(eventManager, "Assign EventManager (storylet system).");
+        Assert.IsNotNull(EventManager.Instance, "Assign EventManager (storylet system).");
     }
 
     private void OnEnable()
     {
         // Optional: react to event open/close to move avatar exactly on those moments.
-        if (eventManager != null)
+        if (EventManager.Instance != null)
         {
-            eventManager.OnEventOpened += HandleEventOpened;
-            eventManager.OnEventClosed += HandleEventClosed;
+            EventManager.Instance.OnEventOpened += HandleEventOpened;
+            EventManager.Instance.OnEventClosed += HandleEventClosed;
         }
     }
 
     private void OnDisable()
     {
-        if (eventManager != null)
+        if (EventManager.Instance != null)
         {
-            eventManager.OnEventOpened -= HandleEventOpened;
-            eventManager.OnEventClosed -= HandleEventClosed;
+            EventManager.Instance.OnEventOpened -= HandleEventOpened;
+            EventManager.Instance.OnEventClosed -= HandleEventClosed;
         }
     }
 
@@ -93,16 +89,16 @@ public class GameController : MonoBehaviour
             float t = 0f;
             while (t < secondsBetweenEvents)
             {
-                if (!eventManager.IsShowingEvent) t += Time.deltaTime;
+                if (!EventManager.Instance.IsShowingEvent) t += Time.deltaTime;
                 yield return null;
             }
 
             // Ask EventManager to present the next storylet
-            eventManager.ShowNextEvent();     // -> EventManager sets IsShowingEvent=true and spawns UI
+            EventManager.Instance.ShowNextEvent();     // -> EventManager sets IsShowingEvent=true and spawns UI
             state = GCState.ShowingChoices;
 
             // Wait until the player chooses and EventManager closes the UI
-            while (eventManager.IsShowingEvent)
+            while (EventManager.Instance.IsShowingEvent)
                 yield return null;
 
             state = GCState.Resolving;

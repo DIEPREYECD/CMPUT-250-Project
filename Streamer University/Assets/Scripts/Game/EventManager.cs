@@ -37,6 +37,9 @@ public class EventManager : MonoBehaviour
     private GameObject sideLeft, sideRight;
     private EventDef currentEvent;
 
+    // Make this a singleton for easy access
+    public static EventManager Instance { get; private set; }
+
     void Start()
     {
         // Check that all the required fields are present
