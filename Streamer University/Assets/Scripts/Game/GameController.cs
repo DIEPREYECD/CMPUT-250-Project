@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private BarUI stressBar;
     [SerializeField] private BarUI fameBar;
     // [SerializeField] private UI.ChatOverlay chatOverlay;   // optional, can be null
+    [SerializeField] private GameObject chatOverlay;
 
     // ====== Timing ======
     [Header("Timing")]
@@ -80,6 +81,7 @@ public class GameController : MonoBehaviour
 
             // Show choices
             SpawnTwoCards();
+            chatOverlay.SetActive(false);
             yield return MoveAvatar(avatarDuringChoices);
             state = GCState.ShowingChoices;
 
@@ -90,6 +92,7 @@ public class GameController : MonoBehaviour
             // Resolve choice & return to stream
             state = GCState.Resolving;
             yield return MoveAvatar(avatarCenter);
+            chatOverlay.SetActive(true);
         }
     }
 
@@ -246,4 +249,11 @@ public class GameController : MonoBehaviour
             };
         }
     }
+    
+    // Helper for Chat Visibility
+    // private void SetChatVisible(bool visible) {
+    //     if (chatOverlay) {
+    //         chatOverlay.SetActive(visible);
+    //     }
+    // }
 }
