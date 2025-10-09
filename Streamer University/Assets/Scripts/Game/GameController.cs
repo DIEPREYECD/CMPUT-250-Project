@@ -127,6 +127,59 @@ public class GameController : MonoBehaviour
         StartCoroutine(MoveAvatar(avatarCenter));
     }
 
+    private void OnChooseEvent(StreamEventSO chosen)
+    {
+        // Apply hidden consequences
+        Debug.Log($"Chose event: {chosen.title}");
+        Debug.Log($"Event effects: Fame {chosen.dFame}, Stress {chosen.dStress}");
+        playerStats.ApplyDelta(dFame: chosen.dFame, dStress: chosen.dStress);
+
+        if (chosen.dFame > 0)
+        {
+            Debug.Log("W choice, stream is popping!");
+        }
+        else
+        {
+            Debug.Log("Yikes… not the best collab.");
+        }
+        Debug.Log($"New Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
+
+        // Play sound
+        AudioController.Instance.PlayChooseEvent();
+
+        // Clear cards
+        ClearChildren(eventCardsRoot);
+        eventCardsRoot.gameObject.SetActive(false);
+
+        // Check end conditions
+        if (playerStats.Fame <= 0 || playerStats.Stress >= 100)
+        {
+            Debug.Log("Stream ended: burnout or lost all fame.");
+            Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
+            QuitGame();
+            return; // Stop further logic; editor/game will exit
+        }
+
+        // Tell loop we're done choosing
+        awaitingChoice = false;
+    }
+
+    private void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    private static void ClearChildren(RectTransform root)
+    {
+        for (int i = root.childCount - 1; i >= 0; i--)
+            Destroy(root.GetChild(i).gameObject);
+    }
+
+    // --- Small tween that works in 2019.4 without extra packages
     private IEnumerator MoveAvatar(RectTarget target)
     {
         var rt = playerAvatar;
