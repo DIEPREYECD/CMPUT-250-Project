@@ -162,6 +162,7 @@ public class EventManager : MonoBehaviour
 
         // Set showing state and notify external systems
         IsShowingEvent = true;
+        Debug.Log("Invoking OnEventOpened");
         OnEventOpened?.Invoke();
     }
 
@@ -233,6 +234,7 @@ public class EventManager : MonoBehaviour
 
         // Clear showing state and notify external systems
         IsShowingEvent = false;
+        Debug.Log("Invoking OnEventClosed");
         OnEventClosed?.Invoke();
     }
 

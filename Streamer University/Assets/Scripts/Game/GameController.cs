@@ -28,9 +28,12 @@ public class GameController : MonoBehaviour
     [SerializeField] private float avatarTweenTime = 0.25f;
 
     // ====== Internal State ======
-    private enum GCState { Streaming, ShowingChoices, Resolving }
+    public enum GCState { Streaming, ShowingChoices, Resolving }
     private GCState state = GCState.Streaming;
     private Coroutine loopCoro;
+
+    private static GameController _instance;
+    public static GameController Instance { get { return _instance; } }
 
     private void Awake()
     {
@@ -38,22 +41,26 @@ public class GameController : MonoBehaviour
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
+
+        _instance = this;
     }
 
-    private void OnEnable()
+    private void Subscribe()
     {
         // Optional: react to event open/close to move avatar exactly on those moments.
         if (EventManager.Instance != null)
         {
+            Debug.Log("Subscribing to EventManager events.");
             EventManager.Instance.OnEventOpened += HandleEventOpened;
             EventManager.Instance.OnEventClosed += HandleEventClosed;
         }
     }
 
-    private void OnDisable()
+    private void Unsubscribe()
     {
         if (EventManager.Instance != null)
         {
+            Debug.Log("Unsubscribing from EventManager events.");
             EventManager.Instance.OnEventOpened -= HandleEventOpened;
             EventManager.Instance.OnEventClosed -= HandleEventClosed;
         }
@@ -61,6 +68,8 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        Subscribe();
+
         Debug.Log("Welcome to Streamer U!");
         playerStats.ResetStats();
         Debug.Log($"Starting Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
@@ -69,7 +78,6 @@ public class GameController : MonoBehaviour
         avatarCenter.ApplyTo(playerAvatar);
 
         // Kick the loop
-        Debug.Log("Starting stream...");
         loopCoro = StartCoroutine(StreamLoop());
     }
 
@@ -127,38 +135,10 @@ public class GameController : MonoBehaviour
         StartCoroutine(MoveAvatar(avatarCenter));
     }
 
-    private void OnChooseEvent(StreamEventSO chosen)
-    {
-        // Apply hidden consequences
-        Debug.Log($"Chose event: {chosen.title}");
-        Debug.Log($"Event effects: Fame {chosen.dFame}, Stress {chosen.dStress}");
-        playerStats.ApplyDelta(dFame: chosen.dFame, dStress: chosen.dStress);
-
-        if (chosen.dFame > 0)
-        {
-            Debug.Log("W choice, stream is popping!");
-        }
-        else
-        {
-            Debug.Log("Yikes… not the best collab.");
-        }
-        Debug.Log($"New Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
-
-        // Play sound
-        AudioController.Instance.PlayChooseEvent();
-
-        // Check end conditions
-        if (playerStats.Fame <= 0 || playerStats.Stress >= 100)
-        {
-            Debug.Log("Stream ended: burnout or lost all fame.");
-            Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
-            QuitGame();
-            return; // Stop further logic; editor/game will exit
-        }
-    }
-
     private void QuitGame()
     {
+        Debug.Log("Quitting game...");
+        Unsubscribe();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -166,16 +146,8 @@ public class GameController : MonoBehaviour
 #endif
     }
 
-    private static void ClearChildren(RectTransform root)
-    {
-        for (int i = root.childCount - 1; i >= 0; i--)
-            Destroy(root.GetChild(i).gameObject);
-    }
-
-    // --- Small tween that works in 2019.4 without extra packages
     private IEnumerator MoveAvatar(RectTarget target)
     {
-        Debug.Log("Moving avatar...");
         var rt = playerAvatar;
         var start = RectTarget.From(rt);
         var t = 0f;
@@ -187,7 +159,6 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         target.ApplyTo(rt);
-        Debug.Log("Avatar move complete.");
     }
 
     // ====== Helper struct for RectTransform targets ======
