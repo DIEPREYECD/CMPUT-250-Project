@@ -368,8 +368,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 312816497}
-  - component: {fileID: 312816496}
   - component: {fileID: 312816495}
+  - component: {fileID: 312816496}
   m_Layer: 0
   m_Name: AudioController
   m_TagString: Untagged
@@ -482,9 +482,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 312816494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c530fa6e4a75fd4cb73222967dd382f, type: 3}
+  m_Script: {fileID: 11500000, guid: dc549c9d66c6285458a1522a61c7ac7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  bgm: {fileID: 0}
+  chooseEvent: {fileID: 0}
 --- !u!4 &312816497
 Transform:
   m_ObjectHideFlags: 0
@@ -1743,7 +1746,7 @@ MonoBehaviour:
   playerAvatar: {fileID: 966450012}
   stressBar: {fileID: 1056929547}
   fameBar: {fileID: 1350946712}
-  secondsBetweenEvents: 5
+  secondsBetweenEvents: 3
   avatarCenter:
     anchorMin: {x: 0.5, y: 0}
     anchorMax: {x: 0.5, y: 0}

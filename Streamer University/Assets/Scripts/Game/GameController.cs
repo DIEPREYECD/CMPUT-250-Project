@@ -175,6 +175,7 @@ public class GameController : MonoBehaviour
     // --- Small tween that works in 2019.4 without extra packages
     private IEnumerator MoveAvatar(RectTarget target)
     {
+        Debug.Log("Moving avatar...");
         var rt = playerAvatar;
         var start = RectTarget.From(rt);
         var t = 0f;
@@ -186,6 +187,7 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         target.ApplyTo(rt);
+        Debug.Log("Avatar move complete.");
     }
 
     // ====== Helper struct for RectTransform targets ======
