@@ -4,28 +4,49 @@ using UnityEngine;
 
 public class ChatOverlay : MonoBehaviour
 {
+    public static ChatOverlay Instance { get; private set; }
+
     [SerializeField] private Transform content;
     [SerializeField] private ChatMessageItem itemPrefab;
     public int maxItems = 15;
 
     private readonly Queue<ChatMessageItem> active = new Queue<ChatMessageItem>();
 
-    public void Push(string user, string message) {
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    public void Update()
+    {
+        // Make the scroll rect go to bottom when new messages come in
+        var scroll = GetComponent<UnityEngine.UI.ScrollRect>();
+        if (scroll.verticalNormalizedPosition <= 0.15f)
+            scroll.verticalNormalizedPosition = 0f;
+    }
+
+    public void Push(string user, string message)
+    {
+        if (gameObject.activeSelf == false)
+        {
+            return;
+        }
+
         ChatMessageItem item = Instantiate(itemPrefab, content);
-
-        // if (active.Count >= maxItems) {
-        //     item = active.Dequeue();
-        // } else {
-        //     item = Instantiate(itemPrefab, content);
-        // }
-
-        item.Set(user, message); 
+        item.Set(user, message);
 
         active.Enqueue(item);
+    }
 
-        // if (active.Count > maxItems) {
-        //     ChatMessageItem old = active.Dequeue();
-        //     Destroy(old.gameObject);
-        // }
+    public void SetActive(bool active)
+    {
+        gameObject.SetActive(active);
     }
 }

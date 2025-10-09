@@ -16,8 +16,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private RectTransform playerAvatar;   // UI avatar RectTransform (Image)
     [SerializeField] private BarUI stressBar;
     [SerializeField] private BarUI fameBar;
-    // [SerializeField] private UI.ChatOverlay chatOverlay;   // optional, can be null
-    [SerializeField] private GameObject chatOverlay;
 
     // ====== Timing ======
     [Header("Timing")]
@@ -49,9 +47,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        // Initial flavor chat
-        // chatOverlay?.Push("mod_Sam", "Welcome to Streamer U!");
-        // chatOverlay?.Push("fan42", "Let’s goooo!");
         Debug.Log("Welcome to Streamer U!");
         Debug.Log("Let’s goooo!");
         playerStats.ResetStats();
@@ -81,7 +76,7 @@ public class GameController : MonoBehaviour
 
             // Show choices
             SpawnTwoCards();
-            chatOverlay.SetActive(false);
+            ChatOverlay.Instance.SetActive(false);
             yield return MoveAvatar(avatarDuringChoices);
             state = GCState.ShowingChoices;
 
@@ -92,7 +87,7 @@ public class GameController : MonoBehaviour
             // Resolve choice & return to stream
             state = GCState.Resolving;
             yield return MoveAvatar(avatarCenter);
-            chatOverlay.SetActive(true);
+            ChatOverlay.Instance.SetActive(true);
         }
     }
 
@@ -125,9 +120,6 @@ public class GameController : MonoBehaviour
         Debug.Log($"Event effects: Fame {chosen.dFame}, Stress {chosen.dStress}");
         playerStats.ApplyDelta(dFame: chosen.dFame, dStress: chosen.dStress);
 
-        // Chat reacts (optional)
-        // if (chosen.dFame > 0) chatOverlay?.Push("chat", "W choice, stream is popping!");
-        // else chatOverlay?.Push("chat", "Yikes… not the best collab.");
         if (chosen.dFame > 0)
         {
             Debug.Log("W choice, stream is popping!");
@@ -148,7 +140,6 @@ public class GameController : MonoBehaviour
         // Check end conditions
         if (playerStats.Fame <= 0 || playerStats.Stress >= 100)
         {
-            // chatOverlay?.Push("system", "Stream ended: burnout or lost all fame.");
             Debug.Log("Stream ended: burnout or lost all fame.");
             Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
             QuitGame();
@@ -252,11 +243,4 @@ public class GameController : MonoBehaviour
             };
         }
     }
-    
-    // Helper for Chat Visibility
-    // private void SetChatVisible(bool visible) {
-    //     if (chatOverlay) {
-    //         chatOverlay.SetActive(visible);
-    //     }
-    // }
 }
