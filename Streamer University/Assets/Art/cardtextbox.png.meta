@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 89c7ac0341e8a60459a759be22a6ce6d
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: 137767483838368990
     second: cardtextbox_0
-=======
-guid: 367a87be7c32fc544b403f6695d73c2c
-TextureImporter:
-  internalIDToNameTable: []
->>>>>>> streamScene
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -40,11 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-<<<<<<< HEAD
     filterMode: 0
-=======
-    filterMode: -1
->>>>>>> streamScene
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -53,21 +43,13 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-<<<<<<< HEAD
   spriteMode: 2
-=======
-  spriteMode: 1
->>>>>>> streamScene
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-<<<<<<< HEAD
-  spriteBorder: {x: 27, y: 53, z: 33, w: 82}
-=======
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
->>>>>>> streamScene
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -92,7 +74,6 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-<<<<<<< HEAD
   - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
@@ -129,7 +110,7 @@ TextureImporter:
         width: 116
         height: 90
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -141,11 +122,6 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-=======
-  spriteSheet:
-    serializedVersion: 2
-    sprites: []
->>>>>>> streamScene
     outline: []
     physicsShape: []
     bones: []

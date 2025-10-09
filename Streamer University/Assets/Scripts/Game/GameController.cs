@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
-        Assert.IsNotNull(EventManager.Instance, "Assign EventManager (storylet system).");
+        Assert.IsNotNull(EventManager.Instance, "EventManager instance not found in scene.");
     }
 
     private void OnEnable()
@@ -70,6 +70,7 @@ public class GameController : MonoBehaviour
         avatarCenter.ApplyTo(playerAvatar);
 
         // Kick the loop
+        Debug.Log("Starting stream...");
         loopCoro = StartCoroutine(StreamLoop());
     }
 
@@ -147,10 +148,6 @@ public class GameController : MonoBehaviour
         // Play sound
         AudioController.Instance.PlayChooseEvent();
 
-        // Clear cards
-        ClearChildren(eventCardsRoot);
-        eventCardsRoot.gameObject.SetActive(false);
-
         // Check end conditions
         if (playerStats.Fame <= 0 || playerStats.Stress >= 100)
         {
@@ -159,9 +156,6 @@ public class GameController : MonoBehaviour
             QuitGame();
             return; // Stop further logic; editor/game will exit
         }
-
-        // Tell loop we're done choosing
-        awaitingChoice = false;
     }
 
     private void QuitGame()
@@ -193,15 +187,6 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         target.ApplyTo(rt);
-    }
-
-    private void QuitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
     }
 
     // ====== Helper struct for RectTransform targets ======

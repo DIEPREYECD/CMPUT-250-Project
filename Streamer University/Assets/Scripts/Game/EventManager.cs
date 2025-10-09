@@ -40,6 +40,16 @@ public class EventManager : MonoBehaviour
     // Make this a singleton for easy access
     public static EventManager Instance { get; private set; }
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     void Start()
     {
         // Check that all the required fields are present
