@@ -38,7 +38,6 @@ public class GameController : MonoBehaviour
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
-        Assert.IsNotNull(EventManager.Instance, "EventManager instance not found in scene.");
     }
 
     private void OnEnable()

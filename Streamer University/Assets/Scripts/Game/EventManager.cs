@@ -38,16 +38,12 @@ public class EventManager : MonoBehaviour
     private EventDef currentEvent;
 
     // Make this a singleton for easy access
-    public static EventManager Instance { get; private set; }
+    private static EventManager _instance;
+    public static EventManager Instance { get { return _instance; } }
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        Instance = this;
+        _instance = this;
     }
 
     void Start()
