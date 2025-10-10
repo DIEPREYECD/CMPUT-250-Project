@@ -8,7 +8,7 @@ public class AudioController : MonoBehaviour
     public static AudioController Instance { get { return _instance; } }
 
     public AudioSource audioSource;
-    public AudioClip bgm, chooseEvent;
+    public AudioClip bgm, onEvent, openSideCard, chooseEvent;
 
     private void Awake()
     {
@@ -33,6 +33,16 @@ public class AudioController : MonoBehaviour
     
     // Play the music
     audioSource.Play();
+    }
+
+    public void PlayOnEvent()
+    {
+        audioSource.PlayOneShot(onEvent);
+    }
+
+    public void PlayOpenSideCard()
+    {
+        audioSource.PlayOneShot(openSideCard);
     }
 
     public void PlayChooseEvent()
