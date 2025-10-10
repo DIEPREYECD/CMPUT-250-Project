@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -116,8 +117,13 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log("Stream ended: burnout or lost all fame.");
                 Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
-                QuitGame();
-                yield break;
+                SceneManager.LoadScene("GameOver");
+            }
+            else if (playerStats.Fame >= 100)
+            {
+                Debug.Log("Stream ended: reached maximum fame! You win!");
+                Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
+                SceneManager.LoadScene("GameWin");
             }
         }
     }
