@@ -1651,8 +1651,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1798688570}
   - component: {fileID: 1798688572}
-  - component: {fileID: 1798688571}
   - component: {fileID: 1798688573}
+  - component: {fileID: 1798688571}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -1698,7 +1698,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f5270e024236b7f438af89144117a734, type: 3}
+  m_Sprite: {fileID: -6319557153674332488, guid: e3d371d85ee282e4cbc0b53137de4dc3,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1728,8 +1729,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02abf6df2df0ec64183f0bf5fe43b71f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgrounds: []
-  animRate: 10
+  backgrounds:
+  - {fileID: -6319557153674332488, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: 4680495894400338468, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: 8723286803718067063, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: -5938272142184177463, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: -347439786770726043, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: 4464920450731452656, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: -7255086320501041741, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: -5599270147973788529, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: 7033322337951829307, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: 8893258354324478719, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  - {fileID: 460878504196629932, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
+  animRate: 17
 --- !u!1 &1815777385
 GameObject:
   m_ObjectHideFlags: 0
