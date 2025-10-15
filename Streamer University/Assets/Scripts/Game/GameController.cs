@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
 {
     // ====== Data ======
     [Header("Data")]
-    [SerializeField] private PlayerStatsSO playerStats;   // ScriptableObject instance
+    [SerializeField] private StreamEventSO[] eventPool;      // Put at least 2 in here
 
     // ====== UI Refs ======
     [Header("UI")]
@@ -38,7 +38,10 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsNotNull(playerStats, "Assign PlayerStats on GameController.");
+
+        // Basic sanity checks to help teammates wire things correctly
+        Assert.IsNotNull(eventCardPrefab, "Assign EventCard prefab.");
+        Assert.IsNotNull(eventCardsRoot, "Assign EventCardsRoot container.");
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
@@ -72,8 +75,9 @@ public class GameController : MonoBehaviour
         Subscribe();
 
         Debug.Log("Welcome to Streamer U!");
-        playerStats.ResetStats();
-        Debug.Log($"Starting Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
+        Debug.Log("Let’s goooo!");
+        player.Instance.ResetStats();
+        Debug.Log($"Starting Fame: {player.Instance.Fame}, Stress: {player.Instance.Stress}");
 
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
@@ -84,8 +88,8 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        stressBar.SetFill(playerStats.Stress / 100f);
-        fameBar.SetFill(playerStats.Fame / 100f);
+        stressBar.SetFill(player.Instance.Stress / 100f);
+        fameBar.SetFill(player.Instance.Fame / 100f);
     }
 
     private IEnumerator StreamLoop()
@@ -137,8 +141,48 @@ public class GameController : MonoBehaviour
 
     private void HandleEventClosed()
     {
-        // Return avatar to normal spot
-        StartCoroutine(MoveAvatar(avatarCenter));
+        var go = Instantiate(eventCardPrefab, eventCardsRoot);
+        var ui = go.GetComponent<UI.EventCardUI>();
+        if (!ui) { Debug.LogWarning("EventCard prefab missing EventCardUI component."); return; }
+        ui.Bind(evt, OnChooseEvent);
+    }
+
+    private void OnChooseEvent(StreamEventSO chosen)
+    {
+        // Apply hidden consequences
+        Debug.Log($"Chose event: {chosen.title}");
+        Debug.Log($"Event effects: Fame {chosen.dFame}, Stress {chosen.dStress}");
+        player.Instance.ApplyDelta(dFame: chosen.dFame, dStress: chosen.dStress);
+
+        // Chat reacts (optional)
+        // if (chosen.dFame > 0) chatOverlay?.Push("chat", "W choice, stream is popping!");
+        // else chatOverlay?.Push("chat", "Yikes… not the best collab.");
+        if (chosen.dFame > 0)
+        {
+            Debug.Log("W choice, stream is popping!");
+        }
+        else
+        {
+            Debug.Log("Yikes… not the best collab.");
+        }
+        Debug.Log($"New Fame: {player.Instance.Fame}, Stress: {player.Instance.Stress}");
+
+        // Clear cards
+        ClearChildren(eventCardsRoot);
+        eventCardsRoot.gameObject.SetActive(false);
+
+        // Check end conditions
+        if (player.Instance.Fame <= 0 || player.Instance.Stress >= 100)
+        {
+            // chatOverlay?.Push("system", "Stream ended: burnout or lost all fame.");
+            Debug.Log("Stream ended: burnout or lost all fame.");
+            Debug.Log($"Final Fame: {player.Instance.Fame}, Final Stress: {player.Instance.Stress}");
+            QuitGame();
+            return; // Stop further logic; editor/game will exit
+        }
+
+        // Tell loop we're done choosing
+        awaitingChoice = false;
     }
 
     private void QuitGame()
