@@ -33,16 +33,16 @@ public class StatsHUDController : MonoBehaviour
 
         // Fame: no upper cap for now, so just show raw value and clamp bar to [0,1]
         if (fameBar != null)
-            fameBar.value = Mathf.Clamp01(player.Instance.Fame / 100f);
+            fameBar.value = Mathf.Clamp01(PlayerController.Instance.Fame / 100f);
 
         if (fameText != null)
-            fameText.text = $"Fame: {player.Instance.Fame}";
+            fameText.text = $"Fame: {PlayerController.Instance.Fame}";
 
         // Stress: always 0–100
         if (stressBar != null)
-            stressBar.value = player.Instance.Stress / 100f;
+            stressBar.value = PlayerController.Instance.Stress / 100f;
 
         if (stressText != null)
-            stressText.text = $"Stress: {player.Instance.Stress}%";
+            stressText.text = $"Stress: {PlayerController.Instance.Stress}%";
     }
 }
