@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameOver.unity
     guid: 442aaad86988321409fdd6be7089a0ac
+  - enabled: 1
+    path: Assets/Scenes/MiniGame_Clicker.unity
+    guid: e7d48aadc49943c42ae0a94a24bd3367
   m_configObjects: {}

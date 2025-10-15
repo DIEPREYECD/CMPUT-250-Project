@@ -86,6 +86,9 @@ public class GameController : MonoBehaviour
     {
         stressBar.SetFill(playerStats.Stress / 100f);
         fameBar.SetFill(playerStats.Fame / 100f);
+
+        if (Input.GetKeyDown(KeyCode.S) && !MiniGameLoader.Instance.isRunningGame())
+            MiniGameLoader.Instance.LaunchMiniGame("MiniGame_Clicker");
     }
 
     private IEnumerator StreamLoop()
