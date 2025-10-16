@@ -1316,6 +1316,7 @@ MonoBehaviour:
   content: {fileID: 1297387335}
   itemPrefab: {fileID: 141964117376473863, guid: b3cc26e0296f9ba40a59f0397d780995,
     type: 3}
+  scroll: {fileID: 1121912110}
   maxItems: 15
 --- !u!1 &1161534228
 GameObject:
