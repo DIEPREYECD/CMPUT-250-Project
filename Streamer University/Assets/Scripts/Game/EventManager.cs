@@ -9,7 +9,6 @@ public class EventManager : MonoBehaviour
 {
     [Header("Data")]
     public TextAsset storyletsCsv;
-    public PlayerStatsSO playerStats;
     public Sprite defaultSprite;
     public AudioController audioController;
 
@@ -50,7 +49,7 @@ public class EventManager : MonoBehaviour
     void Start()
     {
         // Check that all the required fields are present
-        if (storyletsCsv == null || playerStats == null || mainCardPrefab == null || sideChoicePrefab == null || uiRoot == null || defaultSprite == null)
+        if (storyletsCsv == null || mainCardPrefab == null || sideChoicePrefab == null || uiRoot == null || defaultSprite == null)
         {
             Debug.LogError("EventManager is not fully configured.");
             return;
@@ -97,10 +96,10 @@ public class EventManager : MonoBehaviour
             if (cooldown.TryGetValue(e.id, out var left) && left > 0) continue;
 
             // stat gates
-            if (e.conditions.minFame != null && playerStats.Fame < e.conditions.minFame) continue;
-            if (e.conditions.maxFame != null && playerStats.Fame > e.conditions.maxFame) continue;
-            if (e.conditions.minStress != null && playerStats.Stress < e.conditions.minStress) continue;
-            if (e.conditions.maxStress != null && playerStats.Stress > e.conditions.maxStress) continue;
+            if (e.conditions.minFame != null && PlayerController.Instance.Fame < e.conditions.minFame) continue;
+            if (e.conditions.maxFame != null && PlayerController.Instance.Fame > e.conditions.maxFame) continue;
+            if (e.conditions.minStress != null && PlayerController.Instance.Stress < e.conditions.minStress) continue;
+            if (e.conditions.maxStress != null && PlayerController.Instance.Stress > e.conditions.maxStress) continue;
 
             // flag gates
             if (e.conditions.requiresAllFlags.Any(req => !flags.Contains(req))) continue;
@@ -222,7 +221,7 @@ public class EventManager : MonoBehaviour
             Debug.Log($"Next event in chain: {c.nextEventId}");
 
         // apply outcome
-        playerStats.ApplyDelta(c.deltaFame, c.deltaStress);
+        PlayerController.Instance.ApplyDelta(c.deltaFame, c.deltaStress);
 
         foreach (var f in c.setFlags) flags.Add(f);
         foreach (var f in c.clearFlags) flags.Remove(f);

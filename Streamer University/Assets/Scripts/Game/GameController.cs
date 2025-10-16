@@ -7,7 +7,6 @@ public class GameController : MonoBehaviour
 {
     // ====== Data ======
     [Header("Data")]
-    [SerializeField] private PlayerStatsSO playerStats;   // ScriptableObject instance
 
     // ====== UI Refs ======
     [Header("UI")]
@@ -38,7 +37,6 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsNotNull(playerStats, "Assign PlayerStats on GameController.");
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
@@ -72,8 +70,8 @@ public class GameController : MonoBehaviour
         Subscribe();
 
         Debug.Log("Welcome to Streamer U!");
-        playerStats.ResetStats();
-        Debug.Log($"Starting Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
+        PlayerController.Instance.ResetStats();
+        Debug.Log($"Starting Fame: {PlayerController.Instance.Fame}, Stress: {PlayerController.Instance.Stress}");
 
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
@@ -116,16 +114,16 @@ public class GameController : MonoBehaviour
             state = GCState.Resolving;
 
             // End conditions (simple sample)
-            if (playerStats.Fame <= 0 || playerStats.Stress >= 100)
+            if (PlayerController.Instance.Fame <= 0 || PlayerController.Instance.Stress >= 100)
             {
                 Debug.Log("Stream ended: burnout or lost all fame.");
-                Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
+                Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
                 SceneManager.LoadScene("GameOver");
             }
-            else if (playerStats.Fame >= 100)
+            else if (PlayerController.Instance.Fame >= 100)
             {
                 Debug.Log("Stream ended: reached maximum fame! You win!");
-                Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
+                Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
                 SceneManager.LoadScene("GameWin");
             }
         }
