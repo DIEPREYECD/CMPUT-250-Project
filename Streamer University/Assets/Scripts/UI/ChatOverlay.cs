@@ -9,9 +9,7 @@ public class ChatOverlay : MonoBehaviour
 
     [SerializeField] private Transform content;
     [SerializeField] private ChatMessageItem itemPrefab;
-    [SerializeField] private ScrollRect scroll;
     public int maxItems = 15;
-    private bool autoScroll = true;
 
     private readonly Queue<ChatMessageItem> active = new Queue<ChatMessageItem>();
 
@@ -27,15 +25,6 @@ public class ChatOverlay : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        // Make the scroll rect go to bottom when new messages come in
-        if (scroll.verticalNormalizedPosition <= 0.15f)
-            autoScroll = true;
-        else {
-            autoScroll = false;
-        }
-    }
 
     public void Push(string user, string message)
     {
@@ -44,21 +33,24 @@ public class ChatOverlay : MonoBehaviour
             return;
         }
 
+        var scroll = GetComponent<UnityEngine.UI.ScrollRect>();
+
         ChatMessageItem item = Instantiate(itemPrefab, content);
         item.Set(user, message);
 
         active.Enqueue(item);
-        if (autoScroll) {
-            StartCoroutine(ScrollBottom());
-        }
+
+        bool autoScroll = scroll.verticalNormalizedPosition < 0.001f;
+        if (autoScroll) StartCoroutine(AutoScrollChat());
+
     }
 
-    private IEnumerator ScrollBottom() {
+    private IEnumerator AutoScrollChat() {
+        var scroll = GetComponent<UnityEngine.UI.ScrollRect>();
         yield return new WaitForEndOfFrame();
-
-        Canvas.ForceUpdateCanvases();
         scroll.verticalNormalizedPosition = 0f;
     }
+
 
     public void SetActive(bool active)
     {

@@ -485,9 +485,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc549c9d66c6285458a1522a61c7ac7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  bgm: {fileID: 0}
-  chooseEvent: {fileID: 0}
+  audioSource: {fileID: 312816495}
+  bgm: {fileID: 8300000, guid: 7b072ba3829dfe74d930660b0cf98076, type: 3}
+  chooseEvent: {fileID: 8300000, guid: ee55a40d74df4a841b836714a0290046, type: 3}
 --- !u!4 &312816497
 Transform:
   m_ObjectHideFlags: 0
@@ -1316,7 +1316,6 @@ MonoBehaviour:
   content: {fileID: 1297387335}
   itemPrefab: {fileID: 141964117376473863, guid: b3cc26e0296f9ba40a59f0397d780995,
     type: 3}
-  scroll: {fileID: 1121912110}
   maxItems: 15
 --- !u!1 &1161534228
 GameObject:
@@ -1457,10 +1456,10 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
 --- !u!114 &1297387338
