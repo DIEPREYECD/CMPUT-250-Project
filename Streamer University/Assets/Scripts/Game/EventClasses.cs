@@ -21,6 +21,8 @@ public class EventChoice
     public List<string> setFlags = new List<string>();
     public List<string> clearFlags = new List<string>();
     public string nextEventId = "";
+
+    public string miniGame = "";   // Optional mini-game to launch after this choice
 }
 
 [Serializable]

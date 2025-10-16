@@ -6,7 +6,6 @@ public class MiniGameResultListener : MonoBehaviour
 {
     [Header("Wiring")]
     public MiniGameResultChannel resultChannel;
-    public PlayerStatsSO playerStats;
 
     private void OnEnable()
     {
@@ -25,9 +24,7 @@ public class MiniGameResultListener : MonoBehaviour
         int deltaFame = result.delta.ContainsKey("fame") ? result.delta["fame"] : 0;
         int deltaStress = result.delta.ContainsKey("stress") ? result.delta["stress"] : 0;
 
-
-        if (playerStats != null)
-            playerStats.ApplyDelta(deltaFame, deltaStress);
+        PlayerController.Instance.ApplyDelta(deltaFame, deltaStress);
 
         Debug.Log($"MiniGame finished. Success={result.success} | deltaFame: {deltaFame}, deltaStress: {deltaStress}");
     }

@@ -19,6 +19,11 @@ public class MiniGameLoader : MonoBehaviour
 
     public void LaunchMiniGame(string mgsceneName)
     {
+        if (!doesMiniGameExist(mgsceneName))
+        {
+            Debug.LogError($"MiniGame scene '{mgsceneName}' does not exist or is not added to Build Settings.");
+            return;
+        }
         miniGameSceneName = mgsceneName;
         StartCoroutine(LoadMiniGameAdditive());
     }
@@ -43,5 +48,10 @@ public class MiniGameLoader : MonoBehaviour
     }
 
     public bool isRunningGame() => miniGameSceneName != null;
+
+    public bool doesMiniGameExist(string mgsceneName)
+    {
+        return Application.CanStreamedLevelBeLoaded(mgsceneName);
+    }
 
 }

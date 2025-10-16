@@ -63,6 +63,7 @@ public static class CsvStoryletLoader
             ca.setFlags = ParseList(cols[k++]);
             ca.clearFlags = ParseList(cols[k++]);
             ca.nextEventId = cols[k++].Trim();
+            ca.miniGame = cols[k++].Trim();
 
             // Choice B
             var cb = new EventChoice { key = "B" };
@@ -73,6 +74,7 @@ public static class CsvStoryletLoader
             cb.setFlags = ParseList(cols[k++]);
             cb.clearFlags = ParseList(cols[k++]);
             cb.nextEventId = cols[k++].Trim();
+            cb.miniGame = cols[k++].Trim();
 
             e.choices = new List<EventChoice> { ca, cb };
             if (!string.IsNullOrWhiteSpace(e.id)) db[e.id] = e;
