@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/GameFlowControllerScene.unity
+    guid: 25c7166eb5cd4cb49878cac2774b0821
+  - enabled: 1
     path: Assets/Scenes/IntroScene.unity
     guid: 64ecb5223c46d8341b47ca0d96e08073
   - enabled: 1
