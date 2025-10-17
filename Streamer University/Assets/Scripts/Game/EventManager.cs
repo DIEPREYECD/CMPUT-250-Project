@@ -41,6 +41,21 @@ public class EventManager : MonoBehaviour
     private static EventManager _instance;
     public static EventManager Instance { get { return _instance; } }
 
+    public void setFlags(List<string> flags)
+    {
+        foreach (string flag in flags) {
+            this.flags.Add(flag);
+        }
+    }
+
+    public void clearFlags(List<string> flags)
+    {
+        foreach (string flag in flags)
+        {
+            this.flags.Remove(flag);
+        }
+    }
+
     private void Awake()
     {
         _instance = this;
@@ -241,10 +256,16 @@ public class EventManager : MonoBehaviour
 
         ClearUI();
 
-        // Clear showing state and notify external systems
+        // Close the event first so the loop knows the card is gone
         IsShowingEvent = false;
-        Debug.Log("Invoking OnEventClosed");
         OnEventClosed?.Invoke();
+
+        // If this choice launches a minigame, run it modally
+        if (!string.IsNullOrWhiteSpace(c.miniGame))
+        {
+            // NOTE: do NOT apply minigame result deltas here; MiniGameLoader does it
+            MiniGameLoader.Instance.RunMiniGame(c.miniGame);
+        }
     }
 
     Sprite LoadSpriteOrDefault(string path)

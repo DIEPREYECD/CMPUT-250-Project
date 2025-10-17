@@ -38,15 +38,18 @@ public class MiniGameClickerController : MiniGameController
 
     public override void FinishMiniGame(bool success)
     {
+        List<string> setFlags = new List<string>();
         if (success)
         {
             this.delta.Add("fame", 5);
             this.delta.Add("stress", -3);
+            setFlags.Add("clickerWin");
         }
         else
         {
             this.delta.Add("fame", -2);
             this.delta.Add("stress", 4);
+            setFlags.Add("clickerLose");
         }
 
         var result = new MiniGameResult
@@ -58,6 +61,7 @@ public class MiniGameClickerController : MiniGameController
         if (resultChannel != null)
             resultChannel.Raise(result);
 
+        EventManager.Instance.setFlags(setFlags);
         MiniGameLoader.UnloadMiniGame(mySceneName);
         var mainScene = SceneManager.GetSceneByName("StreamScene");
         if (mainScene.IsValid())

@@ -76,6 +76,7 @@ public class GameController : MonoBehaviour
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
 
+        GameFlowController.Instance.SetState(GameState.MainGameplay);
         // Kick the loop
         loopCoro = StartCoroutine(StreamLoop());
     }
@@ -85,8 +86,8 @@ public class GameController : MonoBehaviour
         stressBar.SetFill(PlayerController.Instance.Stress / 100f);
         fameBar.SetFill(PlayerController.Instance.Fame / 100f);
 
-        if (Input.GetKeyDown(KeyCode.S) && !MiniGameLoader.Instance.isRunningGame())
-            MiniGameLoader.Instance.LaunchMiniGame("MiniGame_Clicker");
+        if (Input.GetKeyDown(KeyCode.S) && GameFlowController.Instance.CurrentState != GameState.Minigame)
+            MiniGameLoader.Instance.RunMiniGame("MiniGame_Clicker");
     }
 
     private IEnumerator StreamLoop()
@@ -95,11 +96,17 @@ public class GameController : MonoBehaviour
         {
             state = GCState.Streaming;
 
+            // If a minigame is active for any reason, wait here
+            while (GameFlowController.Instance.CurrentState == GameState.Minigame)
+                yield return null;
+
             // Wait before next event prompt (but don't overlap if one is already showing)
             float t = 0f;
             while (t < secondsBetweenEvents)
             {
-                if (!EventManager.Instance.IsShowingEvent) t += Time.deltaTime;
+                if (!EventManager.Instance.IsShowingEvent && 
+                    GameFlowController.Instance.CurrentState == GameState.MainGameplay) 
+                    t += Time.deltaTime;
                 yield return null;
             }
 
@@ -112,6 +119,10 @@ public class GameController : MonoBehaviour
                 yield return null;
 
             state = GCState.Resolving;
+
+            // If a minigame was launched by the choice, wait for it to finish
+            while (GameFlowController.Instance.CurrentState == GameState.Minigame)
+                yield return null;
 
             // End conditions (simple sample)
             if (PlayerController.Instance.Fame <= 0 || PlayerController.Instance.Stress >= 100)

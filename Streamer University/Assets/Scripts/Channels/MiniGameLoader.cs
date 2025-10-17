@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class MiniGameLoader : MonoBehaviour
 {
@@ -12,9 +13,52 @@ public class MiniGameLoader : MonoBehaviour
     [Tooltip("Name of the MiniGame scene (must be added in Build Settings)")]
     private string miniGameSceneName = null;
 
+    [Header("Wire the shared channel asset here")]
+    [SerializeField] private MiniGameResultChannel resultChannel;
+
+    private bool _waiting;
+    private MiniGameResult _result;
+
     public void Awake()
     {
         _instance = this;
+    }
+
+    public Coroutine RunMiniGame(string sceneName)
+    {
+        return StartCoroutine(RunMiniGameRoutine(sceneName));
+    }
+
+    private IEnumerator RunMiniGameRoutine(string sceneName)
+    {
+        // enter modal state
+        GameFlowController.Instance.SetState(GameState.Minigame); // needs GameFlowController in Intro scene
+        LaunchMiniGame(sceneName); // existing method
+
+        _waiting = true;
+        UnityAction<MiniGameResult> handler = (MiniGameResult r) =>
+        {
+            _result = r;
+            _waiting = false;
+        };
+        resultChannel.OnRaised += handler;
+
+        // wait until minigame sends result
+        while (_waiting) yield return null;
+
+        // stop listening BEFORE unload to avoid leaks
+        resultChannel.OnRaised -= handler;
+
+        // unload
+        UnloadMiniGame(sceneName);
+
+        // apply deltas (centralized here)
+        int deltaFame = _result.delta != null && _result.delta.ContainsKey("fame") ? _result.delta["fame"] : 0;
+        int deltaStress = _result.delta != null && _result.delta.ContainsKey("stress") ? _result.delta["stress"] : 0;
+        PlayerController.Instance.ApplyDelta(deltaFame, deltaStress);
+
+        // back to main gameplay
+        GameFlowController.Instance.SetState(GameState.MainGameplay);
     }
 
     public void LaunchMiniGame(string mgsceneName)

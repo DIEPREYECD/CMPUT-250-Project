@@ -1908,7 +1908,6 @@ GameObject:
   - component: {fileID: 1815777387}
   - component: {fileID: 1815777386}
   - component: {fileID: 1815777388}
-  - component: {fileID: 1815777389}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -1968,24 +1967,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815777385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d984c8e0ee43d1f4fb191394d0470e89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resultChannel: {fileID: 11400000, guid: 67d8d54a59d36ee4997f77eb991ac4d7, type: 2}
-  playerStats: {fileID: 11400000, guid: e69036b639c332441a4d3dd712ab066c, type: 2}
---- !u!114 &1815777389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1815777385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec280a4bb0d4483448fb02487a1c2110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniGameSceneName: 
+  resultChannel: {fileID: 11400000, guid: 67d8d54a59d36ee4997f77eb991ac4d7, type: 2}
 --- !u!1 &1968684230
 GameObject:
   m_ObjectHideFlags: 0
