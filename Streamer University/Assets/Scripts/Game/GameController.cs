@@ -104,13 +104,14 @@ public class GameController : MonoBehaviour
             float t = 0f;
             while (t < secondsBetweenEvents)
             {
-                if (!EventManager.Instance.IsShowingEvent && 
-                    GameFlowController.Instance.CurrentState == GameState.MainGameplay) 
+                if (!EventManager.Instance.IsShowingEvent &&
+                    GameFlowController.Instance.CurrentState == GameState.MainGameplay)
                     t += Time.deltaTime;
                 yield return null;
             }
 
             // Ask EventManager to present the next storylet
+            Debug.Log(EventManager.Instance.PrintEventManagerState());
             EventManager.Instance.ShowNextEvent();     // -> EventManager sets IsShowingEvent=true and spawns UI
             state = GCState.ShowingChoices;
 

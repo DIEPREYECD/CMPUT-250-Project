@@ -81,4 +81,21 @@ public static class CsvStoryletLoader
         }
         return db;
     }
+
+    public static string PrintOutDB(Dictionary<string, EventDef> db)
+    {
+        var lines = new List<string>();
+        foreach (var kvp in db)
+        {
+            var e = kvp.Value;
+            lines.Add($"ID: {e.id}, Title: {e.title}, Weight: {e.weight}, OncePerRun: {e.oncePerRun}, Cooldown: {e.cooldownTurns}");
+            lines.Add($"  Conditions: Fame[{e.conditions.minFame}-{e.conditions.maxFame}], Stress[{e.conditions.minStress}-{e.conditions.maxStress}], Requires[{string.Join(";", e.conditions.requiresAllFlags)}], Forbids[{string.Join(";", e.conditions.forbidsAnyFlags)}]");
+            foreach (var choice in e.choices)
+            {
+                lines.Add($"  Choice {choice.key}: Text: {choice.text}, DeltaFame: {choice.deltaFame}, DeltaStress: {choice.deltaStress}, NextEventId: {choice.nextEventId}, MiniGame: {choice.miniGame}");
+                lines.Add($"    SetFlags: {string.Join(";", choice.setFlags)}, ClearFlags: {string.Join(";", choice.clearFlags)}");
+            }
+        }
+        return string.Join("\n", lines);
+    }
 }

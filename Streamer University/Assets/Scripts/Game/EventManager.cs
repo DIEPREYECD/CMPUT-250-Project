@@ -43,7 +43,8 @@ public class EventManager : MonoBehaviour
 
     public void setFlags(List<string> flags)
     {
-        foreach (string flag in flags) {
+        foreach (string flag in flags)
+        {
             this.flags.Add(flag);
         }
     }
@@ -54,6 +55,16 @@ public class EventManager : MonoBehaviour
         {
             this.flags.Remove(flag);
         }
+    }
+
+    public string PrintEventManagerState()
+    {
+        return $"EventManager State:\n" +
+               $"- Flags: {string.Join(", ", flags)}\n" +
+               $"- Cooldowns: {string.Join(", ", cooldown.Select(kv => $"{kv.Key}({kv.Value})"))}\n" +
+               $"- Consumed: {string.Join(", ", consumed)}\n" +
+               $"- Queued: {string.Join(", ", queued.Select(e => e.id))}\n" +
+               $"- Current Event: {(currentEvent != null ? currentEvent.id : "None")}";
     }
 
     private void Awake()
@@ -71,6 +82,7 @@ public class EventManager : MonoBehaviour
         }
 
         db = CsvStoryletLoader.Load(storyletsCsv);
+        Debug.Log(CsvStoryletLoader.PrintOutDB(db));
 
         // Calculate nudgeX based on prefab sizes also applying the local scale and gap
         var mainRect = mainCardPrefab.GetComponent<RectTransform>().rect;
