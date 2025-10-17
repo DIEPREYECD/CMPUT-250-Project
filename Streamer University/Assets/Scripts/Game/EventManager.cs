@@ -57,6 +57,18 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    public void addToQueue(string eventId)
+    {
+        if (db.TryGetValue(eventId, out var e))
+        {
+            queued.Enqueue(e);
+        }
+        else
+        {
+            Debug.LogWarning($"EventManager: Tried to enqueue unknown event ID '{eventId}'");
+        }
+    }
+
     public string PrintEventManagerState()
     {
         return $"EventManager State:\n" +
