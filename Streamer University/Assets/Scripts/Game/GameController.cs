@@ -82,8 +82,8 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        stressBar.SetFill(playerStats.Stress / 100f);
-        fameBar.SetFill(playerStats.Fame / 100f);
+        stressBar.SetFill(PlayerController.Instance.Stress / 100f);
+        fameBar.SetFill(PlayerController.Instance.Fame / 100f);
 
         if (Input.GetKeyDown(KeyCode.S) && !MiniGameLoader.Instance.isRunningGame())
             MiniGameLoader.Instance.LaunchMiniGame("MiniGame_Clicker");
