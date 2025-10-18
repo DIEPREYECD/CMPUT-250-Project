@@ -7,6 +7,7 @@ public abstract class MiniGameController : MonoBehaviour
     [Header("Channel to report result on")]
     public MiniGameResultChannel resultChannel;
     protected bool successDeclared = false;
+    protected bool finished = false;
 
 
     [Header("Scene name (for unload)")]

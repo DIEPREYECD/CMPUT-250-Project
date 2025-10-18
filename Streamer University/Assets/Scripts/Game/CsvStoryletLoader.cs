@@ -25,8 +25,63 @@ public static class CsvStoryletLoader
 
         // Check whether to skip first column if the header is 'Timestamp'
         var headerCols = lines[0].Split(',').Select(c => c.Trim()).ToList();
-        int expectedCols = 27; // number of expected columns without timestamp
-        bool skipFirstCol = headerCols[0] == "Timestamp";
+        bool skipFirstCol = headerCols.Count > 0 && headerCols[0] == "Timestamp";
+
+        // Expected headers in order (when Timestamp is omitted)
+        var expected = new[] {
+            "id",
+            "title",
+            "spritePath",
+            "situation",
+            "weight",
+            "oncePerRun",
+            "cooldownTurns",
+            "minFame",
+            "maxFame",
+            "minStress",
+            "maxStress",
+            "requiresAllFlags",
+            "forbidsAnyFlags",
+            "choiceA_text",
+            "choiceA_spritePath",
+            "choiceA_deltaFame",
+            "choiceA_deltaStress",
+            "choiceA_setFlags",
+            "choiceA_clearFlags",
+            "choiceA_nextEventId",
+            "choiceA_miniGame",
+            "choiceB_text",
+            "choiceB_spritePath",
+            "choiceB_deltaFame",
+            "choiceB_deltaStress",
+            "choiceB_setFlags",
+            "choiceB_clearFlags",
+            "choiceB_nextEventId",
+            "choiceB_miniGame"
+        };
+
+        // Build the header list that should match 'expected'
+        var actual = headerCols;
+        if (skipFirstCol) actual = headerCols.Skip(1).ToList();
+
+        // Normalize to lower-case for comparison
+        var actualNorm = actual.Select(s => s.Trim().ToLowerInvariant()).ToList();
+        var expectedNorm = expected.Select(s => s.Trim().ToLowerInvariant()).ToList();
+
+        if (actualNorm.Count < expectedNorm.Count)
+        {
+            Debug.LogError($"CSV header has too few columns ({actualNorm.Count}). Expected at least {expectedNorm.Count} headers.");
+            return db;
+        }
+
+        for (int hi = 0; hi < expectedNorm.Count; hi++)
+        {
+            if (actualNorm[hi] != expectedNorm[hi])
+            {
+                Debug.LogError($"CSV header mismatch at column {hi + 1}: expected '{expectedNorm[hi]}', found '{actualNorm[hi]}'. Full headers: {string.Join(",", headerCols)}");
+                return db;
+            }
+        }
 
         // header assumed exactly as defined above
         for (int i = 1; i < lines.Length; i++)
@@ -35,7 +90,6 @@ public static class CsvStoryletLoader
             if (string.IsNullOrWhiteSpace(line)) continue;
             var cols = line.Split(',').ToList();
             if (skipFirstCol) cols = cols.Skip(1).ToList();
-            if (cols.Count < expectedCols) continue; // not enough columns
 
             int k = 0;
             var e = new EventDef();
