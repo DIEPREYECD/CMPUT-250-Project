@@ -78,26 +78,59 @@ public class ChatBarkSystem : MonoBehaviour
 
     // Determines eligiblity of text being in 
     public bool Eligibility(BarkEntry entry) {
+
+        /*
+        Checks for the eligibility of a bark at a time.
+        If default is 1, return true.
+        Checks if stress and fame meet requirements.
+        Return stress and fame conditions at the end.
+        */
+
         // Automatically eligible if default
         if (entry.def) return true;
 
-        bool stressOverHalf;
+        bool stressCond;
         if (entry.stress) {
-            stressOverHalf = playerStats.Stress >= 50;
+            stressCond = playerStats.Stress >= 50;
         }
         else {
-            stressOverHalf = playerStats.Stress < 50;
+            stressCond = playerStats.Stress < 50;
         }
 
-        bool fameOverHalf;
+        bool fameCond;
         if (entry.fame) {
-            fameOverHalf = playerStats.Fame >= 50;
+            fameCond = playerStats.Fame >= 50;
         } else {
-            fameOverHalf = playerStats.Fame < 50;
+            fameCond = playerStats.Fame < 50;
         }
 
-        return stressOverHalf && fameOverHalf;
+        return stressCond && fameCond;
     }
+
+    public BarkEntry GetBark() {
+
+        /*
+        Go through each entry in bark list
+        if eligible, add to eligible List.
+        Return a random bark eligible bark from the list.
+        */
+        
+        List<BarkEntry> eligibleList = new List<BarkEntry>();
+        
+        foreach (var entry in barkList) {
+            if (Eligibility(entry)) {
+                eligibleList.Add(entry);
+            }
+        }
+
+        return eligibleList[Random.Range(0, eligibleList.Count)];
+    }
+
+    public void PushBark() {
+        var bark = GetBark();
+        ChatOverlay.Instance.Push(bark.user, bark.text); 
+    }
+    
 
 
 }
