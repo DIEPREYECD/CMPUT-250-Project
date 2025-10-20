@@ -8,26 +8,32 @@ public class AudioController : MonoBehaviour
     public static AudioController Instance { get { return _instance; } }
 
     public AudioSource audioSource;
-    public AudioClip bgm, onEvent, openSideCard, chooseEvent;
+    public AudioClip menuBGM, streamSceneBGM, onEvent, openSideCard, chooseEvent;
 
     private void Awake()
     {
         _instance = this;
-        toggleBGM();
     }
-
-    public void toggleBGM()
-    {
-    // Check if the BGM is already playing to avoid restarting it every time
-    if (audioSource.isPlaying)
-    {
-        Debug.Log("Stop BGM");
-        return; // Do nothing if it's already playing
-    }
-
-    // Assign the BGM clip to the AudioSource
-    audioSource.clip = bgm;
     
+    public void toggleBGM(string scene)
+    {
+        // Check if the BGM is already playing to avoid restarting it every time
+        if (audioSource.isPlaying)
+        {
+            Debug.Log("Stop BGM");
+            return; // Do nothing if it's already playing
+        }
+
+        // Assign the BGM clip to the AudioSource
+        if (scene == "stream")
+        {
+            audioSource.clip = streamSceneBGM;
+        } else if (scene == "menu")
+        {
+            audioSource.clip = menuBGM;
+        }
+
+
     // Set the AudioSource to loop
     audioSource.loop = true;
     

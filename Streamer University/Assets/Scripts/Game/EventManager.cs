@@ -10,7 +10,6 @@ public class EventManager : MonoBehaviour
     [Header("Data")]
     public TextAsset storyletsCsv;
     public Sprite defaultSprite;
-    public AudioController audioController;
 
     [Header("UI Prefabs")]
     public GameObject mainCardPrefab;                 // shows picture + situation + 2 buttons: View Option 1 / View Option 2
@@ -205,7 +204,7 @@ public class EventManager : MonoBehaviour
         OnEventOpened?.Invoke();
 
         // play sound
-        audioController.PlayOnEvent();
+        AudioController.Instance.PlayOnEvent();
     }
 
     void ShowSideChoice(EventChoice c, bool left)
@@ -249,7 +248,7 @@ public class EventManager : MonoBehaviour
                                       targetLocalX: left ? -nudgeX : +nudgeX, animTime));
 
         // play sound
-        audioController.PlayOpenSideCard();
+        AudioController.Instance.PlayOpenSideCard();
     }
 
     void Choose(EventChoice c)
@@ -276,7 +275,7 @@ public class EventManager : MonoBehaviour
             queued.Enqueue(next);
 
         // play sound
-        audioController.PlayChooseEvent();
+        AudioController.Instance.PlayChooseEvent();
 
         ClearUI();
 

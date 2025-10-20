@@ -41,6 +41,9 @@ public class GameController : MonoBehaviour
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
 
+        // Play BGM
+        AudioController.Instance.toggleBGM("stream");
+
         _instance = this;
     }
 
