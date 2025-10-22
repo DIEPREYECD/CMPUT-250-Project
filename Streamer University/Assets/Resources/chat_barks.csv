@@ -1,8 +1,10 @@
 id,user,text,def,stress,fame
-1,Mr.Fish,This is crazyyyy!!,1,0,0
-2,Aly,AAAHHH,1,0,0
-3,Tucker,Hello,0,1,0
-4,Charles,Welcome,0,1,1
-5,Matthew,Hi,0,0,1
-6,Alvin,What's Up??,0,0,0 
-7,Meghan,Hello,1,1,1 
+1,Mr.Fish,Default,1,0,0
+2,Aly,Defaulttt,1,0,0
+3,Tucker,S Under Half,0,1,0
+4,Charles,S Under Half AND F Under Half,0,1,1
+5,Matthew,F Over Half,0,0,2
+6,Alvin,Defaulttt,0,0,0 
+7,Meghan,Defaulttttt,1,1,1 
+8,Pepsi,Stress Over Half,0,2,0
+9,Coke,Stress Over Half & F Under Half,0,2,1

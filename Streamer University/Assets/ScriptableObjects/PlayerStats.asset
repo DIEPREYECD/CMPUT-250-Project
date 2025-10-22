@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd26940f36484947b943eaa242149de, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  Fame: 40
+  Fame: 30
   Stress: 60

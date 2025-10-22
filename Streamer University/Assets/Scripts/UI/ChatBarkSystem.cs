@@ -18,8 +18,8 @@ public class ChatBarkSystem : MonoBehaviour
         public string user;
         public string text;
         public bool def;
-        public bool stress;
-        public bool fame;
+        public int stress;
+        public int fame;
     }
 
     [System.Serializable]
@@ -67,8 +67,8 @@ public class ChatBarkSystem : MonoBehaviour
                     user = splitRow[1].Trim(),
                     text = splitRow[2].Trim(),
                     def = splitRow[3].Trim() == "1",
-                    stress = splitRow[4].Trim() == "1",
-                    fame = splitRow[5].Trim() == "1"
+                    stress = int.Parse(splitRow[4].Trim()),
+                    fame = int.Parse(splitRow[5].Trim())
                 };
 
                 barkList.Add(entry);
@@ -86,24 +86,21 @@ public class ChatBarkSystem : MonoBehaviour
         Return stress and fame conditions at the end.
         */
 
-        // Automatically eligible if default
-        if (entry.def) return true;
+    
+        if (entry.def) return true; // Automatically eligible if default
 
-        bool stressCond;
-        if (entry.stress) {
-            stressCond = playerStats.Stress >= 50;
-        }
-        else {
-            stressCond = playerStats.Stress < 50;
-        }
+        bool stressCond = true;
+        bool fameCond = true;
 
-        bool fameCond;
-        if (entry.fame) {
-            fameCond = playerStats.Fame >= 50;
-        } else {
-            fameCond = playerStats.Fame < 50;
-        }
-
+        // 0 = ignore, 1 = under half, 2 = over half
+        stressCond = entry.stress == 0 ||
+                        (entry.stress == 1 && playerStats.Stress < 50) ||
+                        (entry.stress == 2 && playerStats.Stress >= 50);
+        
+        fameCond = entry.fame == 0 ||
+                        (entry.fame == 1 && playerStats.Fame < 50) ||
+                        (entry.fame == 2 && playerStats.Fame >= 50);
+        
         return stressCond && fameCond;
     }
 
