@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : AnimatedEntity
 {
     //Singleton pattern
     private static PlayerController _instance;
@@ -33,44 +33,17 @@ public class PlayerController : MonoBehaviour
     private int stress = 0;
     private int fame = 0;
 
-    //assign at least 2 stress sprites in the editor
-    [Header("Stress Sprites (min 2)")]
-    public List<Sprite> stressSprites;
-
-    private Image playerImage;
-
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-
     void Start()
     {
-        playerImage = GetComponent<Image>();
-        if (stressSprites == null || stressSprites.Count < 2)
-        {
-            Debug.LogError("Player: Please assign at least 2 sprites to stressSprites.");
-        }
+        AnimationSetup();
     }
 
     void Update()
     {
-        if (stressSprites == null || stressSprites.Count < 2 || playerImage == null)
-            return;
-
-        int spriteCount = stressSprites.Count;
-        float stressPerSprite = 100f / spriteCount;
-        int spriteIndex = Mathf.FloorToInt(stress / stressPerSprite);
-        spriteIndex = Mathf.Clamp(spriteIndex, 0, spriteCount - 1);
-        playerImage.sprite = stressSprites[spriteIndex];
+        // Update the effective animation slice based on stress level
+        int numSlices = DefaultAnimationCycle.Count/sliceBy;
+        effectiveSlicePortion = Mathf.Clamp(stress / (100 / sliceBy), 0, numSlices - 1);
+        AnimationUpdate();
     }
 
     // method to return stress value
