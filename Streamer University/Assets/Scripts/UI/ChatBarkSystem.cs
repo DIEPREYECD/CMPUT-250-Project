@@ -7,7 +7,6 @@ public class ChatBarkSystem : MonoBehaviour
 {
 
     public TextAsset ChatBarkCSV;
-    public PlayerStatsSO playerStats;
 
     public static ChatBarkSystem Instance {get; private set; }
 
@@ -94,12 +93,12 @@ public class ChatBarkSystem : MonoBehaviour
 
         // 0 = ignore, 1 = under half, 2 = over half
         stressCond = entry.stress == 0 ||
-                        (entry.stress == 1 && playerStats.Stress < 50) ||
-                        (entry.stress == 2 && playerStats.Stress >= 50);
+                        (entry.stress == 1 && PlayerController.Instance.Stress < 50) ||
+                        (entry.stress == 2 && PlayerController.Instance.Stress >= 50);
         
         fameCond = entry.fame == 0 ||
-                        (entry.fame == 1 && playerStats.Fame < 50) ||
-                        (entry.fame == 2 && playerStats.Fame >= 50);
+                        (entry.fame == 1 && PlayerController.Instance.Fame < 50) ||
+                        (entry.fame == 2 && PlayerController.Instance.Fame >= 50);
         
         return stressCond && fameCond;
     }
