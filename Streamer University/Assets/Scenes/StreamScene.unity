@@ -216,23 +216,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0777c174138736344b17371340dfb254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  users:
-  - fweffwefef
-  - wefefwefewfwefwe
-  - ewfwefwefwe
-  - wefwefwefwef
-  - ewfwef
-  - wefwefwefwefwef
-  - wefwefewfwefweffew
-  - fwefew
-  - ewfwef
-  - wefwefwefwef
-  messages:
-  - hry
-  - nice stream
-  - hola
-  - como estas
-  - diablo
   chatRate: 1
 --- !u!4 &40028376
 Transform:
@@ -554,7 +537,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1158,7 +1141,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChatBarkCSV: {fileID: 4900000, guid: 23f2c60747f26c34db910266dc76c568, type: 3}
-  playerStats: {fileID: 11400000, guid: e69036b639c332441a4d3dd712ab066c, type: 2}
 --- !u!4 &1114568750
 Transform:
   m_ObjectHideFlags: 0
@@ -1855,7 +1837,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1798688570}
   - component: {fileID: 1798688572}
-  - component: {fileID: 1798688573}
   - component: {fileID: 1798688571}
   m_Layer: 5
   m_Name: Background
@@ -1902,8 +1883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6319557153674332488, guid: e3d371d85ee282e4cbc0b53137de4dc3,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5f57474e4d106ac42bf05c8c1f6f35d7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1921,31 +1901,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798688569}
   m_CullTransparentMesh: 0
---- !u!114 &1798688573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1798688569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02abf6df2df0ec64183f0bf5fe43b71f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backgrounds:
-  - {fileID: -6319557153674332488, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: 4680495894400338468, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: 8723286803718067063, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: -5938272142184177463, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: -347439786770726043, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: 4464920450731452656, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: -7255086320501041741, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: -5599270147973788529, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: 7033322337951829307, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: 8893258354324478719, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  - {fileID: 460878504196629932, guid: e3d371d85ee282e4cbc0b53137de4dc3, type: 3}
-  animRate: 17
 --- !u!1 &1815777385
 GameObject:
   m_ObjectHideFlags: 0
