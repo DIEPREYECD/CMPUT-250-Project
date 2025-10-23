@@ -9,7 +9,6 @@ public class EventManager : MonoBehaviour
 {
     [Header("Data")]
     public TextAsset storyletsCsv;
-    public PlayerStatsSO playerStats;
     public Sprite defaultSprite;
 
     [Header("UI Prefabs")]
@@ -41,6 +40,44 @@ public class EventManager : MonoBehaviour
     private static EventManager _instance;
     public static EventManager Instance { get { return _instance; } }
 
+    public void setFlags(List<string> flags)
+    {
+        foreach (string flag in flags)
+        {
+            this.flags.Add(flag);
+        }
+    }
+
+    public void clearFlags(List<string> flags)
+    {
+        foreach (string flag in flags)
+        {
+            this.flags.Remove(flag);
+        }
+    }
+
+    public void addToQueue(string eventId)
+    {
+        if (db.TryGetValue(eventId, out var e))
+        {
+            queued.Enqueue(e);
+        }
+        else
+        {
+            Debug.LogWarning($"EventManager: Tried to enqueue unknown event ID '{eventId}'");
+        }
+    }
+
+    public string PrintEventManagerState()
+    {
+        return $"EventManager State:\n" +
+               $"- Flags: {string.Join(", ", flags)}\n" +
+               $"- Cooldowns: {string.Join(", ", cooldown.Select(kv => $"{kv.Key}({kv.Value})"))}\n" +
+               $"- Consumed: {string.Join(", ", consumed)}\n" +
+               $"- Queued: {string.Join(", ", queued.Select(e => e.id))}\n" +
+               $"- Current Event: {(currentEvent != null ? currentEvent.id : "None")}";
+    }
+
     private void Awake()
     {
         _instance = this;
@@ -49,13 +86,14 @@ public class EventManager : MonoBehaviour
     void Start()
     {
         // Check that all the required fields are present
-        if (storyletsCsv == null || playerStats == null || mainCardPrefab == null || sideChoicePrefab == null || uiRoot == null || defaultSprite == null)
+        if (storyletsCsv == null || mainCardPrefab == null || sideChoicePrefab == null || uiRoot == null || defaultSprite == null)
         {
             Debug.LogError("EventManager is not fully configured.");
             return;
         }
 
         db = CsvStoryletLoader.Load(storyletsCsv);
+        Debug.Log(CsvStoryletLoader.PrintOutDB(db));
 
         // Calculate nudgeX based on prefab sizes also applying the local scale and gap
         var mainRect = mainCardPrefab.GetComponent<RectTransform>().rect;
@@ -96,10 +134,10 @@ public class EventManager : MonoBehaviour
             if (cooldown.TryGetValue(e.id, out var left) && left > 0) continue;
 
             // stat gates
-            if (e.conditions.minFame != null && playerStats.Fame < e.conditions.minFame) continue;
-            if (e.conditions.maxFame != null && playerStats.Fame > e.conditions.maxFame) continue;
-            if (e.conditions.minStress != null && playerStats.Stress < e.conditions.minStress) continue;
-            if (e.conditions.maxStress != null && playerStats.Stress > e.conditions.maxStress) continue;
+            if (e.conditions.minFame != null && PlayerController.Instance.Fame < e.conditions.minFame) continue;
+            if (e.conditions.maxFame != null && PlayerController.Instance.Fame > e.conditions.maxFame) continue;
+            if (e.conditions.minStress != null && PlayerController.Instance.Stress < e.conditions.minStress) continue;
+            if (e.conditions.maxStress != null && PlayerController.Instance.Stress > e.conditions.maxStress) continue;
 
             // flag gates
             if (e.conditions.requiresAllFlags.Any(req => !flags.Contains(req))) continue;
@@ -164,6 +202,9 @@ public class EventManager : MonoBehaviour
         IsShowingEvent = true;
         Debug.Log("Invoking OnEventOpened");
         OnEventOpened?.Invoke();
+
+        // play sound
+        AudioController.Instance.PlayOnEvent();
     }
 
     void ShowSideChoice(EventChoice c, bool left)
@@ -205,6 +246,9 @@ public class EventManager : MonoBehaviour
         StartCoroutine(NudgeMain(left ? +nudgeX : -nudgeX));
         StartCoroutine(FadeInAndSlide(side.GetComponent<RectTransform>(), cg,
                                       targetLocalX: left ? -nudgeX : +nudgeX, animTime));
+
+        // play sound
+        AudioController.Instance.PlayOpenSideCard();
     }
 
     void Choose(EventChoice c)
@@ -215,7 +259,7 @@ public class EventManager : MonoBehaviour
             Debug.Log($"Next event in chain: {c.nextEventId}");
 
         // apply outcome
-        playerStats.ApplyDelta(c.deltaFame, c.deltaStress);
+        PlayerController.Instance.ApplyDelta(c.deltaFame, c.deltaStress);
 
         foreach (var f in c.setFlags) flags.Add(f);
         foreach (var f in c.clearFlags) flags.Remove(f);
@@ -230,12 +274,21 @@ public class EventManager : MonoBehaviour
         if (!string.IsNullOrWhiteSpace(c.nextEventId) && db.TryGetValue(c.nextEventId, out var next))
             queued.Enqueue(next);
 
+        // play sound
+        AudioController.Instance.PlayChooseEvent();
+
         ClearUI();
 
-        // Clear showing state and notify external systems
+        // Close the event first so the loop knows the card is gone
         IsShowingEvent = false;
-        Debug.Log("Invoking OnEventClosed");
         OnEventClosed?.Invoke();
+
+        // If this choice launches a minigame, run it modally
+        if (!string.IsNullOrWhiteSpace(c.miniGame))
+        {
+            // NOTE: do NOT apply minigame result deltas here; MiniGameLoader does it
+            MiniGameLoader.Instance.RunMiniGame(c.miniGame);
+        }
     }
 
     Sprite LoadSpriteOrDefault(string path)

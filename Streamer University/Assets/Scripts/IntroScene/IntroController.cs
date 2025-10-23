@@ -57,6 +57,8 @@ public class IntroController : MonoBehaviour
         continueHint.gameObject.SetActive(true);
         readyToContinue = true;
 
+        // Wait a bit before accepting input
+        yield return new WaitForSeconds(0.5f);
         // Pulse hint while waiting
         while (true)
         {

@@ -15,7 +15,7 @@ public class ChatTester : MonoBehaviour
 
     private IEnumerator SimulateChat() {
         while (true) {
-            chatRate = 30f / Mathf.Max(1f, Mathf.Pow((playerStats.Fame * 0.4f), 1.5f));
+            chatRate = 30f / Mathf.Max(1f, Mathf.Pow((playerStats.Fame * 0.1f), 1.5f));
             yield return new WaitForSeconds(chatRate);
 
             ChatBarkSystem.Instance.PushBark();

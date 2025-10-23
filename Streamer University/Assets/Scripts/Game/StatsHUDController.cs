@@ -5,7 +5,6 @@ using TMPro;
 public class StatsHUDController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerStatsSO playerStats;   // Drag your SO asset here
     [SerializeField] private Slider fameBar;
     [SerializeField] private Slider stressBar;
     [SerializeField] private TMP_Text fameText;
@@ -31,20 +30,19 @@ public class StatsHUDController : MonoBehaviour
 
     private void RefreshUI()
     {
-        if (playerStats == null) return;
 
         // Fame: no upper cap for now, so just show raw value and clamp bar to [0,1]
         if (fameBar != null)
-            fameBar.value = Mathf.Clamp01(playerStats.Fame / 100f);
+            fameBar.value = Mathf.Clamp01(PlayerController.Instance.Fame / 100f);
 
         if (fameText != null)
-            fameText.text = $"Fame: {playerStats.Fame}";
+            fameText.text = $"Fame: {PlayerController.Instance.Fame}";
 
         // Stress: always 0–100
         if (stressBar != null)
-            stressBar.value = playerStats.Stress / 100f;
+            stressBar.value = PlayerController.Instance.Stress / 100f;
 
         if (stressText != null)
-            stressText.text = $"Stress: {playerStats.Stress}%";
+            stressText.text = $"Stress: {PlayerController.Instance.Stress}%";
     }
 }

@@ -25,8 +25,63 @@ public static class CsvStoryletLoader
 
         // Check whether to skip first column if the header is 'Timestamp'
         var headerCols = lines[0].Split(',').Select(c => c.Trim()).ToList();
-        int expectedCols = 27; // number of expected columns without timestamp
-        bool skipFirstCol = headerCols[0] == "Timestamp";
+        bool skipFirstCol = headerCols.Count > 0 && headerCols[0] == "Timestamp";
+
+        // Expected headers in order (when Timestamp is omitted)
+        var expected = new[] {
+            "id",
+            "title",
+            "spritePath",
+            "situation",
+            "weight",
+            "oncePerRun",
+            "cooldownTurns",
+            "minFame",
+            "maxFame",
+            "minStress",
+            "maxStress",
+            "requiresAllFlags",
+            "forbidsAnyFlags",
+            "choiceA_text",
+            "choiceA_spritePath",
+            "choiceA_deltaFame",
+            "choiceA_deltaStress",
+            "choiceA_setFlags",
+            "choiceA_clearFlags",
+            "choiceA_nextEventId",
+            "choiceA_miniGame",
+            "choiceB_text",
+            "choiceB_spritePath",
+            "choiceB_deltaFame",
+            "choiceB_deltaStress",
+            "choiceB_setFlags",
+            "choiceB_clearFlags",
+            "choiceB_nextEventId",
+            "choiceB_miniGame"
+        };
+
+        // Build the header list that should match 'expected'
+        var actual = headerCols;
+        if (skipFirstCol) actual = headerCols.Skip(1).ToList();
+
+        // Normalize to lower-case for comparison
+        var actualNorm = actual.Select(s => s.Trim().ToLowerInvariant()).ToList();
+        var expectedNorm = expected.Select(s => s.Trim().ToLowerInvariant()).ToList();
+
+        if (actualNorm.Count < expectedNorm.Count)
+        {
+            Debug.LogError($"CSV header has too few columns ({actualNorm.Count}). Expected at least {expectedNorm.Count} headers.");
+            return db;
+        }
+
+        for (int hi = 0; hi < expectedNorm.Count; hi++)
+        {
+            if (actualNorm[hi] != expectedNorm[hi])
+            {
+                Debug.LogError($"CSV header mismatch at column {hi + 1}: expected '{expectedNorm[hi]}', found '{actualNorm[hi]}'. Full headers: {string.Join(",", headerCols)}");
+                return db;
+            }
+        }
 
         // header assumed exactly as defined above
         for (int i = 1; i < lines.Length; i++)
@@ -35,7 +90,6 @@ public static class CsvStoryletLoader
             if (string.IsNullOrWhiteSpace(line)) continue;
             var cols = line.Split(',').ToList();
             if (skipFirstCol) cols = cols.Skip(1).ToList();
-            if (cols.Count < expectedCols) continue; // not enough columns
 
             int k = 0;
             var e = new EventDef();
@@ -63,6 +117,7 @@ public static class CsvStoryletLoader
             ca.setFlags = ParseList(cols[k++]);
             ca.clearFlags = ParseList(cols[k++]);
             ca.nextEventId = cols[k++].Trim();
+            ca.miniGame = cols[k++].Trim();
 
             // Choice B
             var cb = new EventChoice { key = "B" };
@@ -73,10 +128,28 @@ public static class CsvStoryletLoader
             cb.setFlags = ParseList(cols[k++]);
             cb.clearFlags = ParseList(cols[k++]);
             cb.nextEventId = cols[k++].Trim();
+            cb.miniGame = cols[k++].Trim();
 
             e.choices = new List<EventChoice> { ca, cb };
             if (!string.IsNullOrWhiteSpace(e.id)) db[e.id] = e;
         }
         return db;
+    }
+
+    public static string PrintOutDB(Dictionary<string, EventDef> db)
+    {
+        var lines = new List<string>();
+        foreach (var kvp in db)
+        {
+            var e = kvp.Value;
+            lines.Add($"ID: {e.id}, Title: {e.title}, Weight: {e.weight}, OncePerRun: {e.oncePerRun}, Cooldown: {e.cooldownTurns}");
+            lines.Add($"  Conditions: Fame[{e.conditions.minFame}-{e.conditions.maxFame}], Stress[{e.conditions.minStress}-{e.conditions.maxStress}], Requires[{string.Join(";", e.conditions.requiresAllFlags)}], Forbids[{string.Join(";", e.conditions.forbidsAnyFlags)}]");
+            foreach (var choice in e.choices)
+            {
+                lines.Add($"  Choice {choice.key}: Text: {choice.text}, DeltaFame: {choice.deltaFame}, DeltaStress: {choice.deltaStress}, NextEventId: {choice.nextEventId}, MiniGame: {choice.miniGame}");
+                lines.Add($"    SetFlags: {string.Join(";", choice.setFlags)}, ClearFlags: {string.Join(";", choice.clearFlags)}");
+            }
+        }
+        return string.Join("\n", lines);
     }
 }
