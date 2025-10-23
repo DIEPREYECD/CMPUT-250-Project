@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 public class AudioController : MonoBehaviour
 {
@@ -21,21 +23,26 @@ public class AudioController : MonoBehaviour
     {
         // Get the name of the current scene
         string sceneName = SceneManager.GetActiveScene().name;
+        
         if (sceneName == "StreamScene")
         {
             Debug.Log("play stream bgm");
+            audioSource.clip = streamSceneBGM;
         }
         else if (sceneName == "MainMenu")
         {
             Debug.Log("play main menu bgm");
+            audioSource.clip = menuBGM;
         }
-        else if (sceneName == "GameWin" || sceneName == "GameOver");
+        else if (sceneName == "GameWin" || sceneName == "GameOver")
         {
             Debug.Log("play game over bgm");
+            audioSource.clip = menuBGM; // Use the same track as main menu
         }
+        toggleBGM();
     }
     
-    public void toggleBGM(string scene)
+    public void toggleBGM()
     {
         // Check if the BGM is already playing to avoid restarting it every time
         if (audioSource.isPlaying)
@@ -43,22 +50,11 @@ public class AudioController : MonoBehaviour
             Debug.Log("Stop BGM");
             return; // Do nothing if it's already playing
         }
-
-        // Assign the BGM clip to the AudioSource
-        if (scene == "stream")
-        {
-            audioSource.clip = streamSceneBGM;
-        } else if (scene == "menu")
-        {
-            audioSource.clip = menuBGM;
-        }
-
-
-    // Set the AudioSource to loop
-    audioSource.loop = true;
-    
-    // Play the music
-    audioSource.Play();
+        // Set the AudioSource to loop
+        audioSource.loop = true;
+        
+        // Play the music
+        audioSource.Play();
     }
 
     public void PlayOnEvent()
