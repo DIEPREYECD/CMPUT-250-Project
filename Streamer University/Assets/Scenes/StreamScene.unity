@@ -216,23 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0777c174138736344b17371340dfb254, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  users:
-  - fweffwefef
-  - wefefwefewfwefwe
-  - ewfwefwefwe
-  - wefwefwefwef
-  - ewfwef
-  - wefwefwefwefwef
-  - wefwefewfwefweffew
-  - fwefew
-  - ewfwef
-  - wefwefwefwef
-  messages:
-  - hry
-  - nice stream
-  - hola
-  - como estas
-  - diablo
+  playerStats: {fileID: 11400000, guid: e69036b639c332441a4d3dd712ab066c, type: 2}
   chatRate: 1
 --- !u!4 &40028376
 Transform:
