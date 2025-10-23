@@ -11,6 +11,8 @@ public class MiniGameClickerController : MiniGameController
     public Text scoreText;
     public Text instructionsText;
     public Text timerText;
+    public GameObject losePanel;
+    public GameObject winPanel;
 
     // The player has to reach the target score by clicking before time runs out
     private const float timeLimit = 40f;
@@ -31,6 +33,8 @@ public class MiniGameClickerController : MiniGameController
 
         if (timerText != null)
             timerText.text = $"Time Left: {(timeLimit - timer).ToString("F2")} seconds";
+        losePanel.SetActive(false);
+        winPanel.SetActive(false);
     }
 
     public void Update()
@@ -55,6 +59,14 @@ public class MiniGameClickerController : MiniGameController
         if (timer >= timeLimit)
         {
             successDeclared = score >= targetScore;
+            if (successDeclared == false)
+            {
+                losePanel.SetActive(true);
+            }
+            else
+            {
+                winPanel.SetActive(true);
+            }
             // Change the score text to show final score and target and whether they won or lost
             // then wait a moment before finishing so the player can see the result
             if (scoreText != null)
@@ -66,6 +78,7 @@ public class MiniGameClickerController : MiniGameController
         else if (score >= targetScore)
         {
             successDeclared = true;
+            winPanel.SetActive(true) ;
             // Change the score text to show final score and target and whether they won or lost
             // then wait a moment before finishing so the player can see the result
             if (scoreText != null)
