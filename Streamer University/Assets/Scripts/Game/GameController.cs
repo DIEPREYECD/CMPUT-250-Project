@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
     // ====== Data ======
     [Header("Data")]
-    [SerializeField] private PlayerStatsSO playerStats;   // ScriptableObject instance
 
     // ====== UI Refs ======
     [Header("UI")]
@@ -37,10 +37,12 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsNotNull(playerStats, "Assign PlayerStats on GameController.");
         Assert.IsNotNull(playerAvatar, "Assign PlayerAvatar RectTransform (UI).");
         Assert.IsNotNull(stressBar, "Assign Stress Bar.");
         Assert.IsNotNull(fameBar, "Assign Fame Bar.");
+
+        // Play BGM
+        AudioController.Instance.toggleBGM("stream");
 
         _instance = this;
     }
@@ -71,20 +73,24 @@ public class GameController : MonoBehaviour
         Subscribe();
 
         Debug.Log("Welcome to Streamer U!");
-        playerStats.ResetStats();
-        Debug.Log($"Starting Fame: {playerStats.Fame}, Stress: {playerStats.Stress}");
+        PlayerController.Instance.ResetStats();
+        Debug.Log($"Starting Fame: {PlayerController.Instance.Fame}, Stress: {PlayerController.Instance.Stress}");
 
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
 
+        GameFlowController.Instance.SetState(GameState.MainGameplay);
         // Kick the loop
         loopCoro = StartCoroutine(StreamLoop());
     }
 
     private void Update()
     {
-        stressBar.SetFill(playerStats.Stress / 100f);
-        fameBar.SetFill(playerStats.Fame / 100f);
+        stressBar.SetFill(PlayerController.Instance.Stress / 100f);
+        fameBar.SetFill(PlayerController.Instance.Fame / 100f);
+
+        if (Input.GetKeyDown(KeyCode.S) && GameFlowController.Instance.CurrentState != GameState.Minigame)
+            MiniGameLoader.Instance.RunMiniGame("MiniGame_Clicker");
     }
 
     private IEnumerator StreamLoop()
@@ -93,15 +99,22 @@ public class GameController : MonoBehaviour
         {
             state = GCState.Streaming;
 
+            // If a minigame is active for any reason, wait here
+            while (GameFlowController.Instance.CurrentState == GameState.Minigame)
+                yield return null;
+
             // Wait before next event prompt (but don't overlap if one is already showing)
             float t = 0f;
             while (t < secondsBetweenEvents)
             {
-                if (!EventManager.Instance.IsShowingEvent) t += Time.deltaTime;
+                if (!EventManager.Instance.IsShowingEvent &&
+                    GameFlowController.Instance.CurrentState == GameState.MainGameplay)
+                    t += Time.deltaTime;
                 yield return null;
             }
 
             // Ask EventManager to present the next storylet
+            Debug.Log(EventManager.Instance.PrintEventManagerState());
             EventManager.Instance.ShowNextEvent();     // -> EventManager sets IsShowingEvent=true and spawns UI
             state = GCState.ShowingChoices;
 
@@ -111,13 +124,22 @@ public class GameController : MonoBehaviour
 
             state = GCState.Resolving;
 
+            // If a minigame was launched by the choice, wait for it to finish
+            while (GameFlowController.Instance.CurrentState == GameState.Minigame)
+                yield return null;
+
             // End conditions (simple sample)
-            if (playerStats.Fame <= 0 || playerStats.Stress >= 100)
+            if (PlayerController.Instance.Fame <= 0 || PlayerController.Instance.Stress >= 100)
             {
                 Debug.Log("Stream ended: burnout or lost all fame.");
-                Debug.Log($"Final Fame: {playerStats.Fame}, Final Stress: {playerStats.Stress}");
-                QuitGame();
-                yield break;
+                Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
+                SceneManager.LoadScene("GameOver");
+            }
+            else if (PlayerController.Instance.Fame >= 100)
+            {
+                Debug.Log("Stream ended: reached maximum fame! You win!");
+                Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
+                SceneManager.LoadScene("GameWin");
             }
         }
     }
