@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3388738426068508295}
   - component: {fileID: 6365958823422665944}
   - component: {fileID: 141964117376473863}
+  - component: {fileID: -740015148326247105}
   m_Layer: 5
   m_Name: ChatMessageItem
   m_TagString: Untagged
@@ -67,9 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'User: Hey what''s up man'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fcdc87c9128bee942b8fd7312bc5bea7, type: 2}
-  m_sharedMaterial: {fileID: 3044256442557868431, guid: fcdc87c9128bee942b8fd7312bc5bea7,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,10 +93,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
+  m_fontSize: 30
   m_fontSizeBase: 30
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -147,3 +147,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4627e6fbf7327f74a8852d4bf8c49a87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-740015148326247105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2645142417519196458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2

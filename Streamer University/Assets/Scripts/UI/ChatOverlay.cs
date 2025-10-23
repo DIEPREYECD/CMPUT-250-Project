@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChatOverlay : MonoBehaviour
 {
@@ -24,13 +25,6 @@ public class ChatOverlay : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        // Make the scroll rect go to bottom when new messages come in
-        var scroll = GetComponent<UnityEngine.UI.ScrollRect>();
-        if (scroll.verticalNormalizedPosition <= 0.15f)
-            scroll.verticalNormalizedPosition = 0f;
-    }
 
     public void Push(string user, string message)
     {
@@ -39,11 +33,24 @@ public class ChatOverlay : MonoBehaviour
             return;
         }
 
+        var scroll = GetComponent<UnityEngine.UI.ScrollRect>();
+
         ChatMessageItem item = Instantiate(itemPrefab, content);
         item.Set(user, message);
 
         active.Enqueue(item);
+
+        bool autoScroll = scroll.verticalNormalizedPosition < 0.001f;
+        if (autoScroll) StartCoroutine(AutoScrollChat());
+
     }
+
+    private IEnumerator AutoScrollChat() {
+        var scroll = GetComponent<UnityEngine.UI.ScrollRect>();
+        yield return new WaitForEndOfFrame();
+        scroll.verticalNormalizedPosition = 0f;
+    }
+
 
     public void SetActive(bool active)
     {
