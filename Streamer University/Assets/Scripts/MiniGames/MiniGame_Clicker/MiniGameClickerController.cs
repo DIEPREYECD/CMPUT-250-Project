@@ -79,6 +79,7 @@ public class MiniGameClickerController : MiniGameController
     // Call this from a Button in the min-game UI to simulate "click to score"
     public void Click()
     {
+        AudioController.Instance.PlaySelect();
         score++;
     }
 
