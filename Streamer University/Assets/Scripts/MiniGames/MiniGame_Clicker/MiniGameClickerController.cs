@@ -29,7 +29,7 @@ public class MiniGameClickerController : MiniGameController
 
         targetScore = Random.Range(150, 300);
 
-        instructionsText.text = $"Keep Clicking the Button to WIN!!!!!! Don't be a LOSER : ( Reach at least {targetScore} points in {timeLimit} seconds!";
+        instructionsText.text = $"Keep Petting Mr.Kitty to WIN!!!!!! Don't be a LOSER : ( Reach at least {targetScore} points in {timeLimit} seconds!";
 
         if (timerText != null)
             timerText.text = $"Time Left: {(timeLimit - timer).ToString("F2")} seconds";
