@@ -68,6 +68,7 @@ public class IntroController : MonoBehaviour
         }
 
         // Fade to black and load next scene
+        AudioController.Instance.PlaySelect();
         yield return fader.StartCoroutine(fader.Fade(0f, 1f, fadeDuration));
         SceneManager.LoadScene(nextSceneName);
     }
