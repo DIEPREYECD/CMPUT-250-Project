@@ -132,12 +132,18 @@ public class GameController : MonoBehaviour
                 Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
                 SceneManager.LoadScene("GameOver");
             }
+            // if(PlayerController.Instance.Fame >= 100 && PlayerController.Instance.Stress <= 34) {
+            //     Debug.Log("Max Fame, Low Stress Ending.");
+            // }
+            // if (PlayerContrller.Instance.Fame >= 100 && PlayerController.Instance.Stress > 34) {
+            //     Debug.Log("Max Fame, High Stress Ending.");
+            // }
             else if (PlayerController.Instance.Fame >= 100)
             {
                 Debug.Log("Stream ended: reached maximum fame! You win!");
                 Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
                 SceneManager.LoadScene("GameWin");
-            }
+            } 
         }
     }
 
