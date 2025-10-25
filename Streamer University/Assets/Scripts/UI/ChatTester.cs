@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChatTester : MonoBehaviour
 {
-    [SerializeField] private float chatRate;
+    [SerializeField] private float chatRate = 5f;
 
     void Start()
     {
@@ -13,11 +13,9 @@ public class ChatTester : MonoBehaviour
 
     private IEnumerator SimulateChat() {
         while (true) {
-            if (PlayerController.Instance.Fame != 0) {
-                chatRate = 30f / Mathf.Pow(PlayerController.Instance.Fame * 0.5f, 1.1f); // NEW - Random Calculation - if prevents div by 0.
-            } else {
-                 chatRate = 1000f; // If fame is 0
-            }
+            if (PlayerController.Instance.Fame > 0) {
+                chatRate = 30f / Mathf.Pow(PlayerController.Instance.Fame * 0.5f, 1.2f); // NEW - Random Calculation - if prevents div by 0.
+            } 
             yield return new WaitForSeconds(chatRate);
 
 
