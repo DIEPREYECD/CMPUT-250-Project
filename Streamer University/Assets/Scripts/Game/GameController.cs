@@ -1,7 +1,19 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+
+// serializable struct for setting the conditions for each Game Ending
+[System.Serializable]
+public struct GameEndingCondition
+{
+    public GameEndings ending;   // The specific game ending
+    public float minFame;
+    public float maxFame;
+    public float minStress;
+    public float maxStress;
+}
 
 public class GameController : MonoBehaviour
 {
@@ -31,6 +43,23 @@ public class GameController : MonoBehaviour
     public enum GCState { Streaming, ShowingChoices, Resolving }
     private GCState state = GCState.Streaming;
     private Coroutine loopCoro;
+
+    [Header("Game Ending Conditions")]
+    // List of conditions for triggering each game ending
+    /*
+        Each condition can specify min/max fame and stress.
+        A value of -1 means that condition is not checked.
+
+        The example game endings are:
+        No Fame Ending: Fame <= minFame
+        Max Stress Ending: Stress >= maxStress
+        Max Fame Low Stress Ending: Fame >= maxFame AND Stress <= minStress
+        Max Fame High Stress Ending: Fame >= maxFame AND Stress >= maxStress
+
+        Put a note that is shown in the inspector for clarity.
+    */
+    [Tooltip("Set the conditions for triggering each game ending. Use -1 to ignore a condition. E.g., to trigger No Fame Ending, set minFame to 0 and others to -1.")]
+    public List<GameEndingCondition> endingConditions;
 
     private static GameController _instance;
     public static GameController Instance { get { return _instance; } }
@@ -86,8 +115,40 @@ public class GameController : MonoBehaviour
         stressBar.SetFill(PlayerController.Instance.Stress / 100f);
         fameBar.SetFill(PlayerController.Instance.Fame / 100f);
 
-        if (Input.GetKeyDown(KeyCode.S) && GameFlowController.Instance.CurrentState != GameState.Minigame)
-            MiniGameLoader.Instance.RunMiniGame("MiniGame_Clicker");
+        // Check for game ending conditions
+        foreach (var condition in endingConditions)
+        {
+            /*
+                If the min value is -1 and max value is -1 it means that condition is not checked.
+                The possible game endings are:
+
+                No Fame Ending: Fame <= minFame
+                Max Stress Ending: Stress >= maxStress
+                Max Fame High Stress Ending: Fame >= maxFame AND Stress >= maxStress
+                Max Fame Low Stress Ending: Fame >= maxFame AND Stress <= minStress
+            */
+            bool check = true;
+            if (condition.minFame != -1.0f)
+                check &= PlayerController.Instance.Fame <= condition.minFame;
+            if (condition.maxFame != -1.0f)
+                check &= PlayerController.Instance.Fame >= condition.maxFame;
+            if (condition.minStress != -1.0f)
+                check &= PlayerController.Instance.Stress <= condition.minStress;
+            if (condition.maxStress != -1.0f)
+                check &= PlayerController.Instance.Stress >= condition.maxStress;
+
+
+            if (check)
+            {
+                Debug.Log($"Game Ending Triggered: {condition.ending}");
+                GameFlowController.Instance.SetEnding(condition.ending);
+                SceneManager.LoadScene("GameEnd");
+                Unsubscribe();
+                if (loopCoro != null)
+                    StopCoroutine(loopCoro);
+                break;
+            }
+        }
     }
 
     private IEnumerator StreamLoop()
@@ -111,7 +172,6 @@ public class GameController : MonoBehaviour
             }
 
             // Ask EventManager to present the next storylet
-            Debug.Log(EventManager.Instance.PrintEventManagerState());
             EventManager.Instance.ShowNextEvent();     // -> EventManager sets IsShowingEvent=true and spawns UI
             state = GCState.ShowingChoices;
 
@@ -124,26 +184,6 @@ public class GameController : MonoBehaviour
             // If a minigame was launched by the choice, wait for it to finish
             while (GameFlowController.Instance.CurrentState == GameState.Minigame)
                 yield return null;
-
-            // End conditions (simple sample)
-            if (PlayerController.Instance.Fame <= 0 || PlayerController.Instance.Stress >= 100)
-            {
-                Debug.Log("Stream ended: burnout or lost all fame.");
-                Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
-                SceneManager.LoadScene("GameOver");
-            }
-            // if(PlayerController.Instance.Fame >= 100 && PlayerController.Instance.Stress <= 34) {
-            //     Debug.Log("Max Fame, Low Stress Ending.");
-            // }
-            // if (PlayerContrller.Instance.Fame >= 100 && PlayerController.Instance.Stress > 34) {
-            //     Debug.Log("Max Fame, High Stress Ending.");
-            // }
-            else if (PlayerController.Instance.Fame >= 100)
-            {
-                Debug.Log("Stream ended: reached maximum fame! You win!");
-                Debug.Log($"Final Fame: {PlayerController.Instance.Fame}, Final Stress: {PlayerController.Instance.Stress}");
-                SceneManager.LoadScene("GameWin");
-            } 
         }
     }
 
@@ -158,17 +198,6 @@ public class GameController : MonoBehaviour
     {
         // Return avatar to normal spot
         StartCoroutine(MoveAvatar(avatarCenter));
-    }
-
-    private void QuitGame()
-    {
-        Debug.Log("Quitting game...");
-        Unsubscribe();
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
     }
 
     private IEnumerator MoveAvatar(RectTarget target)

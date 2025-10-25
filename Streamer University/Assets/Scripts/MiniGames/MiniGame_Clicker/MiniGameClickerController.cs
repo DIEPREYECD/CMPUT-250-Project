@@ -78,7 +78,7 @@ public class MiniGameClickerController : MiniGameController
         else if (score >= targetScore)
         {
             successDeclared = true;
-            winPanel.SetActive(true) ;
+            winPanel.SetActive(true);
             // Change the score text to show final score and target and whether they won or lost
             // then wait a moment before finishing so the player can see the result
             if (scoreText != null)
@@ -92,6 +92,8 @@ public class MiniGameClickerController : MiniGameController
     // Call this from a Button in the min-game UI to simulate "click to score"
     public void Click()
     {
+        if (finished) return;
+
         AudioController.Instance.PlaySelect();
         score++;
     }

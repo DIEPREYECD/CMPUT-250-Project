@@ -41,7 +41,7 @@ public class PlayerController : AnimatedEntity
     void Update()
     {
         // Update the effective animation slice based on stress level
-        int numSlices = DefaultAnimationCycle.Count/sliceBy;
+        int numSlices = DefaultAnimationCycle.Count / sliceBy;
         effectiveSlicePortion = Mathf.Clamp(stress / (100 / sliceBy), 0, numSlices - 1);
         AnimationUpdate();
     }
@@ -54,10 +54,8 @@ public class PlayerController : AnimatedEntity
     // method to apply changes to fame and stress
     public void ApplyDelta(int dFame, int dStress)
     {
-        Debug.Log($"Applying stats delta: Fame {dFame}, Stress {dStress}");
         fame += dFame;
         stress += dStress;
-        Debug.Log($"New stats: Fame {fame}, Stress {stress}");
         fame = Mathf.Max(fame, 0);
         stress = Mathf.Clamp(stress, 0, 100);
     }

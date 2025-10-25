@@ -6,6 +6,7 @@ public class GameFlowController : MonoBehaviour
 {
     public static GameFlowController Instance { get; private set; }
     public GameState CurrentState { get; private set; } = GameState.Title;
+    private GameEndings currentEnding;
 
     void Awake()
     {
@@ -16,15 +17,19 @@ public class GameFlowController : MonoBehaviour
 
     public void SetState(GameState next) => CurrentState = next;
 
+    public void SetEnding(GameEndings ending) => currentEnding = ending;
+    public GameEndings GetEnding() => currentEnding;
+
     public void Start()
     {
-        
+
     }
 
     private void Update()
     {
-        
+
     }
 }
 
-public enum GameState { Title, MainMenu, MainGameplay, Minigame, Results, Saving }
+public enum GameState { Title, MainMenu, MainGameplay, Minigame, Paused }
+public enum GameEndings { NoFame, MaxStress, LowStressMaxFame, HighStressMaxFame }

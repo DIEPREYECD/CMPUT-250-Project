@@ -15,15 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StreamScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/GameWin.unity
-    guid: 15ca7cf27d88c7c4d8c00f1abe668a5b
-  - enabled: 1
-    path: Assets/Scenes/GameOver.unity
-    guid: 442aaad86988321409fdd6be7089a0ac
-  - enabled: 1
     path: Assets/Scenes/MiniGame_Clicker.unity
     guid: e7d48aadc49943c42ae0a94a24bd3367
   - enabled: 1
-    path: Assets/Scenes/GameFinished.unity
-    guid: 71a2599c3ae38e644b2e2f00e9e7baee
+    path: Assets/Scenes/GameEnd.unity
+    guid: 92d14c58d347aec4cbe9d265305d6c29
   m_configObjects: {}

@@ -55,9 +55,9 @@ public class AnimatedEntity : MonoBehaviour
     {
         int sliceSize = DefaultAnimationCycle.Count / sliceBy;
         //Print effective slice portion and slice size for debugging
-        Debug.Log($"Effective Slice Portion: {effectiveSlicePortion}, Slice Size: {sliceSize}");
+        // Debug.Log($"Effective Slice Portion: {effectiveSlicePortion}, Slice Size: {sliceSize}");
         EffectiveAnimationCycle.Clear();
-        for (int i = effectiveSlicePortion * sliceSize; i < (effectiveSlicePortion + 1) * sliceSize; i++)
+        for (int i = effectiveSlicePortion * sliceSize; i < (effectiveSlicePortion + 1) * sliceSize && i < DefaultAnimationCycle.Count; i++)
         {
             EffectiveAnimationCycle.Add(DefaultAnimationCycle[i]);
         }

@@ -2181,6 +2181,27 @@ MonoBehaviour:
     anchoredPos: {x: 20, y: 20}
     sizeDelta: {x: 160, y: 220}
   avatarTweenTime: 0.25
+  endingConditions:
+  - ending: 0
+    minFame: 0
+    maxFame: -1
+    minStress: -1
+    maxStress: -1
+  - ending: 1
+    minFame: -1
+    maxFame: -1
+    minStress: -1
+    maxStress: 100
+  - ending: 2
+    minFame: -1
+    maxFame: 100
+    minStress: 32
+    maxStress: -1
+  - ending: 3
+    minFame: -1
+    maxFame: 100
+    minStress: -1
+    maxStress: 33
 --- !u!4 &1815777387
 Transform:
   m_ObjectHideFlags: 0
