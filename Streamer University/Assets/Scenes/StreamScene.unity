@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.43921572, g: 0.43921572, b: 0.43921572, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1519,7 +1519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48d2ff79b617ddc49a536b4e88c7447c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChatBarkCSV: {fileID: 4900000, guid: 23f2c60747f26c34db910266dc76c568, type: 3}
+  ChatBarkCSV: {fileID: 4900000, guid: aa629d231fe619f468db1e317ed1bd19, type: 3}
 --- !u!4 &1114568750
 Transform:
   m_ObjectHideFlags: 0
