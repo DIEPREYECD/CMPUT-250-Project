@@ -697,8 +697,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 68359948}
-        m_MethodName: PlayCatMeow
+      - m_Target: {fileID: 400214065}
+        m_MethodName: OnCatButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -772,6 +772,22 @@ MonoBehaviour:
   Framerate: 8
   image: {fileID: 400214063}
   sliceBy: 1
+  petCooldown: 5
+  catButton: {fileID: 400214062}
+  catInterruptAnimation:
+  - {fileID: 3919380863139442944, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: 4336278422182789660, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -2918785216077897546, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -1827899389529748123, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -7364312037473328777, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -2679082669579421148, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -6135352730097576472, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: 6632593840124779373, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: 3220658748447888221, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -3830786865813274041, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: 1670634066540972855, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: 2986063281960176275, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
+  - {fileID: -7271175883845845900, guid: 7b0ca4d74cb09ed4c8b749cafb667796, type: 3}
 --- !u!212 &400214066
 SpriteRenderer:
   m_ObjectHideFlags: 0
