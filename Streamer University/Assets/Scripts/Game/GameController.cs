@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // serializable struct for setting the conditions for each Game Ending
 [System.Serializable]
@@ -25,6 +26,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private RectTransform playerAvatar;  // UI avatar RectTransform (Image)
     [SerializeField] private BarUI stressBar;
     [SerializeField] private BarUI fameBar;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private GameObject pauseMenuOverlay;
 
     // ====== Timing ======
     [Header("Timing")]
@@ -39,9 +43,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private RectTarget avatarDuringChoices = RectTarget.BottomLeft(new Vector2(20, 20), new Vector2(200, 280));
     [SerializeField] private float avatarTweenTime = 0.25f;
 
-    // ====== Internal State ======
-    public enum GCState { Streaming, ShowingChoices, Resolving }
-    private GCState state = GCState.Streaming;
     private Coroutine loopCoro;
 
     [Header("Game Ending Conditions")]
@@ -108,6 +109,39 @@ public class GameController : MonoBehaviour
         GameFlowController.Instance.SetState(GameState.MainGameplay);
         // Kick the loop
         loopCoro = StartCoroutine(StreamLoop());
+
+        if (pauseButton != null)
+        {
+            pauseButton.onClick.AddListener(() =>
+            {
+                if (GameFlowController.Instance.CurrentState == GameState.MainGameplay)
+                {
+                    GameFlowController.Instance.SetState(GameState.Paused);
+                    Time.timeScale = 0f;
+                    if (pauseMenuOverlay != null)
+                        pauseMenuOverlay.SetActive(true);
+                }
+            });
+        }
+
+        if (resumeButton != null)
+        {
+            resumeButton.onClick.AddListener(() =>
+            {
+                UnPauseGame();
+            });
+        }
+    }
+
+    public static void UnPauseGame()
+    {
+        if (GameFlowController.Instance.CurrentState == GameState.Paused)
+        {
+            GameFlowController.Instance.SetState(GameState.MainGameplay);
+            Time.timeScale = 1f;
+            if (Instance.pauseMenuOverlay != null)
+                Instance.pauseMenuOverlay.SetActive(false);
+        }
     }
 
     private void Update()
@@ -155,10 +189,8 @@ public class GameController : MonoBehaviour
     {
         while (true)
         {
-            state = GCState.Streaming;
-
             // If a minigame is active for any reason, wait here
-            while (GameFlowController.Instance.CurrentState == GameState.Minigame)
+            while (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
                 yield return null;
 
             // Wait before next event prompt (but don't overlap if one is already showing)
@@ -173,17 +205,6 @@ public class GameController : MonoBehaviour
 
             // Ask EventManager to present the next storylet
             EventManager.Instance.ShowNextEvent();     // -> EventManager sets IsShowingEvent=true and spawns UI
-            state = GCState.ShowingChoices;
-
-            // Wait until the player chooses and EventManager closes the UI
-            while (EventManager.Instance.IsShowingEvent)
-                yield return null;
-
-            state = GCState.Resolving;
-
-            // If a minigame was launched by the choice, wait for it to finish
-            while (GameFlowController.Instance.CurrentState == GameState.Minigame)
-                yield return null;
         }
     }
 
