@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public struct EndingDisplay
 {
     public GameEndings ending;   // Enum dropdown
     public Sprite imageToShow;    // Drag Image reference
+    public float soundTrackPitch; // Pitch for the ending soundtrack
 }
 
 public class GameEndController : MonoBehaviour
@@ -28,6 +30,7 @@ public class GameEndController : MonoBehaviour
             if (endingDisplay.ending == currentEnding)
             {
                 gameEndingPanel.sprite = endingDisplay.imageToShow;
+                AudioController.Instance.audioSource.pitch = endingDisplay.soundTrackPitch;
                 break;
             }
         }

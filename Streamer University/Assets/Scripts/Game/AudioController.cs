@@ -57,16 +57,9 @@ public class AudioController : MonoBehaviour
             Debug.Log("play main menu bgm");
             audioSource.clip = menuBGM;
         }
-        else if (sceneName == "GameWin")
+        else if ( sceneName == "GameEnd")
         {
             Debug.Log("play game over bgm");
-            audioSource.pitch = 1.3f;
-            audioSource.clip = menuBGM; // Use the same track as main menu
-        }
-        else if ( sceneName == "GameOver")
-        {
-            Debug.Log("play game over bgm");
-            audioSource.pitch = 0.7f;
             audioSource.clip = menuBGM; // Use the same track as main menu
         }
         else
