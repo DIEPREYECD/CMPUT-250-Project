@@ -331,6 +331,8 @@ MonoBehaviour:
     imageToShow: {fileID: 21300000, guid: 13fab2c0e6779c643b3eaec5d4a91371, type: 3}
     soundTrackPitch: 1.3
   playAgainButton: {fileID: 1274143935}
+  enableTest: 0
+  testEnding: 0
 --- !u!1 &1029794049
 GameObject:
   m_ObjectHideFlags: 0
