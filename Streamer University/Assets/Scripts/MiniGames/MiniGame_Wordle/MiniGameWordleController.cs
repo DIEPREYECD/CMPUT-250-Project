@@ -154,12 +154,18 @@ public class MiniGameWordleController : MiniGameController
 
         var states = EvaluateGuess(guess);
         RevealRowColors(states);
+        UpdateKeyboardStates(guess, states);
 
         if (guess == currentAnswer)
         {
+            // Play bounce animation on tiles
+
             successDeclared = true;
             finished = true;
             Debug.Log("You guessed it!");
+
+            StartCoroutine(PlayWinRowAnimation(currentRow));
+
             Invoke(nameof(FinishMiniGame), finishDelay);
             return;
         }
@@ -173,6 +179,69 @@ public class MiniGameWordleController : MiniGameController
             finished = true;
             Debug.Log("Out of rows! Answer was: " + currentAnswer);
             Invoke(nameof(FinishMiniGame), finishDelay);
+        }
+    }
+
+    private IEnumerator PlayWinRowAnimation(int row)
+    {
+        // Safety check
+        if (tileAnimators == null || tileAnimators.Count < 5) yield break;
+
+        for (int i = 0; i < 5; i++)
+        {
+            int tileIndex = row * 5 + i;
+            if (tileIndex >= 0 && tileIndex < tileAnimators.Count)
+            {
+                var anim = tileAnimators[tileIndex];
+                if (anim != null)
+                {
+                    anim.ResetTrigger("Win"); // safety
+                    anim.SetTrigger("Win");
+                }
+            }
+
+            // small time wait for wave effect
+            yield return new WaitForSeconds(0.06f);
+        }
+    }
+
+    private void UpdateKeyboardStates(string guess, LetterState[] states)
+    {
+        // Update keyboard key colors based on the latest guess
+        for (int i = 0; i < 5; i++)
+        {
+            string letter = guess[i].ToString();
+            LetterState state = states[i];
+            // Find the corresponding key button
+            var keyBtn = letterKeys.Find(btn => btn.GetComponentInChildren<TMP_Text>().text.ToUpper() == letter);
+            if (keyBtn != null)
+            {
+                var keyBg = keyBtn.GetComponent<Image>();
+                if (keyBg != null)
+                {
+                    Color targetColor = keyUnknownColor;
+                    switch (state)
+                    {
+                        case LetterState.Correct:
+                            targetColor = keyCorrectColor;
+                            break;
+                        case LetterState.Present:
+                            targetColor = keyPresentColor;
+                            break;
+                        case LetterState.Absent:
+                            targetColor = keyAbsentColor;
+                            break;
+                    }
+                    // Only upgrade color if it's a higher state
+                    Color currentColor = keyBg.color;
+                    if (state == LetterState.Correct ||
+                        (state == LetterState.Present && currentColor != keyCorrectColor) ||
+                        (state == LetterState.Absent && currentColor != keyCorrectColor && currentColor != keyPresentColor))
+                    {
+                        keyBg.color = targetColor;
+                    }
+                }
+            }
         }
     }
 
