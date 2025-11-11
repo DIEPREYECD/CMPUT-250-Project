@@ -8,11 +8,18 @@ public class MiniGameClickerController : MiniGameController
     private int score;
     private int targetScore;
 
+    [Header("UI References")]
     public Text scoreText;
     public Text instructionsText;
     public Text timerText;
     public GameObject losePanel;
     public GameObject winPanel;
+
+    [Header("Intro UI")]
+    public GameObject introPanel;      // Fullscreen panel with intro text + start button
+    public GameObject gameUIRoot;      // Parent for the actual gameplay UI (score, timer, button, etc.)
+
+    private bool gameStarted = false;
 
     // The player has to reach the target score by clicking before time runs out
     private const float timeLimit = 40f;
@@ -23,23 +30,41 @@ public class MiniGameClickerController : MiniGameController
         this.delta = new Dictionary<string, int>();
         // Generate a random target score between 50 and 200
         score = 0;
+        timer = 0f;
+        finished = false;
+        successDeclared = false;
 
         if (scoreText != null)
             scoreText.text = $"Score: {score}";
 
         targetScore = Random.Range(150, 300);
 
-        instructionsText.text = $"Keep Petting Mr.Kitty to WIN!!!!!! Don't be a LOSER : ( Reach at least {targetScore} points in {timeLimit} seconds!";
+        if (instructionsText != null)
+            instructionsText.text =
+                $"Keep petting Mr. Kitty to win!\n" +
+                $"Reach at least {targetScore} points in {timeLimit} seconds.";
+
+        if (scoreText != null)
+            scoreText.text = $"Score: {score}";
 
         if (timerText != null)
-            timerText.text = $"Time Left: {(timeLimit - timer).ToString("F2")} seconds";
-        losePanel.SetActive(false);
-        winPanel.SetActive(false);
+            timerText.text = $"Time Left: {timeLimit.ToString("F2")} seconds";
+
+        // Result panels hidden at start
+        if (losePanel != null) losePanel.SetActive(false);
+        if (winPanel != null) winPanel.SetActive(false);
+
+        // Show intro, hide gameplay until player presses Start
+        if (introPanel != null) introPanel.SetActive(true);
+        if (gameUIRoot != null) gameUIRoot.SetActive(false);
+
+        gameStarted = false;
     }
 
     public void Update()
     {
-        if (finished) return;
+        // Don't run the game loop until player has started
+        if (!gameStarted || finished) return;
 
         if (scoreText != null)
             scoreText.text = $"Score: {score}";
@@ -47,7 +72,6 @@ public class MiniGameClickerController : MiniGameController
         if (timerText != null && timer <= timeLimit)
             timerText.text = $"Time Left: {(timeLimit - timer).ToString("F2")} seconds";
 
-        // When time is less than 10 second, change timer text color to blinking betwenn white and black
         if (timeLimit - timer <= 10f && score < targetScore)
         {
             float t = Mathf.PingPong(Time.time * 5f, 1f);
@@ -92,7 +116,7 @@ public class MiniGameClickerController : MiniGameController
     // Call this from a Button in the min-game UI to simulate "click to score"
     public void Click()
     {
-        if (finished) return;
+        if (!gameStarted || finished) return;
 
         AudioController.Instance.PlaySelect();
         score++;
@@ -133,4 +157,25 @@ public class MiniGameClickerController : MiniGameController
         if (mainScene.IsValid())
             SceneManager.SetActiveScene(mainScene);
     }
+
+    public void StartGame()
+    {
+        if (gameStarted) return;
+
+        AudioController.Instance.PlaySelect();
+
+        gameStarted = true;
+        timer = 0f;
+
+        if (introPanel != null)
+            introPanel.SetActive(false);
+
+        if (gameUIRoot != null)
+            gameUIRoot.SetActive(true);
+
+        // Reset timer display once more at the actual start
+        if (timerText != null)
+            timerText.text = $"Time Left: {timeLimit.ToString("F2")} seconds";
+    }
+
 }
