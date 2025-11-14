@@ -35,7 +35,7 @@ public class GameEndController : MonoBehaviour
             if (endingDisplay.ending == currentEnding)
             {
                 gameEndingPanel.sprite = endingDisplay.imageToShow;
-                AudioController.Instance.audioSource.pitch = endingDisplay.soundTrackPitch;
+                AudioController.Instance.BGMSource.pitch = endingDisplay.soundTrackPitch;
                 break;
             }
         }
@@ -72,6 +72,9 @@ public class GameEndController : MonoBehaviour
     public void PlayAgain()
     {
         // Reload the main menu scene or title scene
+        AudioController.Instance.PlaySelect();
+        AudioController.Instance.toggleBGM();
+        AudioController.Instance.BGMSource.pitch = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }

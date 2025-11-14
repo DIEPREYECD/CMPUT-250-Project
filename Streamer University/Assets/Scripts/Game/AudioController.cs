@@ -10,9 +10,10 @@ public class AudioController : MonoBehaviour
     private static AudioController _instance;
     public static AudioController Instance { get { return _instance; } }
 
-    public AudioSource audioSource;
-    public AudioClip menuBGM, streamSceneBGM, onEvent, openSideCard, chooseEvent, select, catMeow;
+    public AudioSource BGMSource, SFXSource;
+    public AudioClip menuBGM, streamSceneBGM, onEvent, openSideCard, closeSideCard, chooseEvent, select, catMeow, textBeep;
     private AudioClip currentClip = null;
+    private float defaultVolume;
 
     private void Awake()
     {
@@ -20,14 +21,23 @@ public class AudioController : MonoBehaviour
         // Doing the former because cat button in StreamScene need a object reference (Matthew L)
 
         // Destroy duplicates
+        /* Destroy old
         if (Instance != null)
         {
             Destroy(Instance.gameObject);
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+        */
+        // Destory new
+        if (Instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
     }
-    
 
     private void OnEnable()
     {
@@ -50,17 +60,17 @@ public class AudioController : MonoBehaviour
         if (sceneName == "StreamScene")
         {
             Debug.Log("play stream bgm");
-            audioSource.clip = streamSceneBGM;
+            BGMSource.clip = streamSceneBGM;
         }
         else if (sceneName == "MainMenu")
         {
             Debug.Log("play main menu bgm");
-            audioSource.clip = menuBGM;
+            BGMSource.clip = menuBGM;
         }
         else if ( sceneName == "GameEnd")
         {
             Debug.Log("play game over bgm");
-            audioSource.clip = menuBGM; // Use the same track as main menu
+            BGMSource.clip = menuBGM; // Use the same track as main menu
         }
         else
         {
@@ -73,40 +83,45 @@ public class AudioController : MonoBehaviour
     public void toggleBGM()
     {
         // Check if the BGM is already playing to avoid restarting it every time
-        if (audioSource.isPlaying && currentClip == audioSource.clip)
+        if (BGMSource.isPlaying && currentClip == BGMSource.clip)
         {
             Debug.Log("Stop BGM");
+            BGMSource.Stop();
             return; // Do nothing if it's already playing
         }
         // Set the AudioSource to loop
-        audioSource.loop = true;
+        BGMSource.loop = true;
 
-        currentClip = audioSource.clip;
+        currentClip = BGMSource.clip;
         
         // Play the music
-        audioSource.Play();
+        BGMSource.Play();
     }
 
     public void PlayOnEvent()
     {
-        audioSource.PlayOneShot(onEvent);
+        SFXSource.PlayOneShot(onEvent);
     }
 
     public void PlayOpenSideCard()
     {
-        audioSource.PlayOneShot(openSideCard);
+        SFXSource.PlayOneShot(openSideCard);
     }
 
     public void PlayChooseEvent()
     {
-        audioSource.PlayOneShot(chooseEvent);
+        SFXSource.PlayOneShot(chooseEvent);
     }
     public void PlaySelect()
     {
-        audioSource.PlayOneShot(select);
+        SFXSource.PlayOneShot(select);
     }
     public void PlayCatMeow()
     {
-        audioSource.PlayOneShot(catMeow);
+        SFXSource.PlayOneShot(catMeow);
+    }
+    public void PlayBeep()
+    {
+        SFXSource.PlayOneShot(textBeep);
     }
 }

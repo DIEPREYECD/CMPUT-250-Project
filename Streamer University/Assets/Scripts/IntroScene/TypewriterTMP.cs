@@ -50,6 +50,7 @@ public class TypewriterTMP : MonoBehaviour
                 visible = next;
                 text.maxVisibleCharacters = visible;
             }
+            // AudioController.Instance.PlayBeep();
             yield return null;
         }
 

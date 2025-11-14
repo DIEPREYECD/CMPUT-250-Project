@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,8 +19,9 @@ public class PlayAgain : MonoBehaviour
     }
 
     public void playAgain() {
-        for (int i = 0; i < 100; i++) {
-            Debug.Log("playagain clicked");
+        for (int i = 0; i < 100; i++)
+        {
+            UnityEngine.Debug.Log("playagain clicked");
         }
         SceneManager.LoadScene("IntroScene");
     }
