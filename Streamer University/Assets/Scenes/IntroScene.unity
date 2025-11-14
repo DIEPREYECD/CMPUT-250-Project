@@ -469,9 +469,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1421140200}
+  - component: {fileID: 1421140198}
   - component: {fileID: 1421140199}
   - component: {fileID: 1421140201}
-  - component: {fileID: 1421140198}
   m_Layer: 0
   m_Name: AudioController
   m_TagString: Untagged
@@ -501,6 +501,7 @@ MonoBehaviour:
   chooseEvent: {fileID: 8300000, guid: 7ac8168dd9fabb44fb14f692c766c5f6, type: 3}
   select: {fileID: 8300000, guid: 37319801e66451c458be724020d9a3bb, type: 3}
   catMeow: {fileID: 8300000, guid: 6895af49f8a47d94db2d591d14f1eb0e, type: 3}
+  textBeep: {fileID: 8300000, guid: dfff21d435bc8c442bde0e381679c621, type: 3}
 --- !u!82 &1421140199
 AudioSource:
   m_ObjectHideFlags: 0
