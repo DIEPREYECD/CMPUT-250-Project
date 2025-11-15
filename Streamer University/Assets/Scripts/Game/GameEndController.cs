@@ -19,12 +19,17 @@ public class GameEndController : MonoBehaviour
     public Image gameEndingPanel;
     public List<EndingDisplay> endingsToShow;
     public Button playAgainButton; // Button reference
+    public bool enableTest; // Enable testing
+    public GameEndings testEnding; // Select an ending to test
+    private GameEndings currentEnding;
 
     // Start is called before the first frame update
     void Start()
     {
         // Check which ending to show based on the GameFlowController's current ending
-        GameEndings currentEnding = GameFlowController.Instance.GetEnding();
+        if (enableTest) { currentEnding = testEnding; }
+        else { currentEnding = GameFlowController.Instance.GetEnding(); }
+        
         foreach (EndingDisplay endingDisplay in endingsToShow)
         {
             if (endingDisplay.ending == currentEnding)
