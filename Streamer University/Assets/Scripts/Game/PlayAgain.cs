@@ -21,6 +21,6 @@ public class PlayAgain : MonoBehaviour
         for (int i = 0; i < 100; i++) {
             Debug.Log("playagain clicked");
         }
-        SceneManager.LoadScene("IntroScene");
+        GameFlowController.Instance.TransitionToScene("IntroScene");
     }
 }
