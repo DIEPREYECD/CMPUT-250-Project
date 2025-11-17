@@ -1573,6 +1573,15 @@ MonoBehaviour:
   Framerate: 7
   image: {fileID: 966450013}
   sliceBy: 3
+  playerOnEvents:
+  - {fileID: 3321123658655896268, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -2028986279993773409, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -2623500142975177705, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -4779991566530457145, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: 3196401980548088645, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: 4245857957601633301, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: 4798086431734137681, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -3688719466899429393, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
 --- !u!1 &975953539
 GameObject:
   m_ObjectHideFlags: 0
