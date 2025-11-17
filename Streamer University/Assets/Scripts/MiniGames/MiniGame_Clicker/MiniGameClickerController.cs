@@ -148,14 +148,15 @@ public class MiniGameClickerController : MiniGameController
             delta = delta
         };
 
-        if (resultChannel != null)
-            resultChannel.Raise(result);
 
         EventManager.Instance.setFlags(setFlags);
-        MiniGameLoader.UnloadMiniGame(mySceneName);
-        var mainScene = SceneManager.GetSceneByName("StreamScene");
-        if (mainScene.IsValid())
-            SceneManager.SetActiveScene(mainScene);
+        // MiniGameLoader.UnloadMiniGame(mySceneName);
+        // var mainScene = SceneManager.GetSceneByName("StreamScene");
+        // if (mainScene.IsValid())
+        //     SceneManager.SetActiveScene(mainScene);
+        
+        if (resultChannel != null)
+            resultChannel.Raise(result);
     }
 
     public void StartGame()

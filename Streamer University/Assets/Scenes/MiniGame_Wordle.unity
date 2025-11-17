@@ -4486,8 +4486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e05c9de772bdf64ca50e6098ca6566b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resultChannel: {fileID: 0}
-  mySceneName: 
+  resultChannel: {fileID: 11400000, guid: 67d8d54a59d36ee4997f77eb991ac4d7, type: 2}
+  mySceneName: MiniGame_Wordle
   boardRoot: {fileID: 812943872}
   tileBackgrounds:
   - {fileID: 1008975872}
