@@ -23,6 +23,6 @@ public class PlayAgain : MonoBehaviour
         {
             UnityEngine.Debug.Log("playagain clicked");
         }
-        SceneManager.LoadScene("IntroScene");
+        GameFlowController.Instance.TransitionToScene("IntroScene");
     }
 }

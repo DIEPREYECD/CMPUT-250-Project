@@ -146,6 +146,9 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
+        if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+            return;
+
         stressBar.SetFill(PlayerController.Instance.Stress / 100f);
         fameBar.SetFill(PlayerController.Instance.Fame / 100f);
 
@@ -176,10 +179,11 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log($"Game Ending Triggered: {condition.ending}");
                 GameFlowController.Instance.SetEnding(condition.ending);
-                SceneManager.LoadScene("GameEnd");
+                GameFlowController.Instance.SetState(GameState.GameEnd);
                 Unsubscribe();
                 if (loopCoro != null)
                     StopCoroutine(loopCoro);
+                GameFlowController.Instance.TransitionToScene("GameEnd");
                 break;
             }
         }

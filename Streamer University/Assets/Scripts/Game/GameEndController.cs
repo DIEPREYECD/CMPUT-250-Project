@@ -29,7 +29,7 @@ public class GameEndController : MonoBehaviour
         // Check which ending to show based on the GameFlowController's current ending
         if (enableTest) { currentEnding = testEnding; }
         else { currentEnding = GameFlowController.Instance.GetEnding(); }
-        
+
         foreach (EndingDisplay endingDisplay in endingsToShow)
         {
             if (endingDisplay.ending == currentEnding)
@@ -75,6 +75,6 @@ public class GameEndController : MonoBehaviour
         AudioController.Instance.PlaySelect();
         AudioController.Instance.toggleBGM();
         AudioController.Instance.BGMSource.pitch = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        GameFlowController.Instance.TransitionToScene("MainMenu");
     }
 }
