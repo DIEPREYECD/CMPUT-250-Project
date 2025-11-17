@@ -1573,6 +1573,15 @@ MonoBehaviour:
   Framerate: 7
   image: {fileID: 966450013}
   sliceBy: 3
+  playerOnEvents:
+  - {fileID: 3321123658655896268, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -2028986279993773409, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -2623500142975177705, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -4779991566530457145, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: 3196401980548088645, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: 4245857957601633301, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: 4798086431734137681, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
+  - {fileID: -3688719466899429393, guid: 9fa04e5cf0debc044a910050d7c9aa8c, type: 3}
 --- !u!1 &975953539
 GameObject:
   m_ObjectHideFlags: 0
@@ -3112,7 +3121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba25168bcb125348b65fde6bc98c965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyletsCsv: {fileID: 4900000, guid: 251bb472b323aba469ea761722c9b62f, type: 3}
+  storyletsCsv: {fileID: 4900000, guid: 750bf4dcd0120ea43912143c0af88422, type: 3}
   defaultSprite: {fileID: 21300000, guid: b4ddecf71fc592544b22f3ba8b2fae12, type: 3}
   mainCardPrefab: {fileID: 635179828270733437, guid: 128f80dc9ecfe5e438ad4665c483bae9,
     type: 3}

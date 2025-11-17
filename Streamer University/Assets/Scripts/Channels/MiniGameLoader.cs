@@ -38,6 +38,7 @@ public class MiniGameLoader : MonoBehaviour
         _waiting = true;
         UnityAction<MiniGameResult> handler = (MiniGameResult r) =>
         {
+            Debug.Log($"MiniGameLoader: Received minigame result: success={r.success}");
             _result = r;
             _waiting = false;
         };
@@ -50,7 +51,7 @@ public class MiniGameLoader : MonoBehaviour
         resultChannel.OnRaised -= handler;
 
         // unload
-        UnloadMiniGame(sceneName);
+        UnloadMiniGame(miniGameSceneName);
 
         // apply deltas (centralized here)
         int deltaFame = _result.delta != null && _result.delta.ContainsKey("fame") ? _result.delta["fame"] : 0;
@@ -58,6 +59,13 @@ public class MiniGameLoader : MonoBehaviour
         PlayerController.Instance.ApplyDelta(deltaFame, deltaStress);
 
         // back to main gameplay
+        var mainScene = SceneManager.GetSceneByName("StreamScene");
+        if (mainScene.IsValid())
+        {
+            SceneManager.SetActiveScene(mainScene);
+            AudioController.Instance.checkScene(); // resume main gameplay music
+        }
+
         GameFlowController.Instance.SetState(GameState.MainGameplay);
     }
 

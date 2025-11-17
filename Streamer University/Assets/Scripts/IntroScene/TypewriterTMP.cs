@@ -7,25 +7,58 @@ public class TypewriterTMP : MonoBehaviour
 {
     public TMP_Text text;
     [TextArea(3, 10)]
-    public string fullText =
-        "“It all started one late night… scrolling through clips of Speed(the Streamer of the Year) shattering mics and records. Our hero—armed with a jittery webcam and louder dreams—decided: why not me? Welcome to Streamer University: where viral moments are made, and sanity sometimes goes live.”";
-
+    public string fullText;
     public float charsPerSecond = 40f;
     public bool isTyping { get; private set; }
 
     Coroutine routine;
+    Coroutine initRoutine;
     string bakedText;
-
     void OnEnable()
     {
-        // Bake the final line breaks based on the current box, font, size, etc.
+        // Try to auto-assign TMP_Text if not set in inspector
+        if (text == null)
+            text = GetComponent<TMP_Text>();
+
+        if (text == null)
+        {
+            Debug.LogError("TypewriterTMP requires a TMP_Text assigned or present on the same GameObject.", this);
+            return;
+        }
+
+        // Start an init coroutine that waits for IntroController to be ready before starting the typewriter.
+        if (initRoutine != null) StopCoroutine(initRoutine);
+        initRoutine = StartCoroutine(InitializeAndRun());
+    }
+
+    void OnDisable()
+    {
+        if (initRoutine != null) StopCoroutine(initRoutine);
+        if (routine != null) StopCoroutine(routine);
+        isTyping = false;
+    }
+
+    IEnumerator InitializeAndRun()
+    {
+        // Wait briefly for IntroController.Instance to be assigned, but don't wait forever.
+        float wait = 0f;
+        const float timeout = 5f; // seconds
+        while (IntroController.Instance == null && wait < timeout)
+        {
+            wait += Time.deltaTime;
+            yield return null;
+        }
+
+        if (IntroController.Instance != null)
+            fullText = IntroController.Instance.introText;
+        else
+            Debug.LogWarning("IntroController.Instance not found after waiting; using inspector 'fullText'.", this);
+
+        // Bake and start typing
         bakedText = BakeLineBreaks(fullText);
 
-        // Lock wrapping so lines won’t reflow while typing.
         text.enableWordWrapping = false;
         text.text = bakedText;
-
-        // Start with nothing visible; reveal via maxVisibleCharacters.
         text.maxVisibleCharacters = 0;
 
         if (routine != null) StopCoroutine(routine);
@@ -50,6 +83,7 @@ public class TypewriterTMP : MonoBehaviour
                 visible = next;
                 text.maxVisibleCharacters = visible;
             }
+            // AudioController.Instance.PlayBeep();
             yield return null;
         }
 
@@ -86,7 +120,6 @@ public class TypewriterTMP : MonoBehaviour
 
         // Mark positions right after each line’s last visible character
         var sb = new StringBuilder(src.Length + ti.lineCount * 2);
-        int srcIndex = 0;
         int breakIdx = 0;
 
         // Collect break positions in source-string indices

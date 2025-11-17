@@ -29,13 +29,13 @@ public class GameEndController : MonoBehaviour
         // Check which ending to show based on the GameFlowController's current ending
         if (enableTest) { currentEnding = testEnding; }
         else { currentEnding = GameFlowController.Instance.GetEnding(); }
-        
+
         foreach (EndingDisplay endingDisplay in endingsToShow)
         {
             if (endingDisplay.ending == currentEnding)
             {
                 gameEndingPanel.sprite = endingDisplay.imageToShow;
-                AudioController.Instance.audioSource.pitch = endingDisplay.soundTrackPitch;
+                AudioController.Instance.BGMSource.pitch = endingDisplay.soundTrackPitch;
                 break;
             }
         }
@@ -72,6 +72,9 @@ public class GameEndController : MonoBehaviour
     public void PlayAgain()
     {
         // Reload the main menu scene or title scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        AudioController.Instance.PlaySelect();
+        AudioController.Instance.toggleBGM();
+        AudioController.Instance.BGMSource.pitch = 1;
+        GameFlowController.Instance.TransitionToScene("MainMenu");
     }
 }

@@ -104,6 +104,9 @@ public class EventManager : MonoBehaviour
 
         Debug.Log($"Total events loaded: {db.Count}");
         Debug.Log($"NudgeX calculated as: {nudgeX}");
+
+        // Add initial event EVT000_STARTED
+        addToQueue("EVT000_STARTED");
     }
 
     public void NextTurn()
@@ -210,8 +213,8 @@ public class EventManager : MonoBehaviour
     void ShowSideChoice(EventChoice c, bool left)
     {
         // If already showing, destroy and return
-        if (left && sideLeft) { Destroy(sideLeft); sideLeft = null; StartCoroutine(NudgeMain(0f)); return; }
-        if (!left && sideRight) { Destroy(sideRight); sideRight = null; StartCoroutine(NudgeMain(0f)); return; }
+        if (left && sideLeft) { Destroy(sideLeft); sideLeft = null; StartCoroutine(NudgeMain(0f)); AudioController.Instance.PlayCloseSideCard(); return; }
+        if (!left && sideRight) { Destroy(sideRight); sideRight = null; StartCoroutine(NudgeMain(0f)); AudioController.Instance.PlayCloseSideCard(); return; }
 
         // Destroy opposite side if present and nudge the main back to center
         if (left && sideRight) { Destroy(sideRight); sideRight = null; }

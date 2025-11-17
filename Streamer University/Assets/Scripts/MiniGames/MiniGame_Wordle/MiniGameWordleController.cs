@@ -29,7 +29,7 @@ public class MiniGameWordleController : MiniGameController
     public Color absentColor = new Color32(58, 58, 60, 255);
     public Color presentColor = new Color32(181, 159, 59, 255);
     public Color correctColor = new Color32(83, 141, 78, 255);
-    
+
     Color keyUnknownColor, keyAbsentColor, keyPresentColor, keyCorrectColor;
 
     [Header("Audio")]
@@ -425,14 +425,20 @@ public class MiniGameWordleController : MiniGameController
 
         // Report result through your SO channel
         var result = new MiniGameResult { success = success, delta = this.delta };
-        if (resultChannel != null) resultChannel.Raise(result);
 
         // Flags and cleanup
         EventManager.Instance.setFlags(setFlags);
 
         // Unload this additive scene and focus the main one (same as Clicker)
-        MiniGameLoader.UnloadMiniGame(mySceneName);
-        var main = SceneManager.GetSceneByName("StreamScene");
-        if (main.IsValid()) SceneManager.SetActiveScene(main);
+        // MiniGameLoader.UnloadMiniGame(mySceneName);
+        // var main = SceneManager.GetSceneByName("StreamScene");
+        // if (main.IsValid()) SceneManager.SetActiveScene(main);
+
+        if (resultChannel != null)
+        {
+            Debug.Log("[Wordle] Raising result through resultChannel.");
+            resultChannel.Raise(result);
+        }
+
     }
 }

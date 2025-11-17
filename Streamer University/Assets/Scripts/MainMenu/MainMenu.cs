@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -19,7 +20,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         AudioController.Instance.PlaySelect();
-        UnityEngine.SceneManagement.SceneManager.LoadScene("StreamScene");
+        GameFlowController.Instance.TransitionToScene("StreamScene");
     }
 
     public void QuitGame()

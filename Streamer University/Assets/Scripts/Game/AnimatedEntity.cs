@@ -24,6 +24,9 @@ public class AnimatedEntity : MonoBehaviour
     //interrupt animation info
     private bool interruptFlag;
     private List<Sprite> interruptAnimation;
+    //persistent override animation (e.g., for "player on event" state)
+    private bool overrideFlag = false;
+    private List<Sprite> overrideAnimation;
 
 
     //Set up logic for animation stuff
@@ -69,29 +72,47 @@ public class AnimatedEntity : MonoBehaviour
             animationTimer = 0;
             index++;
 
-            if (!interruptFlag)
+            // Priority: persistent override (looping) -> one-shot interrupt -> default effective cycle
+            if (overrideFlag)
             {
-                if (EffectiveAnimationCycle.Count == 0 || index >= EffectiveAnimationCycle.Count)
+                if (overrideAnimation == null || overrideAnimation.Count == 0)
                 {
-                    index = 0;
+                    // invalid override; clear and fall through to other behaviors
+                    overrideFlag = false;
+                    overrideAnimation = null;
                 }
-                if (EffectiveAnimationCycle.Count > 0)
+                else
                 {
-                    image.sprite = EffectiveAnimationCycle[index];
+                    if (index >= overrideAnimation.Count)
+                        index = 0;
+                    image.sprite = overrideAnimation[index];
+                    return;
                 }
             }
-            else
+
+            if (interruptFlag)
             {
                 if (interruptAnimation == null || index >= interruptAnimation.Count)
                 {
                     index = 0;
                     interruptFlag = false;
-                    interruptAnimation = null;//clear interrupt animation
+                    interruptAnimation = null; // clear interrupt animation
                 }
                 else
                 {
                     image.sprite = interruptAnimation[index];
+                    return;
                 }
+            }
+
+            // Default behaviour
+            if (EffectiveAnimationCycle.Count == 0 || index >= EffectiveAnimationCycle.Count)
+            {
+                index = 0;
+            }
+            if (EffectiveAnimationCycle.Count > 0)
+            {
+                image.sprite = EffectiveAnimationCycle[index];
             }
         }
     }
@@ -104,6 +125,32 @@ public class AnimatedEntity : MonoBehaviour
         index = 0;
         interruptAnimation = _interruptAnimation;
         image.sprite = interruptAnimation[index];
+    }
+
+    // Persistent override animation: loop a different animation until cleared
+    public void SetAnimationOverride(List<Sprite> _overrideAnimation)
+    {
+        if (_overrideAnimation == null || _overrideAnimation.Count == 0)
+            return;
+        overrideFlag = true;
+        overrideAnimation = new List<Sprite>(_overrideAnimation);
+        // cancel any one-shot interrupts
+        interruptFlag = false;
+        interruptAnimation = null;
+        animationTimer = 0;
+        index = 0;
+        image.sprite = overrideAnimation[index];
+    }
+
+    public void ClearAnimationOverride()
+    {
+        overrideFlag = false;
+        overrideAnimation = null;
+        animationTimer = 0;
+        index = 0;
+        // Immediately attempt to reset to effective cycle if available
+        if (EffectiveAnimationCycle != null && EffectiveAnimationCycle.Count > 0)
+            image.sprite = EffectiveAnimationCycle[Mathf.Clamp(index, 0, EffectiveAnimationCycle.Count - 1)];
     }
 
 }
