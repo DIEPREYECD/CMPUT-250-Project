@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         AudioController.Instance.PlaySelect();
-        UnityEngine.SceneManagement.SceneManager.LoadScene("StreamScene");
+        GameFlowController.Instance.TransitionToScene("StreamScene");
     }
 
     public void QuitGame()

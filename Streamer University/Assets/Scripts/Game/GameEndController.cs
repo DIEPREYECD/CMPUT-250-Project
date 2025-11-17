@@ -72,6 +72,6 @@ public class GameEndController : MonoBehaviour
     public void PlayAgain()
     {
         // Reload the main menu scene or title scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        GameFlowController.Instance.TransitionToScene("MainMenu");
     }
 }

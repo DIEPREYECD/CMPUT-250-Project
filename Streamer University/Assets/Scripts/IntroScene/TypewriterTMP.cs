@@ -7,9 +7,7 @@ public class TypewriterTMP : MonoBehaviour
 {
     public TMP_Text text;
     [TextArea(3, 10)]
-    public string fullText =
-        "“It all started one late night… scrolling through clips of Speed(the Streamer of the Year) shattering mics and records. Our hero—armed with a jittery webcam and louder dreams—decided: why not me? Welcome to Streamer University: where viral moments are made, and sanity sometimes goes live.”";
-
+    public string fullText = IntroController.Instance.introText;
     public float charsPerSecond = 40f;
     public bool isTyping { get; private set; }
 

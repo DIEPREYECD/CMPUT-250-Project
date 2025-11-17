@@ -176,7 +176,7 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log($"Game Ending Triggered: {condition.ending}");
                 GameFlowController.Instance.SetEnding(condition.ending);
-                SceneManager.LoadScene("GameEnd");
+                GameFlowController.Instance.TransitionToScene("GameEnd");
                 Unsubscribe();
                 if (loopCoro != null)
                     StopCoroutine(loopCoro);
