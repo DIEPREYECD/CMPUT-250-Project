@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-#if UNITY_EDITOR
 [ExecuteAlways]
 public class LetterTilePreview : MonoBehaviour
 {
@@ -29,4 +28,3 @@ public class LetterTilePreview : MonoBehaviour
         }
     }
 }
-#endif
