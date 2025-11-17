@@ -3121,7 +3121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba25168bcb125348b65fde6bc98c965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storyletsCsv: {fileID: 4900000, guid: 7903174cbc60f784eb512c2ebeb00c3d, type: 3}
+  storyletsCsv: {fileID: 4900000, guid: 750bf4dcd0120ea43912143c0af88422, type: 3}
   defaultSprite: {fileID: 21300000, guid: b4ddecf71fc592544b22f3ba8b2fae12, type: 3}
   mainCardPrefab: {fileID: 635179828270733437, guid: 128f80dc9ecfe5e438ad4665c483bae9,
     type: 3}
