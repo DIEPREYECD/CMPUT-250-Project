@@ -83,7 +83,6 @@ public class PlayerController : AnimatedEntity
     // Public callback to trigger player "on" event animation
     public void PlayPlayerOnEvent()
     {
-        Debug.Log("PlayerController: Playing player on-event animation.");
         if (playerOnEvents == null || playerOnEvents.Count == 0)
         {
             Debug.LogWarning("PlayerController: No playerOnEvents assigned for on-event animation.");
@@ -96,7 +95,6 @@ public class PlayerController : AnimatedEntity
     // Public callback to trigger player "off" event animation
     public void PlayPlayerOffEvent()
     {
-        Debug.Log("PlayerController: Clearing player on-event animation.");
         ClearAnimationOverride();
     }
 

@@ -35,7 +35,6 @@ public class IntroController : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start() => StartCoroutine(Sequence());
