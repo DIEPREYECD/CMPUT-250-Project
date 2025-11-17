@@ -11,7 +11,23 @@ public class AudioController : MonoBehaviour
     public static AudioController Instance { get { return _instance; } }
 
     public AudioSource BGMSource, SFXSource;
-    public AudioClip menuBGM, streamSceneBGM, onEvent, openSideCard, closeSideCard, chooseEvent, select, catMeow, textBeep;
+
+    [Header("Soundtracks")]
+    public AudioClip menuBGM;
+    public AudioClip streamSceneBGM;
+    public AudioClip minigameClickerBGM;
+    public AudioClip minigameWordleBGM;
+    
+    [Header("Sound effects")]
+    public AudioClip textBeep;
+    public AudioClip onEvent;
+    public AudioClip openSideCard;
+    public AudioClip closeSideCard;
+    public AudioClip chooseEvent;
+    public AudioClip select;
+    public AudioClip catMeow;
+    public AudioClip winMinigame;
+    public AudioClip loseMinigame;
     private AudioClip currentClip = null;
     private float defaultVolume;
 
@@ -52,25 +68,29 @@ public class AudioController : MonoBehaviour
         checkScene();
     }
 
-    private void checkScene()
+    /// <summary>
+    /// Check the current scene and toggle BGM for respective scene automatically
+    /// </summary>
+    public void checkScene()
     {
         // Get the name of the current scene
         string sceneName = SceneManager.GetActiveScene().name;
+        // UnityEngine.Debug.Log(sceneName); for testing
 
         if (sceneName == "StreamScene")
         {
             Debug.Log("play stream bgm");
             BGMSource.clip = streamSceneBGM;
         }
-        else if (sceneName == "MainMenu")
+        else if (sceneName == "MainMenu" || sceneName == "GameEnd")
         {
             Debug.Log("play main menu bgm");
             BGMSource.clip = menuBGM;
         }
-        else if ( sceneName == "GameEnd")
+        else if (sceneName == "MiniGame_Clicker")
         {
-            Debug.Log("play game over bgm");
-            BGMSource.clip = menuBGM; // Use the same track as main menu
+            Debug.Log("play clicker bgm");
+            BGMSource.clip = minigameClickerBGM;
         }
         else
         {
@@ -97,31 +117,17 @@ public class AudioController : MonoBehaviour
         // Play the music
         BGMSource.Play();
     }
-
-    public void PlayOnEvent()
+    private void playSFX(AudioClip clip)
     {
-        SFXSource.PlayOneShot(onEvent);
+        SFXSource.PlayOneShot(clip);
     }
-
-    public void PlayOpenSideCard()
-    {
-        SFXSource.PlayOneShot(openSideCard);
-    }
-
-    public void PlayChooseEvent()
-    {
-        SFXSource.PlayOneShot(chooseEvent);
-    }
-    public void PlaySelect()
-    {
-        SFXSource.PlayOneShot(select);
-    }
-    public void PlayCatMeow()
-    {
-        SFXSource.PlayOneShot(catMeow);
-    }
-    public void PlayBeep()
-    {
-        SFXSource.PlayOneShot(textBeep);
-    }
+    public void PlayOnEvent() => playSFX(onEvent);
+    public void PlayOpenSideCard() => playSFX(openSideCard);
+    public void PlayCloseSideCard() => playSFX(closeSideCard);
+    public void PlayChooseEvent() => playSFX(chooseEvent);
+    public void PlaySelect() => playSFX(select);
+    public void PlayCatMeow() => playSFX(catMeow);
+    public void PlayBeep() => playSFX(textBeep);
+    public void PlayWinMinigame() => playSFX(winMinigame);
+    public void PlayLoseMinigame() => playSFX(loseMinigame);
 }

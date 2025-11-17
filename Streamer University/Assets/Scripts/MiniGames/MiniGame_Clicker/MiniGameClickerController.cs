@@ -20,6 +20,7 @@ public class MiniGameClickerController : MiniGameController
     public GameObject gameUIRoot;      // Parent for the actual gameplay UI (score, timer, button, etc.)
 
     private bool gameStarted = false;
+    private float soundEffectVolReduce = 0.4f; // How much quieter should the clicking sound effect be in this minigame
 
     // The player has to reach the target score by clicking before time runs out
     private const float timeLimit = 40f;
@@ -83,12 +84,16 @@ public class MiniGameClickerController : MiniGameController
         if (timer >= timeLimit)
         {
             successDeclared = score >= targetScore;
+            AudioController.Instance.toggleBGM(); // stop the BGM 
+            AudioController.Instance.SFXSource.volume += soundEffectVolReduce; // Reverse the modified sound volume
             if (successDeclared == false)
             {
+                AudioController.Instance.PlayLoseMinigame();
                 losePanel.SetActive(true);
             }
             else
             {
+                AudioController.Instance.PlayWinMinigame();
                 winPanel.SetActive(true);
             }
             // Change the score text to show final score and target and whether they won or lost
@@ -96,19 +101,22 @@ public class MiniGameClickerController : MiniGameController
             if (scoreText != null)
                 scoreText.text = $"Final Score: {score} / Target: {targetScore} - " + (successDeclared ? "You Win!" : "You Lose!");
 
-            Invoke("FinishMiniGame", 2f);
+            Invoke("FinishMiniGame", 4f);
             finished = true;
         }
         else if (score >= targetScore)
         {
             successDeclared = true;
             winPanel.SetActive(true);
+            AudioController.Instance.toggleBGM(); // stop the BGM
+            AudioController.Instance.SFXSource.volume += soundEffectVolReduce; // Reverse the modified sound volume
+            AudioController.Instance.PlayWinMinigame();
             // Change the score text to show final score and target and whether they won or lost
             // then wait a moment before finishing so the player can see the result
             if (scoreText != null)
                 scoreText.text = $"Final Score: {score} / Target: {targetScore} - " + (successDeclared ? "You Win!" : "You Lose!");
 
-            Invoke("FinishMiniGame", 2f);
+            Invoke("FinishMiniGame", 4f);
             finished = true;
         }
     }
@@ -118,7 +126,7 @@ public class MiniGameClickerController : MiniGameController
     {
         if (!gameStarted || finished) return;
 
-        AudioController.Instance.PlaySelect();
+        AudioController.Instance.PlayCatMeow();
         score++;
     }
 
@@ -136,7 +144,6 @@ public class MiniGameClickerController : MiniGameController
         }
         else
         {
-            this.delta.Add("fame", -2);
             this.delta.Add("stress", 4);
             setFlags.Add("clickerLose");
             EventManager.Instance.addToQueue("EVT003_LOSE");
@@ -156,6 +163,7 @@ public class MiniGameClickerController : MiniGameController
         var mainScene = SceneManager.GetSceneByName("StreamScene");
         if (mainScene.IsValid())
             SceneManager.SetActiveScene(mainScene);
+            AudioController.Instance.checkScene();
     }
 
     public void StartGame()
@@ -163,6 +171,8 @@ public class MiniGameClickerController : MiniGameController
         if (gameStarted) return;
 
         AudioController.Instance.PlaySelect();
+        AudioController.Instance.checkScene(); // play the minigame soundtrack
+        AudioController.Instance.SFXSource.volume -= soundEffectVolReduce;
 
         gameStarted = true;
         timer = 0f;

@@ -495,13 +495,17 @@ MonoBehaviour:
   SFXSource: {fileID: 1421140201}
   menuBGM: {fileID: 8300000, guid: eff5706f59d3d184bb24be7291d086cd, type: 3}
   streamSceneBGM: {fileID: 8300000, guid: f7c3db1746337c44795c7df9a2aac27d, type: 3}
+  minigameClickerBGM: {fileID: 8300000, guid: fa5f3a817967c3145ae82aa5bc982106, type: 3}
+  minigameWordleBGM: {fileID: 0}
+  textBeep: {fileID: 8300000, guid: dfff21d435bc8c442bde0e381679c621, type: 3}
   onEvent: {fileID: 8300000, guid: 2ed6dc0adb637ca449fb6a2c3ed5ae63, type: 3}
   openSideCard: {fileID: 8300000, guid: 90221bddf6bb93744ad76868b5489646, type: 3}
   closeSideCard: {fileID: 8300000, guid: bbd6eb0129a2ab345a7785e17caca1c5, type: 3}
   chooseEvent: {fileID: 8300000, guid: 7ac8168dd9fabb44fb14f692c766c5f6, type: 3}
   select: {fileID: 8300000, guid: 37319801e66451c458be724020d9a3bb, type: 3}
   catMeow: {fileID: 8300000, guid: 6895af49f8a47d94db2d591d14f1eb0e, type: 3}
-  textBeep: {fileID: 8300000, guid: dfff21d435bc8c442bde0e381679c621, type: 3}
+  winMinigame: {fileID: 8300000, guid: 7d6b85733793ba541b5455fd1e73f4a6, type: 3}
+  loseMinigame: {fileID: 8300000, guid: e17492cbb892e9040b1f8f39953f669d, type: 3}
 --- !u!82 &1421140199
 AudioSource:
   m_ObjectHideFlags: 0
