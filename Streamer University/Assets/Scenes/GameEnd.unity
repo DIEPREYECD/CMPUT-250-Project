@@ -319,16 +319,16 @@ MonoBehaviour:
   gameEndingPanel: {fileID: 96073720}
   endingsToShow:
   - ending: 0
-    imageToShow: {fileID: 21300000, guid: bc3ff2bca93dab045bd904d401171e48, type: 3}
+    imageToShow: {fileID: 21300000, guid: ba84fa5aee35b164a9eb0672a20775e1, type: 3}
     soundTrackPitch: 0.7
   - ending: 1
-    imageToShow: {fileID: 21300000, guid: b9c7f3d453ba6b640b404ad872573eef, type: 3}
+    imageToShow: {fileID: 21300000, guid: 846cae9196d4ac94fafafb3fb1b5464c, type: 3}
     soundTrackPitch: 0.7
   - ending: 2
-    imageToShow: {fileID: 21300000, guid: 7d533fdeb03f16a4ca258d8d9e7a66e9, type: 3}
+    imageToShow: {fileID: 21300000, guid: 166de1b498db3ae4f9e355381a25c121, type: 3}
     soundTrackPitch: 1.3
   - ending: 3
-    imageToShow: {fileID: 21300000, guid: 13fab2c0e6779c643b3eaec5d4a91371, type: 3}
+    imageToShow: {fileID: 21300000, guid: 8009243829ee48f47a9b78892ab2530d, type: 3}
     soundTrackPitch: 1.3
   playAgainButton: {fileID: 1274143935}
   enableTest: 0
@@ -518,7 +518,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -183, y: 61}
-  m_SizeDelta: {x: 140, y: 30}
+  m_SizeDelta: {x: 180, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1274143935
 MonoBehaviour:
@@ -593,7 +593,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5904209483315446400, guid: 6226cc81ba194374985b289196c4b3b4,
+  m_Sprite: {fileID: -6683027130849710019, guid: 994e34bd74c3e654f975b3a877bd76f6,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
