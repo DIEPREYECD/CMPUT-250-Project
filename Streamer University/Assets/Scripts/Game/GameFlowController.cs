@@ -85,5 +85,5 @@ public class GameFlowController : MonoBehaviour
     }
 }
 
-public enum GameState { Title, MainMenu, MainGameplay, Minigame, Paused }
+public enum GameState { Title, MainMenu, MainGameplay, Minigame, Paused, GameEnd }
 public enum GameEndings { NoFame, MaxStress, LowStressMaxFame, HighStressMaxFame }
