@@ -55,7 +55,7 @@ public class Movement : MonoBehaviour
             Sprite.rotation = Quaternion.Euler(Rotation);
 
             // Jump
-            if (Input.GetMouseButton(0))
+            if (Input.GetKey(KeyCode.Space))
             {
             rb.velocity = Vector2.zero;
             rb.AddForce(Vector2.up * 26.6581f * Gravity, ForceMode2D.Impulse);

@@ -9,6 +9,7 @@ public class AnimatedEntity : MonoBehaviour
     public float Framerate = 12f;//frames per second
     public Image image;//image component to update
 
+
     // Give the animator the ability to split the default animation into an effective animation
     // This is mainly due to the player object having different animations based on the stress level
     public int sliceBy = 1;
