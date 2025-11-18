@@ -53,6 +53,7 @@ public class Movement : MonoBehaviour
             Vector3 Rotation = Sprite.rotation.eulerAngles;
             // Rotation.z = Mathf.Round(Rotation.z / 90) * 90;
 
+            // Always "Upright"
             if (Gravity == -1)
             {
                 Rotation.z = 180;
@@ -60,7 +61,7 @@ public class Movement : MonoBehaviour
             {
                 Rotation.z = 0;
             }
-            
+
             Sprite.rotation = Quaternion.Euler(Rotation);
 
             // Jump
@@ -81,8 +82,16 @@ public class Movement : MonoBehaviour
                 CurrentSpeed = Speed;
                 break;
             case 1:
-                Gravity = gravity;
-                rb.gravityScale = Mathf.Abs(rb.gravityScale) * (int)gravity;
+                if (Gravity != gravity)
+                {
+                    Gravity = gravity;
+                    rb.gravityScale = Mathf.Abs(rb.gravityScale) * (int)gravity;
+
+                    rb.velocity = new Vector2(rb.velocity.x, 0);
+                    rb.AddForce(Vector2.up * 10f * gravity, ForceMode2D.Impulse);
+                }
+                // Gravity = gravity;
+                // rb.gravityScale = Mathf.Abs(rb.gravityScale) * (int)gravity;
                 break;
         }
     }
