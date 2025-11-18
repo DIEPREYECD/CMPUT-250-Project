@@ -167,6 +167,7 @@ public class MiniGameWordleController : MiniGameController
             StartCoroutine(PlayWinRowAnimation(currentRow));
 
             Invoke(nameof(FinishMiniGame), finishDelay);
+            AudioController.Instance.checkScene(); // Switch back to stream scene BGM
             return;
         }
 
@@ -179,6 +180,7 @@ public class MiniGameWordleController : MiniGameController
             finished = true;
             Debug.Log("Out of rows! Answer was: " + currentAnswer);
             Invoke(nameof(FinishMiniGame), finishDelay);
+            AudioController.Instance.checkScene(); // Switch back to stream scene BGM
         }
     }
 
@@ -364,6 +366,7 @@ public class MiniGameWordleController : MiniGameController
         LoadWordLists();
         SetupKeyboard();
         ClearBoardVisuals();
+        AudioController.Instance.toggleBGM("Wordle"); // Play BGM
 
         // required by MiniGameController pattern
         this.delta = new Dictionary<string, int>();
@@ -410,6 +413,7 @@ public class MiniGameWordleController : MiniGameController
         var setFlags = new List<string>();
         if (success)
         {
+            AudioController.Instance.PlayWinMinigame();
             this.delta["fame"] = fameDeltaOnWin;
             this.delta["stress"] = stressDeltaOnWin;
             setFlags.Add("wordleWin");
@@ -417,6 +421,7 @@ public class MiniGameWordleController : MiniGameController
         }
         else
         {
+            AudioController.Instance.PlayLoseMinigame();
             this.delta["fame"] = fameDeltaOnLose;
             this.delta["stress"] = stressDeltaOnLose;
             setFlags.Add("wordleLose");

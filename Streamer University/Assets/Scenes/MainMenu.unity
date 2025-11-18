@@ -225,14 +225,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc549c9d66c6285458a1522a61c7ac7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 429297298}
+  BGMSource: {fileID: 0}
+  SFXSource: {fileID: 0}
   menuBGM: {fileID: 8300000, guid: eff5706f59d3d184bb24be7291d086cd, type: 3}
   streamSceneBGM: {fileID: 8300000, guid: f7c3db1746337c44795c7df9a2aac27d, type: 3}
+  minigameClickerBGM: {fileID: 0}
+  minigameWordleBGM: {fileID: 0}
+  textBeep: {fileID: 0}
   onEvent: {fileID: 8300000, guid: e4527c254ec7565428320dfa5806f5f5, type: 3}
   openSideCard: {fileID: 8300000, guid: 5104c6aeb6731134ba0a0811235506eb, type: 3}
+  closeSideCard: {fileID: 0}
   chooseEvent: {fileID: 8300000, guid: 7ed234d5a6f453d49b9f189e89c276ac, type: 3}
   select: {fileID: 8300000, guid: 25f91c3c39c41794d888a126e09ae4b9, type: 3}
   catMeow: {fileID: 8300000, guid: 6895af49f8a47d94db2d591d14f1eb0e, type: 3}
+  winMinigame: {fileID: 0}
+  loseMinigame: {fileID: 0}
 --- !u!82 &429297298
 AudioSource:
   m_ObjectHideFlags: 0
@@ -521,7 +528,6 @@ GameObject:
   - component: {fileID: 1068129791}
   - component: {fileID: 1068129790}
   - component: {fileID: 1068129793}
-  - component: {fileID: 1068129794}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -606,18 +612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f191c82674252e4abf5a34378e23d81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1068129794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1068129789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eac0fe2ac786b8442ba443b82ba7c987, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  quitButton: {fileID: 0}
 --- !u!1 &1144651363
 GameObject:
   m_ObjectHideFlags: 0

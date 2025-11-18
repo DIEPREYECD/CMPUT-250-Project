@@ -100,8 +100,12 @@ public class AudioController : MonoBehaviour
         toggleBGM();
     }
     
-    public void toggleBGM()
+    public void toggleBGM(string currentScene=null)
     {
+        if (currentScene != null)
+        {
+            if (currentScene == "Wordle") { BGMSource.clip = minigameWordleBGM; }
+        }
         // Check if the BGM is already playing to avoid restarting it every time
         if (BGMSource.isPlaying && currentClip == BGMSource.clip)
         {
