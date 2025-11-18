@@ -45,11 +45,28 @@ public class MiniGameWordleController : MiniGameController
     public TMP_Text statusLabel;
     public CanvasGroup statusToastGroup;
 
+    [Header("Intro / Result UI")]
+    public GameObject introPanel;     // full-screen panel with rules + Start button
+    public GameObject gameUIRoot;     // parent of the board + keyboard
+    public GameObject winPanel;       // shown on success
+    public GameObject losePanel;      // shown on failure
+
+    private bool gameStarted = false;
+
+    // Separate finish delays
+    [SerializeField] private float successFinishDelay = 4f;
+    [SerializeField] private float failFinishDelay = 1.25f;
+
+    // Text elements that show the actual target word
+    public TMP_Text winWordLabel;
+    public TMP_Text loseWordLabel;
+
     // Data containers
     private HashSet<string> allowedWords;
     private List<string> answerWords;
 
     // Minigame deltas
+    [Header("Minigame Result Deltas")]
     public int fameDeltaOnWin = 5;
     public int stressDeltaOnWin = -2;
     public int fameDeltaOnLose = -2;
@@ -112,7 +129,7 @@ public class MiniGameWordleController : MiniGameController
 
     private void OnLetterKey(string letter)
     {
-        if (finished) return;
+        if (!gameStarted || finished) return;
         if (currentCol >= 5 || currentRow >= 6) return;
 
         board[currentRow, currentCol] = letter[0];
@@ -123,7 +140,7 @@ public class MiniGameWordleController : MiniGameController
 
     private void OnBackspaceKey()
     {
-        if (finished) return;
+        if (!gameStarted || finished) return;
         if (currentCol <= 0 || currentRow >= 6) return;
 
         currentCol--;
@@ -134,7 +151,7 @@ public class MiniGameWordleController : MiniGameController
 
     private void OnEnterKey()
     {
-        if (finished) return;
+        if (!gameStarted || finished) return;
         if (currentCol < 5) return; // not enough letters
 
         string guess = new string(Enumerable.Range(0, 5)
@@ -162,11 +179,22 @@ public class MiniGameWordleController : MiniGameController
 
             successDeclared = true;
             finished = true;
-            Debug.Log("You guessed it!");
-
+            AudioController.Instance.toggleBGM();
             StartCoroutine(PlayWinRowAnimation(currentRow));
 
-            Invoke(nameof(FinishMiniGame), finishDelay);
+            if (winPanel)
+            {
+                winPanel.SetActive(true);
+
+                if (winWordLabel)
+                {
+                    winWordLabel.text = $"The word was: {currentAnswer.ToUpper()}";
+                }
+            }
+            if (keyboardRoot) keyboardRoot.gameObject.SetActive(false);
+
+            AudioController.Instance.PlayWinMinigame();
+            Invoke(nameof(FinishMiniGame), successFinishDelay);
             AudioController.Instance.checkScene(); // Switch back to stream scene BGM
             return;
         }
@@ -178,8 +206,21 @@ public class MiniGameWordleController : MiniGameController
         {
             successDeclared = false;
             finished = true;
-            Debug.Log("Out of rows! Answer was: " + currentAnswer);
-            Invoke(nameof(FinishMiniGame), finishDelay);
+            AudioController.Instance.toggleBGM();
+
+            if (losePanel)
+            { 
+                losePanel.SetActive(true); 
+                if (loseWordLabel)
+                {
+                    loseWordLabel.text = $"The word was: {currentAnswer.ToUpper()}";
+                }
+            }
+
+            if (keyboardRoot) keyboardRoot.gameObject.SetActive(false);
+
+            AudioController.Instance.PlayLoseMinigame();
+            Invoke(nameof(FinishMiniGame), failFinishDelay);          // keep ~1.25s
             AudioController.Instance.checkScene(); // Switch back to stream scene BGM
         }
     }
@@ -355,6 +396,22 @@ public class MiniGameWordleController : MiniGameController
         finished = false;
         successDeclared = false;
     }
+    public void StartGame()
+    {
+        if (gameStarted) return;
+
+        gameStarted = true;
+
+        if (introPanel) introPanel.SetActive(false);
+        if (gameUIRoot) gameUIRoot.SetActive(true);
+
+        // Optional: clear any status toast
+        if (statusToastGroup) statusToastGroup.alpha = 0f;
+
+        // Optional SFX
+        if (sfx && keyClick) sfx.PlayOneShot(keyClick);
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -363,6 +420,7 @@ public class MiniGameWordleController : MiniGameController
         keyAbsentColor = absentColor;
         keyPresentColor = presentColor;
         keyCorrectColor = correctColor;
+
         LoadWordLists();
         SetupKeyboard();
         ClearBoardVisuals();
@@ -375,12 +433,22 @@ public class MiniGameWordleController : MiniGameController
         if (string.IsNullOrEmpty(mySceneName))
             mySceneName = gameObject.scene.name;
 
+        // NEW — intro / result setup
+        if (introPanel) introPanel.SetActive(true);
+        if (gameUIRoot) gameUIRoot.SetActive(false);
+        if (winPanel) winPanel.SetActive(false);
+        if (losePanel) losePanel.SetActive(false);
+
+        gameStarted = false;
+
         Debug.Log($"[Wordle] Answer selected: {currentAnswer}");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!gameStarted || finished) return;   // NEW: gate everything until Start is pressed
+
         // Accept keyboard input also
         if (Input.anyKeyDown)
         {
@@ -413,7 +481,6 @@ public class MiniGameWordleController : MiniGameController
         var setFlags = new List<string>();
         if (success)
         {
-            AudioController.Instance.PlayWinMinigame();
             this.delta["fame"] = fameDeltaOnWin;
             this.delta["stress"] = stressDeltaOnWin;
             setFlags.Add("wordleWin");
@@ -421,7 +488,6 @@ public class MiniGameWordleController : MiniGameController
         }
         else
         {
-            AudioController.Instance.PlayLoseMinigame();
             this.delta["fame"] = fameDeltaOnLose;
             this.delta["stress"] = stressDeltaOnLose;
             setFlags.Add("wordleLose");
