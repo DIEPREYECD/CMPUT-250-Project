@@ -19,6 +19,8 @@ public class ChatBarkSystem : MonoBehaviour
         public bool def;
         public int stress;
         public int fame;
+
+        public int lastSpawnedTurn = -1;
     }
 
     [System.Serializable]
@@ -28,6 +30,7 @@ public class ChatBarkSystem : MonoBehaviour
     }
 
     private List<BarkEntry> barkList = new List<BarkEntry>();
+    private int currentTurn = 0;
 
     // Awake
     void Awake() {
@@ -103,6 +106,27 @@ public class ChatBarkSystem : MonoBehaviour
         return stressCond && fameCond;
     }
 
+    private float GetProbWeight(BarkEntry entry)
+    {
+        if (entry.lastSpawnedTurn == -1)
+        {
+            return 1.0f;
+        }
+
+        int turnsSinceSpawn = currentTurn - entry.lastSpawnedTurn;
+
+        if (turnsSinceSpawn <= 3)
+        {
+            return 0f;
+        }
+
+        // Increase prob over time
+        float normalizedTime = (turnsSinceSpawn - 3f) / barkList.Count;
+
+        // Cap at 1.0 for full weight
+        return Mathf.Min(1.0f, normalizedTime);
+    }
+
     public BarkEntry GetBark() {
 
         /*
@@ -112,18 +136,49 @@ public class ChatBarkSystem : MonoBehaviour
         */
         
         List<BarkEntry> eligibleList = new List<BarkEntry>();
+        List<float> weights = new List<float>();
         
         foreach (var entry in barkList) {
             if (Eligibility(entry)) {
-                eligibleList.Add(entry);
+                float weight = GetProbWeight(entry);
+                if (weight > 0f)
+                {
+                    eligibleList.Add(entry);
+                    weights.Add(weight);
+                }
             }
         }
 
-        return eligibleList[Random.Range(0, eligibleList.Count)];
+        return WeightedRandomSelect(eligibleList, weights);
+    }
+
+    private BarkEntry WeightedRandomSelect(List<BarkEntry> entries, List<float> weights)
+    {
+        float totalWeight = 0f;
+        foreach (float weight in weights)
+        {
+            totalWeight += weight;
+        }
+
+        float randomValue = Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            cumulative += weights[i];
+            if (randomValue <= cumulative)
+            {
+                return entries[i];
+            }
+        }
+
+        return entries[entries.Count - 1];
     }
 
     public void PushBark() {
         var bark = GetBark();
+        bark.lastSpawnedTurn = currentTurn;
+        currentTurn++;
         ChatOverlay.Instance.Push(bark.user, bark.text); 
     }
     
