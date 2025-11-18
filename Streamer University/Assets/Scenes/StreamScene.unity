@@ -267,6 +267,7 @@ MonoBehaviour:
   streamSceneBGM: {fileID: 8300000, guid: f7c3db1746337c44795c7df9a2aac27d, type: 3}
   minigameClickerBGM: {fileID: 0}
   minigameWordleBGM: {fileID: 0}
+  minigameGeoDashBGM: {fileID: 0}
   textBeep: {fileID: 0}
   onEvent: {fileID: 8300000, guid: e4527c254ec7565428320dfa5806f5f5, type: 3}
   openSideCard: {fileID: 8300000, guid: 5104c6aeb6731134ba0a0811235506eb, type: 3}
@@ -276,6 +277,8 @@ MonoBehaviour:
   catMeow: {fileID: 8300000, guid: 6895af49f8a47d94db2d591d14f1eb0e, type: 3}
   winMinigame: {fileID: 0}
   loseMinigame: {fileID: 0}
+  jumpSound: {fileID: 8300000, guid: e4527c254ec7565428320dfa5806f5f5, type: 3}
+  spikeSound: {fileID: 8300000, guid: 166cb6807f4473449ad78135de8cd174, type: 3}
 --- !u!82 &68359949
 AudioSource:
   m_ObjectHideFlags: 0

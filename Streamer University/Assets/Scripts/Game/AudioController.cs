@@ -17,6 +17,7 @@ public class AudioController : MonoBehaviour
     public AudioClip streamSceneBGM;
     public AudioClip minigameClickerBGM;
     public AudioClip minigameWordleBGM;
+    public AudioClip minigameGeoDashBGM;
     
     [Header("Sound effects")]
     public AudioClip textBeep;
@@ -28,6 +29,8 @@ public class AudioController : MonoBehaviour
     public AudioClip catMeow;
     public AudioClip winMinigame;
     public AudioClip loseMinigame;
+    public AudioClip jumpSound;
+    public AudioClip spikeSound;
     private AudioClip currentClip = null;
     private float defaultVolume;
 
@@ -125,6 +128,7 @@ public class AudioController : MonoBehaviour
     {
         SFXSource.PlayOneShot(clip);
     }
+
     public void PlayOnEvent() => playSFX(onEvent);
     public void PlayOpenSideCard() => playSFX(openSideCard);
     public void PlayCloseSideCard() => playSFX(closeSideCard);
@@ -134,4 +138,6 @@ public class AudioController : MonoBehaviour
     public void PlayBeep() => playSFX(textBeep);
     public void PlayWinMinigame() => playSFX(winMinigame);
     public void PlayLoseMinigame() => playSFX(loseMinigame);
+    public void PlayJump() => playSFX(jumpSound);
+    public void PlaySpike() => playSFX(spikeSound);
 }
