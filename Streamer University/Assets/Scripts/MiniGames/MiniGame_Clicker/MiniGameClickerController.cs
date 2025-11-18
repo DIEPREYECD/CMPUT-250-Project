@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MiniGameClickerController : MiniGameController
 {
+    // Clicker Mini Game Controller
     private int score;
     private int targetScore;
 

@@ -51,7 +51,16 @@ public class Movement : MonoBehaviour
         if (OnGround())
         {
             Vector3 Rotation = Sprite.rotation.eulerAngles;
-            Rotation.z = Mathf.Round(Rotation.z / 90) * 90;
+            // Rotation.z = Mathf.Round(Rotation.z / 90) * 90;
+
+            if (Gravity == -1)
+            {
+                Rotation.z = 180;
+            } else
+            {
+                Rotation.z = 0;
+            }
+            
             Sprite.rotation = Quaternion.Euler(Rotation);
 
             // Jump

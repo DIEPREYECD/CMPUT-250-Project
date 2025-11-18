@@ -11,16 +11,6 @@ public class Portal : AnimatedSprite
     private Movement movement;
 
 
-    // void Start()
-    // {
-    //     AnimationSetup();
-    // }
-
-    // void Update()
-    // {
-    //     AnimationUpdate();
-    // }
-
     public void initiatePortal(Movement movement) {
         movement.ChangeThroughPortal(Speed, gravity ? 1 : -1, State, transform.position.y);
     }
