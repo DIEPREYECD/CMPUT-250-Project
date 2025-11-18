@@ -53,10 +53,6 @@ public class MiniGameWordleController : MiniGameController
 
     private bool gameStarted = false;
 
-    // Separate finish delays
-    [SerializeField] private float successFinishDelay = 4f;
-    [SerializeField] private float failFinishDelay = 1.25f;
-
     // Text elements that show the actual target word
     public TMP_Text winWordLabel;
     public TMP_Text loseWordLabel;
@@ -78,7 +74,7 @@ public class MiniGameWordleController : MiniGameController
     private int currentCol = 0;
     private char[,] board = new char[6, 5];
 
-    private const float finishDelay = 1.25f;
+    private const float finishDelay = 4f;
 
     private Coroutine toastCo;
     private IEnumerator ShowToast(string msg, float seconds = 1.2f)
@@ -194,7 +190,7 @@ public class MiniGameWordleController : MiniGameController
             if (keyboardRoot) keyboardRoot.gameObject.SetActive(false);
 
             AudioController.Instance.PlayWinMinigame();
-            Invoke(nameof(FinishMiniGame), successFinishDelay);
+            Invoke(nameof(FinishMiniGame), finishDelay);
             AudioController.Instance.checkScene(); // Switch back to stream scene BGM
             return;
         }
@@ -220,7 +216,7 @@ public class MiniGameWordleController : MiniGameController
             if (keyboardRoot) keyboardRoot.gameObject.SetActive(false);
 
             AudioController.Instance.PlayLoseMinigame();
-            Invoke(nameof(FinishMiniGame), failFinishDelay);          // keep ~1.25s
+            Invoke(nameof(FinishMiniGame), finishDelay);
             AudioController.Instance.checkScene(); // Switch back to stream scene BGM
         }
     }
