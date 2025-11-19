@@ -84,6 +84,12 @@ public class GameController : MonoBehaviour
             EventManager.Instance.OnEventOpened += HandleEventOpened;
             EventManager.Instance.OnEventClosed += HandleEventClosed;
         }
+        // Subscribe to player stat changes to display deltas when they occur
+        if (PlayerController.Instance != null)
+        {
+            Debug.Log("Subscribing to PlayerController stat events.");
+            PlayerController.Instance.OnStatsChanged += HandleStatsChanged;
+        }
     }
 
     private void Unsubscribe()
@@ -93,6 +99,11 @@ public class GameController : MonoBehaviour
             Debug.Log("Unsubscribing from EventManager events.");
             EventManager.Instance.OnEventOpened -= HandleEventOpened;
             EventManager.Instance.OnEventClosed -= HandleEventClosed;
+        }
+        if (PlayerController.Instance != null)
+        {
+            Debug.Log("Unsubscribing from PlayerController stat events.");
+            PlayerController.Instance.OnStatsChanged -= HandleStatsChanged;
         }
     }
 
@@ -106,6 +117,12 @@ public class GameController : MonoBehaviour
 
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
+
+        // Initialize bars to current player values (avoid relying on per-frame polling)
+        if (fameBar != null)
+            fameBar.SetFill(PlayerController.Instance.Fame / 100f);
+        if (stressBar != null)
+            stressBar.SetFill(PlayerController.Instance.Stress / 100f);
 
         GameFlowController.Instance.SetState(GameState.MainGameplay);
         // Kick the loop
@@ -169,8 +186,7 @@ public class GameController : MonoBehaviour
         if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
             return;
 
-        stressBar.SetFill(PlayerController.Instance.Stress / 100f);
-        fameBar.SetFill(PlayerController.Instance.Fame / 100f);
+        // Bars are updated via PlayerController.OnStatsChanged event (no per-frame polling)
 
         // Check for game ending conditions
         foreach (var condition in endingConditions)
@@ -206,6 +222,35 @@ public class GameController : MonoBehaviour
                 GameFlowController.Instance.TransitionToScene("GameEnd");
                 break;
             }
+        }
+    }
+
+    // ---- Player stat change hooks ----
+    private void HandleStatsChanged(PlayerController.StatsDelta d)
+    {
+        StartCoroutine(ShowDeltasCoroutine(d));
+    }
+
+    private IEnumerator ShowDeltasCoroutine(PlayerController.StatsDelta d)
+    {
+        // Show fame delta first
+        if (fameBar != null)
+        {
+            // Don't show if delta is zero
+            if (d.deltaFame != 0)
+                fameBar.ShowDelta(d.deltaFame);
+            fameBar.SetFill(d.newFame / 100f);
+        }
+
+        // small stagger so the player perceives separate changes
+        yield return new WaitForSeconds(0.12f);
+
+        if (stressBar != null)
+        {
+            // Don't show if delta is zero
+            if (d.deltaStress != 0)
+                stressBar.ShowDelta(d.deltaStress);
+            stressBar.SetFill(d.newStress / 100f);
         }
     }
 
