@@ -3169,6 +3169,11 @@ MonoBehaviour:
   resumeButton: {fileID: 1726398034}
   pauseMenuOverlay: {fileID: 1402673468}
   quitButton: {fileID: 839203988}
+  catButton: {fileID: 400214062}
+  catBlinkIntervalSeconds: 30
+  catBlinkDurationSeconds: 5
+  catBlinkHighlightAlpha: 170
+  catBlinkPulseFrequency: 2
   secondsBetweenEvents: 3
   avatarCenter:
     anchorMin: {x: 0.5, y: 0}

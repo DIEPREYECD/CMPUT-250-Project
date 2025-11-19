@@ -31,6 +31,22 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject pauseMenuOverlay;
     [SerializeField] private Button quitButton; // assign in inspector
 
+    // ====== Cat Button Blink ======
+    [Header("Cat Button Blink")]
+    [Tooltip("Button for the cat UI that will blink to draw attention.")]
+    [SerializeField] private Button catButton;
+    [Tooltip("Seconds between blink cycles.")]
+    [SerializeField] private float catBlinkIntervalSeconds = 120f;
+    [Tooltip("Duration of each blink period in seconds.")]
+    [SerializeField] private float catBlinkDurationSeconds = 10f;
+    [Tooltip("Max alpha (0-255) used during blinking.")]
+    [Range(0, 255)]
+    [SerializeField] private int catBlinkHighlightAlpha = 255;
+    [Tooltip("Pulse frequency (cycles per second) during blink.")]
+    [SerializeField] private float catBlinkPulseFrequency = 2f;
+
+    private Coroutine catBlinkCoro;
+
     // ====== Timing ======
     [Header("Timing")]
     [Tooltip("Seconds between storylet prompts while streaming.")]
@@ -127,6 +143,9 @@ public class GameController : MonoBehaviour
         GameFlowController.Instance.SetState(GameState.MainGameplay);
         // Kick the loop
         loopCoro = StartCoroutine(StreamLoop());
+        // Kick the cat blink loop (optional if assigned in inspector)
+        if (catButton != null)
+            catBlinkCoro = StartCoroutine(CatBlinkLoop());
 
         if (pauseButton != null)
         {
@@ -219,6 +238,8 @@ public class GameController : MonoBehaviour
                 Unsubscribe();
                 if (loopCoro != null)
                     StopCoroutine(loopCoro);
+                if (catBlinkCoro != null)
+                    StopCoroutine(catBlinkCoro);
                 GameFlowController.Instance.TransitionToScene("GameEnd");
                 break;
             }
@@ -303,6 +324,74 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         target.ApplyTo(rt);
+    }
+
+    // ====== Cat Button Blink Coroutines ======
+    private IEnumerator CatBlinkLoop()
+    {
+        if (catButton == null)
+            yield break;
+
+        while (true)
+        {
+            // Wait until main gameplay state
+            while (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+                yield return null;
+
+            // Wait for the interval, but reset if leaving gameplay
+            float t = 0f;
+            while (t < catBlinkIntervalSeconds)
+            {
+                if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+                {
+                    t = 0f;
+                    yield return null;
+                    continue;
+                }
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            // Perform blinking/pulsing for the configured duration
+            yield return StartCoroutine(BlinkCatForDuration(catBlinkDurationSeconds));
+        }
+    }
+
+    private IEnumerator BlinkCatForDuration(float duration)
+    {
+        if (catButton == null)
+            yield break;
+
+        var img = catButton.image;
+        if (img == null)
+            img = catButton.GetComponent<UnityEngine.UI.Image>();
+        if (img == null)
+            yield break;
+        Color orig = img.color;
+        float origA = orig.a;
+        float targetA = catBlinkHighlightAlpha / 255f; // convert 0-255 to 0-1
+
+        Debug.Log($"Cat blink START ({duration}s)");
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+            {
+                yield return null;
+                continue;
+            }
+            float k = (Mathf.Sin(elapsed * Mathf.PI * 2f * catBlinkPulseFrequency) + 1f) * 0.5f;
+            float a = Mathf.Lerp(origA, targetA, k);
+            var c = orig;
+            c.a = a;
+            img.color = c;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        img.color = orig;
+        Debug.Log("Cat blink STOP");
     }
 
     // ====== Helper struct for RectTransform targets ======
