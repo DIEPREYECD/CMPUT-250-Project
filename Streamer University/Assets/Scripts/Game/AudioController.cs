@@ -29,7 +29,8 @@ public class AudioController : MonoBehaviour
     public AudioClip winMinigame;
     public AudioClip loseMinigame;
     private AudioClip currentClip = null;
-    private float defaultVolume;
+    private float SFXdefaultVolume;
+    private float BGMdefaultVolume;
 
     private void Awake()
     {
@@ -53,6 +54,8 @@ public class AudioController : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SFXdefaultVolume = SFXSource.volume;
     }
 
     private void OnEnable()
@@ -121,6 +124,9 @@ public class AudioController : MonoBehaviour
         // Play the music
         BGMSource.Play();
     }
+
+    public void setSFXDefaultVol() => SFXSource.volume = SFXdefaultVolume;
+
     private void playSFX(AudioClip clip)
     {
         SFXSource.PlayOneShot(clip);
