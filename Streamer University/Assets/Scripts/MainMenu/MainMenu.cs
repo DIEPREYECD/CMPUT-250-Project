@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private Button quitButton; // assign in inspector
     // Start is called before the first frame update
     void Start()
     {
-
+        if (quitButton != null)
+            quitButton.onClick.AddListener(QuitGame);
     }
 
     // Update is called once per frame

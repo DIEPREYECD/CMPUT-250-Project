@@ -382,6 +382,22 @@ MonoBehaviour:
   winPanel: {fileID: 1822487199}
   introPanel: {fileID: 2064432504}
   gameUIRoot: {fileID: 1299016837}
+  targetConfigs:
+  - targetScore: 100
+    fameSuccess: 7
+    stressSuccess: -3
+    fameFail: -3
+    stressFail: 3
+  - targetScore: 140
+    fameSuccess: 10
+    stressSuccess: -2
+    fameFail: -15
+    stressFail: 5
+  - targetScore: 200
+    fameSuccess: 15
+    stressSuccess: -5
+    fameFail: -25
+    stressFail: 15
 --- !u!1 &718783062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,14 +1635,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc549c9d66c6285458a1522a61c7ac7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 2006681254}
+  BGMSource: {fileID: 0}
+  SFXSource: {fileID: 0}
   menuBGM: {fileID: 8300000, guid: eff5706f59d3d184bb24be7291d086cd, type: 3}
   streamSceneBGM: {fileID: 8300000, guid: f7c3db1746337c44795c7df9a2aac27d, type: 3}
+  minigameClickerBGM: {fileID: 0}
+  minigameWordleBGM: {fileID: 0}
+  textBeep: {fileID: 0}
   onEvent: {fileID: 8300000, guid: e4527c254ec7565428320dfa5806f5f5, type: 3}
   openSideCard: {fileID: 8300000, guid: 5104c6aeb6731134ba0a0811235506eb, type: 3}
+  closeSideCard: {fileID: 0}
   chooseEvent: {fileID: 8300000, guid: 7ed234d5a6f453d49b9f189e89c276ac, type: 3}
   select: {fileID: 8300000, guid: 25f91c3c39c41794d888a126e09ae4b9, type: 3}
   catMeow: {fileID: 8300000, guid: 6895af49f8a47d94db2d591d14f1eb0e, type: 3}
+  winMinigame: {fileID: 0}
+  loseMinigame: {fileID: 0}
 --- !u!82 &2006681254
 AudioSource:
   m_ObjectHideFlags: 0

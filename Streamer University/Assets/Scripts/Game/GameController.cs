@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button resumeButton;
     [SerializeField] private GameObject pauseMenuOverlay;
+    [SerializeField] private Button quitButton; // assign in inspector
 
     // ====== Timing ======
     [Header("Timing")]
@@ -122,6 +123,8 @@ public class GameController : MonoBehaviour
                         pauseMenuOverlay.SetActive(true);
                 }
             });
+
+            pauseMenuOverlay.SetActive(false);
         }
 
         if (resumeButton != null)
@@ -129,6 +132,14 @@ public class GameController : MonoBehaviour
             resumeButton.onClick.AddListener(() =>
             {
                 UnPauseGame();
+            });
+        }
+
+        if (quitButton != null)
+        {
+            quitButton.onClick.AddListener(() =>
+            {
+                QuitGame();
             });
         }
     }
@@ -142,6 +153,15 @@ public class GameController : MonoBehaviour
             if (Instance.pauseMenuOverlay != null)
                 Instance.pauseMenuOverlay.SetActive(false);
         }
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void Update()
