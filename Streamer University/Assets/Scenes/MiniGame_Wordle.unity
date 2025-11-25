@@ -5331,8 +5331,8 @@ MonoBehaviour:
   gameUIRoot: {fileID: 1396298067}
   winPanel: {fileID: 361689679}
   losePanel: {fileID: 45905675}
-  successFinishDelay: 4
-  failFinishDelay: 1.25
+  winWordLabel: {fileID: 1267569088}
+  loseWordLabel: {fileID: 2043293819}
   fameDeltaOnWin: 5
   stressDeltaOnWin: -2
   fameDeltaOnLose: -2
