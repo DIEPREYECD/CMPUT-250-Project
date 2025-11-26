@@ -1574,7 +1574,7 @@ RectTransform:
   - {fileID: 1006157572}
   - {fileID: 1422578854}
   m_Father: {fileID: 586681798}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4219,7 +4219,6 @@ RectTransform:
   - {fileID: 150006716}
   - {fileID: 1050236040}
   - {fileID: 960852436}
-  - {fileID: 1791079839}
   - {fileID: 1928059892}
   - {fileID: 246453691}
   m_Father: {fileID: 465646337}
@@ -5695,8 +5694,8 @@ MonoBehaviour:
   gameUIRoot: {fileID: 1396298067}
   winPanel: {fileID: 361689679}
   losePanel: {fileID: 45905675}
-  instructionsPanel: {fileID: 0}
-  instructionsBackDrop: {fileID: 0}
+  instructionsPanel: {fileID: 246453690}
+  instructionsBackDrop: {fileID: 1928059891}
   winWordLabel: {fileID: 1267569088}
   loseWordLabel: {fileID: 2043293819}
   fameDeltaOnWin: 8
@@ -6200,8 +6199,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u2022 Guess the hidden 5-letter word in 6 tries.\r\n\u2022 Green = right
     letter in the right spot.\r\n\u2022 Yellow = letter is in the word, wrong spot.\r\n\u2022
-    Grey = letter is not in the word.\r\n\u2022 Use the keyboard below to enter your
-    guesses.\r\n"
+    Grey = letter is not in the word.\r\n\u2022 Use the keyboard below or type to
+    enter your guesses.\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d32e347a4a2661345bcad882a168c073, type: 2}
   m_sharedMaterial: {fileID: 5560958745316507874, guid: d32e347a4a2661345bcad882a168c073,
@@ -11671,84 +11670,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1791079838
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1791079839}
-  - component: {fileID: 1791079841}
-  - component: {fileID: 1791079840}
-  m_Layer: 5
-  m_Name: Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1791079839
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1791079838}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 586681798}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1791079840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1791079838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: New Text
---- !u!222 &1791079841
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1791079838}
-  m_CullTransparentMesh: 0
 --- !u!114 &1810865084 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 158625090537658684, guid: 959139ac80f32564f949cd1777f06ba4,
@@ -12009,7 +11930,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 586681798}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
