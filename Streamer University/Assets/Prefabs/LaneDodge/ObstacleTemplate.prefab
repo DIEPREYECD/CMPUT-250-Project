@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 8608866287139872144}
   - component: {fileID: 8608866287139872110}
   - component: {fileID: 8608866287139872109}
+  - component: {fileID: -5949835901398489229}
   m_Layer: 5
-  m_Name: Obstacle
-  m_TagString: Untagged
+  m_Name: ObstacleTemplate
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,7 +67,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 8359268700359919526, guid: 57809fca9e44ff548be42baad449075f,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -123,3 +125,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-5949835901398489229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8608866287139872146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee3f45a6ba1782749b082c659eaf5792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTransform: {fileID: 8608866287139872145}
+  obstacleImage: {fileID: 8608866287139872144}
+  moveSpeed: 600
+  destroyX: -1200

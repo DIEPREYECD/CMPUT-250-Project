@@ -255,9 +255,9 @@ TextureImporter:
       name: Player_Run2
       rect:
         serializedVersion: 2
-        x: 34
+        x: 35
         y: 32
-        width: 12
+        width: 11
         height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -423,9 +423,9 @@ TextureImporter:
       name: Player_Run1
       rect:
         serializedVersion: 2
-        x: 21
+        x: 18
         y: 33
-        width: 6
+        width: 11
         height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -465,9 +465,9 @@ TextureImporter:
       name: Player_Run3
       rect:
         serializedVersion: 2
-        x: 53
+        x: 51
         y: 33
-        width: 6
+        width: 11
         height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}

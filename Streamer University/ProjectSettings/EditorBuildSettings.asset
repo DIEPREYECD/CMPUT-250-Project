@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MiniGame_Wordle.unity
     guid: 2e2221a4f86571f4aaee707cb68855a1
+  - enabled: 1
+    path: Assets/Scenes/MiniGame_LaneDodge.unity
+    guid: 35dfa639ded3cbb4ea19ab86c76d4891
   m_configObjects: {}
