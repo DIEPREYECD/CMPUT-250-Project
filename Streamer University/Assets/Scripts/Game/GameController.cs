@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private BarUI stressBar;
     [SerializeField] private BarUI fameBar;
     [SerializeField] private Button pauseButton;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Button resumeButton;
     [SerializeField] private GameObject pauseMenuOverlay;
     [SerializeField] private Button quitButton; // assign in inspector
@@ -135,6 +136,18 @@ public class GameController : MonoBehaviour
             });
         }
 
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.AddListener(() =>
+            {
+                OpenSettings();
+            });
+        }
+        Instance.pauseMenuOverlay.transform.Find("SettingsUI").Find("ExitSettingsButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+           OpenSettings(true, false); 
+        });
+
         if (quitButton != null)
         {
             quitButton.onClick.AddListener(() =>
@@ -153,6 +166,12 @@ public class GameController : MonoBehaviour
             if (Instance.pauseMenuOverlay != null)
                 Instance.pauseMenuOverlay.SetActive(false);
         }
+    }
+
+    public static void OpenSettings(bool pause=false, bool settings=true)
+    {
+        Instance.pauseMenuOverlay.transform.Find("PauseMenu").gameObject.SetActive(pause);
+        Instance.pauseMenuOverlay.transform.Find("SettingsUI").gameObject.SetActive(settings);
     }
 
     public void QuitGame()
