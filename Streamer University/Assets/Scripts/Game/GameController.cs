@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
 {
     // ====== Data ======
     [Header("Data")]
+    [SerializeField] private Slider SFXVolume;
+    [SerializeField] private Slider BGMVolume;
 
     // ====== UI Refs ======
     [Header("UI")]
@@ -148,6 +150,9 @@ public class GameController : MonoBehaviour
            OpenSettings(true, false); 
         });
 
+        SFXVolume.onValueChanged.AddListener(delegate { AudioController.Instance.setSFXVol(ReadSliderValue(SFXVolume)); }); 
+        BGMVolume.onValueChanged.AddListener(delegate { AudioController.Instance.setBGMVol(ReadSliderValue(BGMVolume)); }); 
+
         if (quitButton != null)
         {
             quitButton.onClick.AddListener(() =>
@@ -172,6 +177,11 @@ public class GameController : MonoBehaviour
     {
         Instance.pauseMenuOverlay.transform.Find("PauseMenu").gameObject.SetActive(pause);
         Instance.pauseMenuOverlay.transform.Find("SettingsUI").gameObject.SetActive(settings);
+    }
+
+    public static float ReadSliderValue(Slider slider)
+    {
+        return slider.value;
     }
 
     public void QuitGame()
