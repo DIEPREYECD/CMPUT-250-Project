@@ -56,6 +56,7 @@ public class AudioController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         SFXdefaultVolume = SFXSource.volume;
+        BGMdefaultVolume = BGMSource.volume;
     }
 
     private void OnEnable()
@@ -126,6 +127,10 @@ public class AudioController : MonoBehaviour
     }
 
     public void setSFXDefaultVol() => SFXSource.volume = SFXdefaultVolume;
+    public void setBGMDefaultVol() => BGMSource.volume = BGMdefaultVolume;
+    // Change volume percentage
+    public void setSFXVol(float volumePer) => SFXSource.volume = SFXdefaultVolume * volumePer;
+    public void setBGMVol(float volumePer) => BGMSource.volume = BGMdefaultVolume * volumePer;
 
     private void playSFX(AudioClip clip)
     {
