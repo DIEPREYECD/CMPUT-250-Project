@@ -71,6 +71,7 @@ public class TypewriterTMP : MonoBehaviour
         float t = 0f;
         int visible = 0;
         int total = text.textInfo.characterCount; // counts visible glyphs
+        AudioController.Instance.SFXSource.volume -= 0.6f; // Reduce sound effect volume
 
         while (visible < total)
         {
@@ -83,10 +84,17 @@ public class TypewriterTMP : MonoBehaviour
                 visible = next;
                 text.maxVisibleCharacters = visible;
             }
-            // AudioController.Instance.PlayBeep();
+            if (visible % 2 == 1) // Reduce times sound effect playing
+            { 
+                AudioController.Instance.SFXSource.Stop();
+                AudioController.Instance.SFXSource.pitch = Random.Range(0.98f, 1.02f);
+                AudioController.Instance.PlayBeep();
+            }
             yield return null;
         }
 
+        AudioController.Instance.setSFXDefaultVol();
+        AudioController.Instance.SFXSource.pitch = 1;
         text.maxVisibleCharacters = int.MaxValue;
         isTyping = false;
     }

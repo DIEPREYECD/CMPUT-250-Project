@@ -50,6 +50,8 @@ public class MiniGameWordleController : MiniGameController
     public GameObject gameUIRoot;     // parent of the board + keyboard
     public GameObject winPanel;       // shown on success
     public GameObject losePanel;      // shown on failure
+    public GameObject instructionsPanel;
+    public GameObject instructionsBackDrop;
 
     private bool gameStarted = false;
 
@@ -407,6 +409,10 @@ public class MiniGameWordleController : MiniGameController
 
         gameStarted = true;
 
+        // NEW — just in case the player had the instructions open
+        if (instructionsPanel) instructionsPanel.SetActive(false);
+        if (instructionsBackDrop) instructionsBackDrop.SetActive(false);
+
         if (introPanel) introPanel.SetActive(false);
         if (gameUIRoot) gameUIRoot.SetActive(true);
 
@@ -444,10 +450,28 @@ public class MiniGameWordleController : MiniGameController
         if (winPanel) winPanel.SetActive(false);
         if (losePanel) losePanel.SetActive(false);
 
+        // NEW — ensure instructions are hidden at the beginning
+        if (instructionsPanel) instructionsPanel.SetActive(false);
+        if (instructionsBackDrop) instructionsBackDrop.SetActive(false);
+
         gameStarted = false;
 
         Debug.Log($"[Wordle] Answer selected: {currentAnswer}");
     }
+
+    // === Instructions panel controls ===
+    public void ShowInstructions()
+    {
+        if (instructionsBackDrop) instructionsBackDrop.SetActive(true);
+        if (instructionsPanel) instructionsPanel.SetActive(true);
+    }
+
+    public void HideInstructions()
+    {
+        if (instructionsPanel) instructionsPanel.SetActive(false);
+        if (instructionsBackDrop) instructionsBackDrop.SetActive(false);
+    }
+
 
     // Update is called once per frame
     void Update()
