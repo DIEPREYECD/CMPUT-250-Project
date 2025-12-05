@@ -1,0 +1,11 @@
+# Let Git know these are text and use Unity SmartMerge
+*.unity   merge=unityyamlmerge eol=lf
+*.prefab  merge=unityyamlmerge eol=lf
+*.asset   merge=unityyamlmerge eol=lf
+*.mat     merge=unityyamlmerge eol=lf
+*.anim    merge=unityyamlmerge eol=lf
+*.controller merge=unityyamlmerge eol=lf
+
+# Always keep text endings consistent
+*.cs text eol=lf
+*.shader text eol=lf

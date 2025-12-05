@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Streamer University/Assets/Scripts/Game/EventManager.cs.meta
+guid: 049f51901faff6146a97128aebd5b32a
+========
+guid: b8e09218c5f481645b3d39a167031b0b
+>>>>>>>> streamScene:Streamer University/Assets/Scripts/UI/ChatMessageItem.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
