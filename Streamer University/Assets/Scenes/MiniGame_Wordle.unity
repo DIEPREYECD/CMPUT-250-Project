@@ -5680,9 +5680,9 @@ MonoBehaviour:
   presentColor: {r: 0.70980394, g: 0.62352943, b: 0.23137255, a: 1}
   correctColor: {r: 0.3254902, g: 0.5529412, b: 0.30588236, a: 1}
   sfx: {fileID: 1664145749}
-  keyClick: {fileID: 0}
-  invalid: {fileID: 0}
-  reveal: {fileID: 0}
+  keyClick: {fileID: 8300000, guid: 53ea7913a30904e4599bf729103d8068, type: 3}
+  invalid: {fileID: 8300000, guid: ed30eb71b57fb21468120f5404074c75, type: 3}
+  reveal: {fileID: 8300000, guid: aa90692e40fa5de4da4c5220ec5a8a84, type: 3}
   win: {fileID: 0}
   lose: {fileID: 0}
   allowedWordsFile: {fileID: 4900000, guid: bc4c2e313923eed4ca311c32ab6ff0a6, type: 3}

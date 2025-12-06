@@ -150,6 +150,13 @@ public class GameController : MonoBehaviour
         if (catButton != null)
             catBlinkCoro = StartCoroutine(CatBlinkLoop());
 
+        // Set the slider to the previous set value
+        if (SFXVolume != null && BGMVolume != null)
+        {
+            SFXVolume.value = AudioController.Instance.SFXSource.volume / AudioController.Instance.SFXDefaultVolume;
+            BGMVolume.value = AudioController.Instance.BGMSource.volume / AudioController.Instance.BGMDefaultVolume;
+        }
+
         if (pauseButton != null)
         {
             pauseButton.onClick.AddListener(() =>

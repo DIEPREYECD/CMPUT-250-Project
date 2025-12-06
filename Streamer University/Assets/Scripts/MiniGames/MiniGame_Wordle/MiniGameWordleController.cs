@@ -436,6 +436,7 @@ public class MiniGameWordleController : MiniGameController
         SetupKeyboard();
         ClearBoardVisuals();
         AudioController.Instance.toggleBGM("Wordle"); // Play BGM
+        sfx.volume = AudioController.Instance.SFXSource.volume;
 
         // required by MiniGameController pattern
         this.delta = new Dictionary<string, int>();
