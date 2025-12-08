@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,17 @@ public class BarUI : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
     private float currentFill;
+
+    [SerializeField]
+    private TMP_Text deltaText; // This Text object will display the change in value specified
+
+    private void Start()
+    {
+        if (deltaText != null)
+        {
+            deltaText.gameObject.SetActive(false);
+        }
+    }
 
     public void SetFill(float value)
     {
@@ -27,7 +39,7 @@ public class BarUI : MonoBehaviour
     {
         StartCoroutine(ShakeCoroutine(intensity, duration));
     }
-    
+
     private IEnumerator ShakeCoroutine(float intensity, float duration)
     {
         RectTransform rt = GetComponent<RectTransform>();
@@ -42,5 +54,18 @@ public class BarUI : MonoBehaviour
             yield return null;
         }
         rt.anchoredPosition = originalPos;
+    }
+
+    public void ShowDelta(int deltaValue, float displayDuration = 1f)
+    {
+        StartCoroutine(ShowDeltaCoroutine(deltaValue, displayDuration));
+    }
+
+    private IEnumerator ShowDeltaCoroutine(int deltaValue, float displayDuration)
+    {
+        deltaText.text = (deltaValue > 0 ? "+" : "-") + deltaValue.ToString();
+        deltaText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(displayDuration);
+        deltaText.gameObject.SetActive(false);
     }
 }

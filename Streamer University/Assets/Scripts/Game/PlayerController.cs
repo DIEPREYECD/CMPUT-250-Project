@@ -33,6 +33,22 @@ public class PlayerController : AnimatedEntity
     private int stress = 0;
     private int fame = 0;
 
+    // Event data for stat changes
+    public struct StatsDelta
+    {
+        public int deltaFame;
+        public int deltaStress;
+        public int oldFame;
+        public int newFame;
+        public int oldStress;
+        public int newStress;
+        public string source;
+        public float timestamp;
+    }
+
+    // Raised whenever fame/stress are changed via ApplyDelta
+    public event System.Action<StatsDelta> OnStatsChanged;
+
     [SerializeField]
     private List<Sprite> playerOnEvents;
 
@@ -104,12 +120,31 @@ public class PlayerController : AnimatedEntity
     public int Fame { get { return fame; } }
 
     // method to apply changes to fame and stress
-    public void ApplyDelta(int dFame, int dStress)
+    // Optional `source` parameter can be provided by callers for debugging/analytics
+    public void ApplyDelta(int dFame, int dStress, string source = null)
     {
+        int oldFame = fame;
+        int oldStress = stress;
+
         fame += dFame;
         stress += dStress;
         fame = Mathf.Max(fame, 0);
         stress = Mathf.Clamp(stress, 0, 100);
+
+        // Build and raise stats delta event
+        StatsDelta sd = new StatsDelta
+        {
+            deltaFame = dFame,
+            deltaStress = dStress,
+            oldFame = oldFame,
+            newFame = fame,
+            oldStress = oldStress,
+            newStress = stress,
+            source = source,
+            timestamp = Time.realtimeSinceStartup
+        };
+
+        OnStatsChanged?.Invoke(sd);
     }
 
     // method to reset stats to default values

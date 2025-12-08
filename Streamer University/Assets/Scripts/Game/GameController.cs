@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
 {
     // ====== Data ======
     [Header("Data")]
+    [SerializeField] private Slider SFXVolume;
+    [SerializeField] private Slider BGMVolume;
 
     // ====== UI Refs ======
     [Header("UI")]
@@ -27,9 +29,26 @@ public class GameController : MonoBehaviour
     [SerializeField] private BarUI stressBar;
     [SerializeField] private BarUI fameBar;
     [SerializeField] private Button pauseButton;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Button resumeButton;
     [SerializeField] private GameObject pauseMenuOverlay;
     [SerializeField] private Button quitButton; // assign in inspector
+
+    // ====== Cat Button Blink ======
+    [Header("Cat Button Blink")]
+    [Tooltip("Button for the cat UI that will blink to draw attention.")]
+    [SerializeField] private Button catButton;
+    [Tooltip("Seconds between blink cycles.")]
+    [SerializeField] private float catBlinkIntervalSeconds = 120f;
+    [Tooltip("Duration of each blink period in seconds.")]
+    [SerializeField] private float catBlinkDurationSeconds = 10f;
+    [Tooltip("Max alpha (0-255) used during blinking.")]
+    [Range(0, 255)]
+    [SerializeField] private int catBlinkHighlightAlpha = 255;
+    [Tooltip("Pulse frequency (cycles per second) during blink.")]
+    [SerializeField] private float catBlinkPulseFrequency = 2f;
+
+    private Coroutine catBlinkCoro;
 
     // ====== Timing ======
     [Header("Timing")]
@@ -84,6 +103,12 @@ public class GameController : MonoBehaviour
             EventManager.Instance.OnEventOpened += HandleEventOpened;
             EventManager.Instance.OnEventClosed += HandleEventClosed;
         }
+        // Subscribe to player stat changes to display deltas when they occur
+        if (PlayerController.Instance != null)
+        {
+            Debug.Log("Subscribing to PlayerController stat events.");
+            PlayerController.Instance.OnStatsChanged += HandleStatsChanged;
+        }
     }
 
     private void Unsubscribe()
@@ -93,6 +118,11 @@ public class GameController : MonoBehaviour
             Debug.Log("Unsubscribing from EventManager events.");
             EventManager.Instance.OnEventOpened -= HandleEventOpened;
             EventManager.Instance.OnEventClosed -= HandleEventClosed;
+        }
+        if (PlayerController.Instance != null)
+        {
+            Debug.Log("Unsubscribing from PlayerController stat events.");
+            PlayerController.Instance.OnStatsChanged -= HandleStatsChanged;
         }
     }
 
@@ -107,9 +137,25 @@ public class GameController : MonoBehaviour
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
 
+        // Initialize bars to current player values (avoid relying on per-frame polling)
+        if (fameBar != null)
+            fameBar.SetFill(PlayerController.Instance.Fame / 100f);
+        if (stressBar != null)
+            stressBar.SetFill(PlayerController.Instance.Stress / 100f);
+
         GameFlowController.Instance.SetState(GameState.MainGameplay);
         // Kick the loop
         loopCoro = StartCoroutine(StreamLoop());
+        // Kick the cat blink loop (optional if assigned in inspector)
+        if (catButton != null)
+            catBlinkCoro = StartCoroutine(CatBlinkLoop());
+
+        // Set the slider to the previous set value
+        if (SFXVolume != null && BGMVolume != null)
+        {
+            SFXVolume.value = AudioController.Instance.SFXSource.volume / AudioController.Instance.SFXDefaultVolume;
+            BGMVolume.value = AudioController.Instance.BGMSource.volume / AudioController.Instance.BGMDefaultVolume;
+        }
 
         if (pauseButton != null)
         {
@@ -135,6 +181,21 @@ public class GameController : MonoBehaviour
             });
         }
 
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.AddListener(() =>
+            {
+                OpenSettings();
+            });
+        }
+        Instance.pauseMenuOverlay.transform.Find("SettingsUI").Find("ExitSettingsButton").GetComponent<Button>().onClick.AddListener(() =>
+        {
+           OpenSettings(true, false); 
+        });
+
+        SFXVolume.onValueChanged.AddListener(delegate { AudioController.Instance.setSFXVol(ReadSliderValue(SFXVolume)); }); 
+        BGMVolume.onValueChanged.AddListener(delegate { AudioController.Instance.setBGMVol(ReadSliderValue(BGMVolume)); }); 
+
         if (quitButton != null)
         {
             quitButton.onClick.AddListener(() =>
@@ -155,6 +216,17 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public static void OpenSettings(bool pause=false, bool settings=true)
+    {
+        Instance.pauseMenuOverlay.transform.Find("PauseMenu").gameObject.SetActive(pause);
+        Instance.pauseMenuOverlay.transform.Find("SettingsUI").gameObject.SetActive(settings);
+    }
+
+    public static float ReadSliderValue(Slider slider)
+    {
+        return slider.value;
+    }
+
     public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -169,8 +241,7 @@ public class GameController : MonoBehaviour
         if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
             return;
 
-        stressBar.SetFill(PlayerController.Instance.Stress / 100f);
-        fameBar.SetFill(PlayerController.Instance.Fame / 100f);
+        // Bars are updated via PlayerController.OnStatsChanged event (no per-frame polling)
 
         // Check for game ending conditions
         foreach (var condition in endingConditions)
@@ -203,9 +274,40 @@ public class GameController : MonoBehaviour
                 Unsubscribe();
                 if (loopCoro != null)
                     StopCoroutine(loopCoro);
+                if (catBlinkCoro != null)
+                    StopCoroutine(catBlinkCoro);
                 GameFlowController.Instance.TransitionToScene("GameEnd");
                 break;
             }
+        }
+    }
+
+    // ---- Player stat change hooks ----
+    private void HandleStatsChanged(PlayerController.StatsDelta d)
+    {
+        StartCoroutine(ShowDeltasCoroutine(d));
+    }
+
+    private IEnumerator ShowDeltasCoroutine(PlayerController.StatsDelta d)
+    {
+        // Show fame delta first
+        if (fameBar != null)
+        {
+            // Don't show if delta is zero
+            if (d.deltaFame != 0)
+                fameBar.ShowDelta(d.deltaFame);
+            fameBar.SetFill(d.newFame / 100f);
+        }
+
+        // small stagger so the player perceives separate changes
+        yield return new WaitForSeconds(0.12f);
+
+        if (stressBar != null)
+        {
+            // Don't show if delta is zero
+            if (d.deltaStress != 0)
+                stressBar.ShowDelta(d.deltaStress);
+            stressBar.SetFill(d.newStress / 100f);
         }
     }
 
@@ -258,6 +360,74 @@ public class GameController : MonoBehaviour
             yield return null;
         }
         target.ApplyTo(rt);
+    }
+
+    // ====== Cat Button Blink Coroutines ======
+    private IEnumerator CatBlinkLoop()
+    {
+        if (catButton == null)
+            yield break;
+
+        while (true)
+        {
+            // Wait until main gameplay state
+            while (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+                yield return null;
+
+            // Wait for the interval, but reset if leaving gameplay
+            float t = 0f;
+            while (t < catBlinkIntervalSeconds)
+            {
+                if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+                {
+                    t = 0f;
+                    yield return null;
+                    continue;
+                }
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            // Perform blinking/pulsing for the configured duration
+            yield return StartCoroutine(BlinkCatForDuration(catBlinkDurationSeconds));
+        }
+    }
+
+    private IEnumerator BlinkCatForDuration(float duration)
+    {
+        if (catButton == null)
+            yield break;
+
+        var img = catButton.image;
+        if (img == null)
+            img = catButton.GetComponent<UnityEngine.UI.Image>();
+        if (img == null)
+            yield break;
+        Color orig = img.color;
+        float origA = orig.a;
+        float targetA = catBlinkHighlightAlpha / 255f; // convert 0-255 to 0-1
+
+        Debug.Log($"Cat blink START ({duration}s)");
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (GameFlowController.Instance.CurrentState != GameState.MainGameplay)
+            {
+                yield return null;
+                continue;
+            }
+            float k = (Mathf.Sin(elapsed * Mathf.PI * 2f * catBlinkPulseFrequency) + 1f) * 0.5f;
+            float a = Mathf.Lerp(origA, targetA, k);
+            var c = orig;
+            c.a = a;
+            img.color = c;
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        img.color = orig;
+        Debug.Log("Cat blink STOP");
     }
 
     // ====== Helper struct for RectTransform targets ======

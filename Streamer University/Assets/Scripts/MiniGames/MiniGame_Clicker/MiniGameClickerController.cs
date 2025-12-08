@@ -20,11 +20,27 @@ public class MiniGameClickerController : MiniGameController
     public GameObject introPanel;      // Fullscreen panel with intro text + start button
     public GameObject gameUIRoot;      // Parent for the actual gameplay UI (score, timer, button, etc.)
 
+    [System.Serializable]
+    public class TargetConfig
+    {
+        public int targetScore = 150;
+        public int fameSuccess = 5;
+        public int stressSuccess = -3;
+        public int fameFail = 0;
+        public int stressFail = 4;
+    }
+
+    // Combined per-difficulty configuration (score + success/fail deltas)
+    public List<TargetConfig> targetConfigs;
+
+    // Selected difficulty index for this run (-1 = random/fallback)
+    private int chosenDifficultyIndex = -1;
+
     private bool gameStarted = false;
     private float soundEffectVolReduce = 0.4f; // How much quieter should the clicking sound effect be in this minigame
 
-    // The player has to reach the target score by clicking before time runs out
-    private const float timeLimit = 40f;
+    [SerializeField]
+    private const float timeLimit = 30f;
     private float timer = 0f;
 
     public void Start()
@@ -39,7 +55,65 @@ public class MiniGameClickerController : MiniGameController
         if (scoreText != null)
             scoreText.text = $"Score: {score}";
 
-        targetScore = Random.Range(150, 300);
+        // Determine targetScore based on difficulty flags managed by EventManager.
+        // Flags are named "ClickerMini_Game_{n}" where n is the difficulty index.
+        if (targetConfigs != null && targetConfigs.Count > 0)
+        {
+            int currentIndex = 0; // default when no flag exists
+            if (EventManager.Instance != null)
+            {
+                try
+                {
+                    var allFlags = EventManager.Instance.GetFlags();
+                    int found = -1;
+                    const string prefix = "ClickerMini_Game_";
+                    foreach (var f in allFlags)
+                    {
+                        if (f != null && f.StartsWith(prefix))
+                        {
+                            var suffix = f.Substring(prefix.Length);
+                            if (int.TryParse(suffix, out var v))
+                            {
+                                if (found == -1 || v < found) // choose lowest if multiple present
+                                    found = v;
+                            }
+                        }
+                    }
+                    if (found >= 0)
+                        currentIndex = found;
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogWarning($"MiniGameClickerController: Error reading flags: {ex.Message}");
+                    currentIndex = 0;
+                }
+            }
+            if (currentIndex < 0 || currentIndex >= targetConfigs.Count)
+                currentIndex = 0;
+
+            targetScore = targetConfigs[currentIndex].targetScore;
+            chosenDifficultyIndex = currentIndex;
+
+            // Advance difficulty flag (wrap around)
+            if (EventManager.Instance != null)
+            {
+                int nextIndex = (currentIndex + 1) % targetConfigs.Count;
+                // clear any existing ClickerMini_Game_* flags to keep state consistent
+                var toClear = new List<string>();
+                for (int i = 0; i < targetConfigs.Count; i++)
+                    toClear.Add($"ClickerMini_Game_{i}");
+
+                EventManager.Instance.clearFlags(toClear);
+                EventManager.Instance.setFlags(new List<string> { $"ClickerMini_Game_{nextIndex}" });
+                Debug.Log($"MiniGameClickerController: selected difficulty {currentIndex}, target {targetScore}, advanced to {nextIndex}");
+            }
+        }
+        else
+        {
+            // fallback to previous random behavior when no explicit targets set
+            targetScore = Random.Range(150, 300);
+            chosenDifficultyIndex = -1;
+        }
 
         if (instructionsText != null)
             instructionsText.text =
@@ -138,14 +212,34 @@ public class MiniGameClickerController : MiniGameController
         List<string> setFlags = new List<string>();
         if (success)
         {
-            this.delta.Add("fame", 5);
-            this.delta.Add("stress", -3);
+            if (chosenDifficultyIndex >= 0 && targetConfigs != null && chosenDifficultyIndex < targetConfigs.Count)
+            {
+                var cfg = targetConfigs[chosenDifficultyIndex];
+                this.delta.Add("fame", cfg.fameSuccess);
+                this.delta.Add("stress", cfg.stressSuccess);
+            }
+            else
+            {
+                // fallback to previous defaults
+                this.delta.Add("fame", 5);
+                this.delta.Add("stress", -3);
+            }
             setFlags.Add("clickerWin");
             EventManager.Instance.addToQueue("EVT003_WIN");
         }
         else
         {
-            this.delta.Add("stress", 4);
+            if (chosenDifficultyIndex >= 0 && targetConfigs != null && chosenDifficultyIndex < targetConfigs.Count)
+            {
+                var cfg = targetConfigs[chosenDifficultyIndex];
+                this.delta.Add("fame", cfg.fameFail);
+                this.delta.Add("stress", cfg.stressFail);
+            }
+            else
+            {
+                // fallback to previous defaults
+                this.delta.Add("stress", 4);
+            }
             setFlags.Add("clickerLose");
             EventManager.Instance.addToQueue("EVT003_LOSE");
         }

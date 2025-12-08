@@ -32,7 +32,8 @@ public class AudioController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip spikeSound;
     private AudioClip currentClip = null;
-    private float defaultVolume;
+    public float SFXDefaultVolume;
+    public float BGMDefaultVolume;
 
     private void Awake()
     {
@@ -56,6 +57,9 @@ public class AudioController : MonoBehaviour
         }
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SFXDefaultVolume = SFXSource.volume;
+        BGMDefaultVolume = BGMSource.volume;
     }
 
     private void OnEnable()
@@ -124,6 +128,13 @@ public class AudioController : MonoBehaviour
         // Play the music
         BGMSource.Play();
     }
+
+    public void setSFXDefaultVol() => SFXSource.volume = SFXDefaultVolume;
+    public void setBGMDefaultVol() => BGMSource.volume = BGMDefaultVolume;
+    // Change volume percentage
+    public void setSFXVol(float volumePer) => SFXSource.volume = SFXDefaultVolume * volumePer;
+    public void setBGMVol(float volumePer) => BGMSource.volume = BGMDefaultVolume * volumePer;
+
     private void playSFX(AudioClip clip)
     {
         SFXSource.PlayOneShot(clip);

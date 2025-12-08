@@ -68,6 +68,31 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    // Helper accessors for flags so other systems (like minigames) can inspect and modify
+    public bool HasFlag(string flagName)
+    {
+        if (string.IsNullOrWhiteSpace(flagName)) return false;
+        return flags.Contains(flagName);
+    }
+
+    public List<string> GetFlags()
+    {
+        return flags.ToList();
+    }
+
+    // Convenience single-flag setters/clears that wrap the existing list-based APIs
+    public void SetFlag(string flag)
+    {
+        if (string.IsNullOrWhiteSpace(flag)) return;
+        flags.Add(flag);
+    }
+
+    public void ClearFlag(string flag)
+    {
+        if (string.IsNullOrWhiteSpace(flag)) return;
+        flags.Remove(flag);
+    }
+
     public string PrintEventManagerState()
     {
         return $"EventManager State:\n" +

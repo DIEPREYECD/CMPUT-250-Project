@@ -654,7 +654,7 @@ MonoBehaviour:
   streamSceneBGM: {fileID: 8300000, guid: f7c3db1746337c44795c7df9a2aac27d, type: 3}
   minigameClickerBGM: {fileID: 8300000, guid: fa5f3a817967c3145ae82aa5bc982106, type: 3}
   minigameWordleBGM: {fileID: 8300000, guid: bff9c0840d0572444bbf73018895ff32, type: 3}
-  textBeep: {fileID: 8300000, guid: dfff21d435bc8c442bde0e381679c621, type: 3}
+  textBeep: {fileID: 8300000, guid: 25f91c3c39c41794d888a126e09ae4b9, type: 3}
   onEvent: {fileID: 8300000, guid: 2ed6dc0adb637ca449fb6a2c3ed5ae63, type: 3}
   openSideCard: {fileID: 8300000, guid: 90221bddf6bb93744ad76868b5489646, type: 3}
   closeSideCard: {fileID: 8300000, guid: bbd6eb0129a2ab345a7785e17caca1c5, type: 3}
