@@ -62,6 +62,7 @@ public class MiniGameGeoDashController : MiniGameController
         SpawnSpike(new Vector3(40f, 5f, 0f), true);
         SpawnSpike(new Vector3(60f, 5f, 0f), true);
 
+        // Gravity Portal: (true = upside down, false = ceiling)
         SpawnSpeedPortal(new Vector3(5f, 1f, 0f), Speeds.Fastest, false, Color.red);
         SpawnGravityPortal(new Vector3(70f, 4f, 0f), true, false);
     }
