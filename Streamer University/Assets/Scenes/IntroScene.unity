@@ -656,6 +656,7 @@ MonoBehaviour:
   minigameWordleBGM: {fileID: 8300000, guid: bff9c0840d0572444bbf73018895ff32, type: 3}
   minigameLaneDodgeBGM: {fileID: 8300000, guid: 8782e72ffb20dcc43bf9101506c23333,
     type: 3}
+  minigameDetangleBGM: {fileID: 8300000, guid: cc93909f3e3d15246a5b7b5ed130ca15, type: 3}
   textBeep: {fileID: 8300000, guid: 25f91c3c39c41794d888a126e09ae4b9, type: 3}
   onEvent: {fileID: 8300000, guid: 2ed6dc0adb637ca449fb6a2c3ed5ae63, type: 3}
   openSideCard: {fileID: 8300000, guid: 90221bddf6bb93744ad76868b5489646, type: 3}

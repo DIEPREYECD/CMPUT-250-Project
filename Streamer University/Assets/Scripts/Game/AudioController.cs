@@ -18,7 +18,8 @@ public class AudioController : MonoBehaviour
     public AudioClip minigameClickerBGM;
     public AudioClip minigameWordleBGM;
     public AudioClip minigameLaneDodgeBGM;
-    
+    public AudioClip minigameDetangleBGM;
+
     [Header("Sound effects")]
     public AudioClip textBeep;
     public AudioClip onEvent;
@@ -105,6 +106,11 @@ public class AudioController : MonoBehaviour
             Debug.Log("play Lane Dodge bgm");
             BGMSource.clip = minigameLaneDodgeBGM;
         }
+        else if (sceneName == "MiniGame_Detangle")
+        {
+            Debug.Log("play Detangle bgm");
+            BGMSource.clip = minigameDetangleBGM;
+        }
         else
         {
             Debug.Log("No bgm");
@@ -112,8 +118,8 @@ public class AudioController : MonoBehaviour
         }
         toggleBGM();
     }
-    
-    public void toggleBGM(string currentScene=null)
+
+    public void toggleBGM(string currentScene = null)
     {
         if (currentScene != null)
         {
@@ -130,7 +136,7 @@ public class AudioController : MonoBehaviour
         BGMSource.loop = true;
 
         currentClip = BGMSource.clip;
-        
+
         // Play the music
         BGMSource.Play();
     }
