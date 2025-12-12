@@ -166,11 +166,20 @@ public class GameController : MonoBehaviour
                     GameFlowController.Instance.SetState(GameState.Paused);
                     Time.timeScale = 0f;
                     if (pauseMenuOverlay != null)
+                    {
                         pauseMenuOverlay.SetActive(true);
+
+                        // Show pause menu, hide settings
+                        OpenSettings(true, false);
+                    }
                 }
             });
 
+            // Hide overlay at start
             pauseMenuOverlay.SetActive(false);
+
+            // Hide pause menu and settings UI at start
+            OpenSettings(false, false);
         }
 
         if (resumeButton != null)
@@ -185,7 +194,8 @@ public class GameController : MonoBehaviour
         {
             settingsButton.onClick.AddListener(() =>
             {
-                OpenSettings();
+                // Hide pause menu, show settings
+                OpenSettings(false, true);
             });
         }
         Instance.pauseMenuOverlay.transform.Find("SettingsUI").Find("ExitSettingsButton").GetComponent<Button>().onClick.AddListener(() =>
