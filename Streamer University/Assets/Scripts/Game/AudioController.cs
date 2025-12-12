@@ -17,6 +17,7 @@ public class AudioController : MonoBehaviour
     public AudioClip streamSceneBGM;
     public AudioClip minigameClickerBGM;
     public AudioClip minigameWordleBGM;
+    public AudioClip minigameLaneDodgeBGM;
     
     [Header("Sound effects")]
     public AudioClip textBeep;
@@ -29,7 +30,10 @@ public class AudioController : MonoBehaviour
     public AudioClip winMinigame;
     public AudioClip loseMinigame;
     private AudioClip currentClip = null;
+    // The default volume would just be set to the current volume of the sources
+    [System.NonSerialized]
     public float SFXDefaultVolume;
+    [System.NonSerialized]
     public float BGMDefaultVolume;
 
     private void Awake()
@@ -95,6 +99,11 @@ public class AudioController : MonoBehaviour
         {
             Debug.Log("play clicker bgm");
             BGMSource.clip = minigameClickerBGM;
+        }
+        else if (sceneName == "MiniGame_LaneDodge")
+        {
+            Debug.Log("play Lane Dodge bgm");
+            BGMSource.clip = minigameLaneDodgeBGM;
         }
         else
         {

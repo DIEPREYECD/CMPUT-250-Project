@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -99,14 +100,14 @@ public class GameController : MonoBehaviour
         // Optional: react to event open/close to move avatar exactly on those moments.
         if (EventManager.Instance != null)
         {
-            Debug.Log("Subscribing to EventManager events.");
+            UnityEngine.Debug.Log("Subscribing to EventManager events.");
             EventManager.Instance.OnEventOpened += HandleEventOpened;
             EventManager.Instance.OnEventClosed += HandleEventClosed;
         }
         // Subscribe to player stat changes to display deltas when they occur
         if (PlayerController.Instance != null)
         {
-            Debug.Log("Subscribing to PlayerController stat events.");
+            UnityEngine.Debug.Log("Subscribing to PlayerController stat events.");
             PlayerController.Instance.OnStatsChanged += HandleStatsChanged;
         }
     }
@@ -115,13 +116,13 @@ public class GameController : MonoBehaviour
     {
         if (EventManager.Instance != null)
         {
-            Debug.Log("Unsubscribing from EventManager events.");
+            UnityEngine.Debug.Log("Unsubscribing from EventManager events.");
             EventManager.Instance.OnEventOpened -= HandleEventOpened;
             EventManager.Instance.OnEventClosed -= HandleEventClosed;
         }
         if (PlayerController.Instance != null)
         {
-            Debug.Log("Unsubscribing from PlayerController stat events.");
+            UnityEngine.Debug.Log("Unsubscribing from PlayerController stat events.");
             PlayerController.Instance.OnStatsChanged -= HandleStatsChanged;
         }
     }
@@ -130,9 +131,9 @@ public class GameController : MonoBehaviour
     {
         Subscribe();
 
-        Debug.Log("Welcome to Streamer U!");
+        UnityEngine.Debug.Log("Welcome to Streamer U!");
         PlayerController.Instance.ResetStats();
-        Debug.Log($"Starting Fame: {PlayerController.Instance.Fame}, Stress: {PlayerController.Instance.Stress}");
+        UnityEngine.Debug.Log($"Starting Fame: {PlayerController.Instance.Fame}, Stress: {PlayerController.Instance.Stress}");
 
         // Put avatar in the starting pose/anchors
         avatarCenter.ApplyTo(playerAvatar);
@@ -200,9 +201,10 @@ public class GameController : MonoBehaviour
         }
         Instance.pauseMenuOverlay.transform.Find("SettingsUI").Find("ExitSettingsButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-           OpenSettings(true, false); 
+           OpenSettings(true, false); // Hide settings, show pause menu
         });
 
+        // Set Audio Sources volume whenever change is detected
         SFXVolume.onValueChanged.AddListener(delegate { AudioController.Instance.setSFXVol(ReadSliderValue(SFXVolume)); }); 
         BGMVolume.onValueChanged.AddListener(delegate { AudioController.Instance.setBGMVol(ReadSliderValue(BGMVolume)); }); 
 
@@ -210,6 +212,7 @@ public class GameController : MonoBehaviour
         {
             quitButton.onClick.AddListener(() =>
             {
+                AudioController.Instance.PlayCloseSideCard();
                 QuitGame();
             });
         }
@@ -217,6 +220,7 @@ public class GameController : MonoBehaviour
 
     public static void UnPauseGame()
     {
+        AudioController.Instance.PlayCloseSideCard();
         if (GameFlowController.Instance.CurrentState == GameState.Paused)
         {
             GameFlowController.Instance.SetState(GameState.MainGameplay);
@@ -228,6 +232,8 @@ public class GameController : MonoBehaviour
 
     public static void OpenSettings(bool pause=false, bool settings=true)
     {
+        if (pause == false && settings == true) { AudioController.Instance.PlayOpenSideCard(); }
+        else if (pause == true && settings == false) { AudioController.Instance.PlayCloseSideCard(); }
         Instance.pauseMenuOverlay.transform.Find("PauseMenu").gameObject.SetActive(pause);
         Instance.pauseMenuOverlay.transform.Find("SettingsUI").gameObject.SetActive(settings);
     }
@@ -278,7 +284,7 @@ public class GameController : MonoBehaviour
 
             if (check)
             {
-                Debug.Log($"Game Ending Triggered: {condition.ending}");
+                UnityEngine.Debug.Log($"Game Ending Triggered: {condition.ending}");
                 GameFlowController.Instance.SetEnding(condition.ending);
                 GameFlowController.Instance.SetState(GameState.GameEnd);
                 Unsubscribe();
@@ -417,7 +423,7 @@ public class GameController : MonoBehaviour
         float origA = orig.a;
         float targetA = catBlinkHighlightAlpha / 255f; // convert 0-255 to 0-1
 
-        Debug.Log($"Cat blink START ({duration}s)");
+        UnityEngine.Debug.Log($"Cat blink START ({duration}s)");
 
         float elapsed = 0f;
         while (elapsed < duration)
@@ -437,7 +443,7 @@ public class GameController : MonoBehaviour
         }
 
         img.color = orig;
-        Debug.Log("Cat blink STOP");
+        UnityEngine.Debug.Log("Cat blink STOP");
     }
 
     // ====== Helper struct for RectTransform targets ======
