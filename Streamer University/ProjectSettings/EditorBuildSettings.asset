@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MiniGame_LaneDodge.unity
     guid: 35dfa639ded3cbb4ea19ab86c76d4891
+  - enabled: 1
+    path: Assets/Scenes/MiniGame_Detangle.unity
+    guid: d9fa95cb54368284094aeec3174f82c9
   m_configObjects: {}

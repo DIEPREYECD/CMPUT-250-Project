@@ -13,6 +13,10 @@ public class DetangleController : MiniGameController
     public float timeLimit = 60f; // 60 seconds to solve
     private float timeRemaining;
 
+    [Header("Audio")]
+    [Tooltip("How much quieter SFX should be during this minigame (like clicker).")]
+    public float soundEffectVolReduce = 0.4f;
+
     [Header("UI")]
     public TMPro.TMP_Text timerText;
 
@@ -55,6 +59,8 @@ public class DetangleController : MiniGameController
 
     void Start()
     {
+        AudioController.Instance.toggleBGM(); // Play BGM
+
         this.delta = new Dictionary<string, int>();
         finished = false;
         successDeclared = false;
@@ -300,7 +306,7 @@ public class DetangleController : MiniGameController
         lr.SetPosition(1, worldEnd);
     }
 
-    public void OnNodeMoved(){}
+    public void OnNodeMoved() { }
 
     bool DoLinesIntersect(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
     {
@@ -320,6 +326,14 @@ public class DetangleController : MiniGameController
     public void StartGame()
     {
         if (gameStarted) return;
+
+        // Audio similar to clicker
+        if (AudioController.Instance != null)
+        {
+            AudioController.Instance.PlaySelect();
+            AudioController.Instance.SFXSource.volume -= soundEffectVolReduce;
+        }
+
 
         gameStarted = true;
 
@@ -448,6 +462,13 @@ public class DetangleController : MiniGameController
         finished = true;
         gameStarted = false;
 
+        if (AudioController.Instance != null)
+        {
+            AudioController.Instance.toggleBGM(); // stop BGM
+            AudioController.Instance.SFXSource.volume += soundEffectVolReduce; // restore SFX volume
+            AudioController.Instance.PlayWinMinigame();
+        }
+
         if (winPanel) winPanel.SetActive(true);
 
         Invoke(nameof(FinishMiniGame), 3f);
@@ -460,6 +481,10 @@ public class DetangleController : MiniGameController
         successDeclared = false;
         finished = true;
         gameStarted = false;
+
+        AudioController.Instance.toggleBGM(); // stop BGM
+        AudioController.Instance.SFXSource.volume += soundEffectVolReduce; // restore SFX volume
+        AudioController.Instance.PlayLoseMinigame();
 
         if (losePanel) losePanel.SetActive(true);
 
