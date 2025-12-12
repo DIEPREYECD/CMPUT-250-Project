@@ -213,6 +213,9 @@ public class LaneDodgeGameController : MiniGameController
         timeAlive = 0f;
         UpdateTimerUI();
 
+        if (LaneDodgePlayerController.Instance != null)
+            LaneDodgePlayerController.Instance.ResetVisual();
+
         if (introPanel != null)
             introPanel.SetActive(false);
 
@@ -246,6 +249,10 @@ public class LaneDodgeGameController : MiniGameController
         successDeclared = false;
         finished = true;
         gameStarted = false;
+
+        if (LaneDodgePlayerController.Instance != null)
+            LaneDodgePlayerController.Instance.SetKnockedDown();
+
 
         LaneDodgeSpawner.Instance.StopSpawning();
 

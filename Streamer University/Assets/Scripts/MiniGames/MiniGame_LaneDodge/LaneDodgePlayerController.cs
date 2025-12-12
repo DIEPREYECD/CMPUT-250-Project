@@ -29,6 +29,17 @@ public class LaneDodgePlayerController : MonoBehaviour
     [Tooltip("Sprites for the running animation, played in a loop.")]
     public List<Sprite> runSprites = new List<Sprite>();
 
+    [Header("Hit / Knockdown Visual")]
+    [Tooltip("Single sprite to show when the player hits an obstacle.")]
+    public Sprite hitSprite;
+
+    [Tooltip("Degrees to rotate when knocked down (90 = on the floor).")]
+    public float knockedRotationZ = -90f;
+
+    private Quaternion defaultRotation;
+    private Sprite defaultSprite;
+    private bool knockedDown = false;
+
     [Tooltip("Frames per second for the running animation.")]
     public float animationFPS = 10f;
 
@@ -76,11 +87,18 @@ public class LaneDodgePlayerController : MonoBehaviour
         }
 
         ResizeColliderToMatchRect();
+
+        defaultRotation = playerRect.localRotation;
+        defaultSprite = playerImage != null ? playerImage.sprite : null;
+
     }
 
     private void Update()
     {
         if (LaneDodgeGameController.Instance == null || LaneDodgeGameController.Instance.IsGameFinished)
+            return;
+
+        if (knockedDown)
             return;
 
         HandleInput();
@@ -173,6 +191,41 @@ public class LaneDodgePlayerController : MonoBehaviour
             col.size = playerRect.sizeDelta;
             col.offset = Vector2.zero;
         }
+    }
+
+    public void SetKnockedDown()
+    {
+        if (knockedDown) return;
+        knockedDown = true;
+
+        // Stop run animation by clearing frames or just leaving UpdateRunAnimation unused
+        // We'll block input + animation by checking knockedDown in Update()
+
+        if (playerImage != null && hitSprite != null)
+            playerImage.sprite = hitSprite;
+
+        if (playerRect != null)
+            playerRect.localRotation = Quaternion.Euler(0f, 0f, knockedRotationZ);
+    }
+
+    public void ResetVisual()
+    {
+        knockedDown = false;
+
+        if (playerRect != null)
+            playerRect.localRotation = defaultRotation;
+
+        // Reset to first run sprite if available, otherwise original sprite
+        if (playerImage != null)
+        {
+            if (runSprites != null && runSprites.Count > 0)
+                playerImage.sprite = runSprites[0];
+            else if (defaultSprite != null)
+                playerImage.sprite = defaultSprite;
+        }
+
+        currentFrameIndex = 0;
+        animationTimer = 0f;
     }
 
 
