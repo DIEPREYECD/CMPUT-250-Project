@@ -67,8 +67,8 @@ public class MiniGameWordleController : MiniGameController
     [Header("Minigame Result Deltas")]
     public int fameDeltaOnWin = 5;
     public int stressDeltaOnWin = -2;
-    public int fameDeltaOnLose = -2;
-    public int stressDeltaOnLose = 3;
+    public int fameDeltaOnLose = -8;
+    public int stressDeltaOnLose = 5;
 
     // Current game state
     private string currentAnswer;
@@ -180,15 +180,9 @@ public class MiniGameWordleController : MiniGameController
             AudioController.Instance.toggleBGM();
             StartCoroutine(PlayWinRowAnimation(currentRow));
 
-            if (winPanel)
-            {
-                winPanel.SetActive(true);
+            // Show the win panel after a short delay so the row animation is visible
+            StartCoroutine(ShowWinPanelDelayed(2f));
 
-                if (winWordLabel)
-                {
-                    winWordLabel.text = $"The word was: {currentAnswer.ToUpper()}";
-                }
-            }
             if (keyboardRoot) keyboardRoot.gameObject.SetActive(false);
 
             AudioController.Instance.PlayWinMinigame();
@@ -207,8 +201,8 @@ public class MiniGameWordleController : MiniGameController
             AudioController.Instance.toggleBGM();
 
             if (losePanel)
-            { 
-                losePanel.SetActive(true); 
+            {
+                losePanel.SetActive(true);
                 if (loseWordLabel)
                 {
                     loseWordLabel.text = $"The word was: {currentAnswer.ToUpper()}";
@@ -243,6 +237,21 @@ public class MiniGameWordleController : MiniGameController
 
             // small time wait for wave effect
             yield return new WaitForSeconds(0.06f);
+        }
+    }
+
+    private IEnumerator ShowWinPanelDelayed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (winPanel)
+        {
+            winPanel.SetActive(true);
+
+            if (winWordLabel)
+            {
+                winWordLabel.text = $"The word was: {currentAnswer.ToUpper()}";
+            }
         }
     }
 
@@ -427,6 +436,7 @@ public class MiniGameWordleController : MiniGameController
         SetupKeyboard();
         ClearBoardVisuals();
         AudioController.Instance.toggleBGM("Wordle"); // Play BGM
+        sfx.volume = AudioController.Instance.SFXSource.volume;
 
         // required by MiniGameController pattern
         this.delta = new Dictionary<string, int>();
