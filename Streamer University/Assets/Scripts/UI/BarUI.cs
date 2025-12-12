@@ -63,7 +63,7 @@ public class BarUI : MonoBehaviour
 
     private IEnumerator ShowDeltaCoroutine(int deltaValue, float displayDuration)
     {
-        deltaText.text = (deltaValue > 0 ? "+" : "-") + deltaValue.ToString();
+        deltaText.text = (deltaValue > 0 ? "+" : "-") + Mathf.Abs(deltaValue).ToString();
         deltaText.gameObject.SetActive(true);
         yield return new WaitForSeconds(displayDuration);
         deltaText.gameObject.SetActive(false);
