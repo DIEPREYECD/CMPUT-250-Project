@@ -59,7 +59,7 @@ public class DetangleController : MiniGameController
 
     void Start()
     {
-        AudioController.Instance.toggleBGM(); // Play BGM
+        AudioController.Instance.toggleBGM("Detangle"); // Play BGM
 
         this.delta = new Dictionary<string, int>();
         finished = false;

@@ -91,7 +91,7 @@ public class LaneDodgeGameController : MiniGameController
 
     private void Start()
     {
-        AudioController.Instance.toggleBGM(); // Play BGM
+        AudioController.Instance.toggleBGM("LaneDodge"); // Play BGM
 
         // Initialize the base fields
         this.delta = new Dictionary<string, int>();

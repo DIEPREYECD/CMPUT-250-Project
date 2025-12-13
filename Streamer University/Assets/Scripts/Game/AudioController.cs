@@ -84,7 +84,7 @@ public class AudioController : MonoBehaviour
     {
         // Get the name of the current scene
         string sceneName = SceneManager.GetActiveScene().name;
-        // UnityEngine.Debug.Log(sceneName); for testing
+        UnityEngine.Debug.Log(sceneName); // for testing
 
         if (sceneName == "StreamScene")
         {
@@ -121,9 +121,11 @@ public class AudioController : MonoBehaviour
 
     public void toggleBGM(string currentScene = null)
     {
-        if (currentScene != null)
+        if (currentScene != null) // For minigames that doesn't function normally because it's loaded weirdly
         {
             if (currentScene == "Wordle") { BGMSource.clip = minigameWordleBGM; }
+            else if (currentScene == "LaneDodge") { BGMSource.clip = minigameLaneDodgeBGM; }
+            else if (currentScene == "Detangle") { BGMSource.clip = minigameDetangleBGM; }
         }
         // Check if the BGM is already playing to avoid restarting it every time
         if (BGMSource.isPlaying && currentClip == BGMSource.clip)
