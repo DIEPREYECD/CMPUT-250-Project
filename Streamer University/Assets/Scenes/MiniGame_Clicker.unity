@@ -384,18 +384,18 @@ MonoBehaviour:
   gameUIRoot: {fileID: 1299016837}
   targetConfigs:
   - targetScore: 100
-    fameSuccess: 7
-    stressSuccess: -3
-    fameFail: -3
-    stressFail: 3
-  - targetScore: 140
     fameSuccess: 10
-    stressSuccess: -2
-    fameFail: -15
-    stressFail: 5
-  - targetScore: 200
-    fameSuccess: 15
     stressSuccess: -5
+    fameFail: -5
+    stressFail: 5
+  - targetScore: 140
+    fameSuccess: 15
+    stressSuccess: -8
+    fameFail: -15
+    stressFail: 10
+  - targetScore: 200
+    fameSuccess: 20
+    stressSuccess: -10
     fameFail: -25
     stressFail: 15
 --- !u!1 &718783062
@@ -1641,6 +1641,8 @@ MonoBehaviour:
   streamSceneBGM: {fileID: 8300000, guid: f7c3db1746337c44795c7df9a2aac27d, type: 3}
   minigameClickerBGM: {fileID: 0}
   minigameWordleBGM: {fileID: 0}
+  minigameLaneDodgeBGM: {fileID: 0}
+  minigameDetangleBGM: {fileID: 0}
   textBeep: {fileID: 0}
   onEvent: {fileID: 8300000, guid: e4527c254ec7565428320dfa5806f5f5, type: 3}
   openSideCard: {fileID: 8300000, guid: 5104c6aeb6731134ba0a0811235506eb, type: 3}

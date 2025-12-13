@@ -34,12 +34,8 @@ public class LaneDodgeSpawner : MonoBehaviour
     [Tooltip("Fixed height for all obstacles.")]
     public float obstacleHeight = 100f;
 
-    [Header("Spawn Timing")]
-    [Tooltip("Minimum time between spawns.")]
-    public float minSpawnInterval = 0.7f;
-
-    [Tooltip("Maximum time between spawns.")]
-    public float maxSpawnInterval = 1.3f;
+    private float minSpawnInterval;
+    private float maxSpawnInterval;
 
     [Header("Pickup Settings")]
     [Tooltip("Chance (0–1) that a spawn will be a pickup instead of an obstacle.")]

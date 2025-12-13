@@ -1219,6 +1219,7 @@ MonoBehaviour:
   winPanel: {fileID: 526301569}
   losePanel: {fileID: 216435498}
   timeLimit: 60
+  soundEffectVolReduce: 0.4
   timerText: {fileID: 1291644128}
   nodePrefab: {fileID: 4639653684816723758, guid: 4dee74f23bf9cbf4eb90e2a4ede7d499,
     type: 3}
@@ -1229,10 +1230,10 @@ MonoBehaviour:
   lineNormalColor: {r: 0.026210386, g: 0.2924528, b: 0.06240702, a: 1}
   lineIntersectColor: {r: 1, g: 0, b: 0, a: 1}
   lineWidth: 3
-  fameDeltaOnWin: 10
-  stressDeltaOnWin: -5
-  fameDeltaOnLose: -5
-  stressDeltaOnLose: 10
+  fameDeltaOnWin: 15
+  stressDeltaOnWin: -10
+  fameDeltaOnLose: -15
+  stressDeltaOnLose: 15
 --- !u!1 &1191390770
 GameObject:
   m_ObjectHideFlags: 0

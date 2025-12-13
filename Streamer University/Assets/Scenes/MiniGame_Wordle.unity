@@ -5698,10 +5698,10 @@ MonoBehaviour:
   instructionsBackDrop: {fileID: 1928059891}
   winWordLabel: {fileID: 1267569088}
   loseWordLabel: {fileID: 2043293819}
-  fameDeltaOnWin: 8
+  fameDeltaOnWin: 14
   stressDeltaOnWin: -5
-  fameDeltaOnLose: -5
-  stressDeltaOnLose: 6
+  fameDeltaOnLose: -10
+  stressDeltaOnLose: 10
 --- !u!1001 &936186947
 PrefabInstance:
   m_ObjectHideFlags: 0

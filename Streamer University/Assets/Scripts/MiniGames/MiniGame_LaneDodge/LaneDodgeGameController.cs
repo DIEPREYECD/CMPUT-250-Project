@@ -150,7 +150,8 @@ public class LaneDodgeGameController : MiniGameController
         // Difficulty ramp based on survival time
         if (LaneDodgeSpawner.Instance != null)
         {
-            float perf = GetPerformanceFactor(); // 0..1 based on timeAlive/gameDuration
+            float extraDenominator = 2.5f; // make difficulty ramp slower
+            float perf = GetPerformanceFactor(extraDenominator); // 0..1 based on timeAlive/gameDuration
             LaneDodgeSpawner.Instance.UpdateDifficulty(perf);
         }
 
@@ -350,13 +351,13 @@ public class LaneDodgeGameController : MiniGameController
     {
         return gameStarted;
     }
-    private float GetPerformanceFactor()
+    private float GetPerformanceFactor(float extraDenominator = 1f)
     {
         // 0.0 = instantly died, 1.0 = survived full gameDuration
         if (gameDuration <= 0f)
             return 0f;
 
-        float normalized = Mathf.Clamp01(timeAlive / gameDuration);
+        float normalized = Mathf.Clamp01(timeAlive / (gameDuration * extraDenominator));
         return normalized;
     }
 
